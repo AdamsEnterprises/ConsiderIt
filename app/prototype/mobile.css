@@ -1,0 +1,422 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+}
+
+ul {
+    padding-left: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+h1, h2 {
+    font-size: 12pt;
+}
+
+.home {
+    float: right;
+}
+
+.home img {
+    width: 30px;
+    height: 30px;
+}
+
+.initiative_list {
+    border: 1px solid rgb(192,192,192);
+}
+
+.initiative_list li {
+    padding: 8px;
+}
+
+li.even {
+    background-color: rgb(222,222,222);
+}
+
+.init_title {
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgb(192,192,192);
+}
+/*
+#main_content {
+    max-height: 84%;
+    overflow-y: scroll;
+    position: fixed;
+    border-bottom: 1px solid rgb(192,192,192);
+}
+
+#nav.fixed {
+    position: fixed;
+    bottom: 5%;
+}
+
+#footer.fixed {
+    clear: both;
+    position: fixed;
+    bottom: 0;
+}
+*/
+
+
+#footer {
+    clear: both;
+    border-top: 1px solid rgb(192,192,192);
+    padding-top: 5px;
+    font-size: 9pt;
+}
+
+a, .clickable {
+    color: #414141;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+h1 {
+    color: #272727;
+    margin: 0;
+}
+
+h2.locality {
+    color: #999999;
+    font-size: 9pt;
+    font-variant: small-caps;
+    font-weight: normal;
+    text-transform: lowercase;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  vertical-align: top;
+  margin: 3px 2px;
+}
+
+/* textboxes with a watermark */
+.example {
+  color: #999999;
+}
+
+.spacer {
+    clear: both;
+}
+
+#nav {
+    width: 100%;
+}
+
+#nav div {
+    width: 50%;
+    float: left;
+    margin: 10px 0;
+}
+
+.back {/*
+    background-image: url("arrow_left.png");
+    background-repeat: repeat-x;*/  
+}
+
+.hide { 
+    display: none;
+}
+
+.prompt {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.expander {
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+.expandable {
+    font-size: 9pt;
+}
+
+.note {
+    /*color: #C1C1C1;*/
+    margin: 10px 0 5px;
+}
+
+.desc_link {
+    font-size: 9pt;
+    margin-left: 5px;
+}
+
+.point_list {
+    border: 1px solid rgb(192,192,192); 
+    margin-top: 10px;
+}
+
+.pros, .cons {
+    width: 49%;
+    float: left;
+}
+
+.pros {
+    border-right: 1px solid rgb(192,192,192); 
+}
+
+.point_list h2 {
+    text-align: center;
+    border-bottom: 1px solid rgb(192,192,192);
+}
+
+.point_list .add_point, .point_list .write_point {
+    margin: 12px 0;
+}
+
+.point_list .controls {
+    margin-left: 12px;
+}
+
+.point_list ul {
+    margin: 0;
+}
+
+.point_list li {
+    font-size: 9pt;
+    padding: 8px;
+    border-bottom: 1px solid rgb(150,150,150);
+}
+
+.point_list li:first-child {
+    padding-top: 0;
+}
+
+.point_links{
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.all_points .point_links a:first-child {
+    margin-right: 8px;
+}
+
+/*********************************
+      HOMEPAGE
+**********************************/
+.all_options h1 {
+    font-size: 16pt;
+}
+
+/*********************************
+      INITIATIVE DESCRIPTION
+**********************************/
+
+/*********************************
+      CHOOSE POSITION PAGE
+**********************************/
+
+.opinion_list {
+    margin-left: 20px;
+}
+
+.opinion_list input {
+    margin-right: 10px;
+}
+
+.opinion_list li {
+    min-height: 30px;
+}
+
+/*********************************
+      PRO/CON LIST
+**********************************/
+
+.point_links img {
+    margin-left: 8px;
+}
+
+.comments {
+    font-style: italic;
+}
+
+/*********************************
+      POINT DETAILS
+**********************************/
+
+.author {
+    font-size: 9pt;
+}
+
+div.author {
+    margin-bottom: 3px;
+}
+
+/* use padding instead of margin for the "Details" header that is
+right below the floating avatar - the margin gets pushed up into
+the floating area and is effectively nonexistent. */
+.point_details h1 {
+    padding: 12px 0 4px;
+    margin: 0;
+}
+
+.discuss ul {
+    border: 1px solid rgb(150,150,150);
+    border-bottom: none;
+}
+
+.point_details .details {
+    clear: both;
+}
+
+.discuss li {
+    border-bottom: 1px solid rgb(150,150,150);
+    padding: 8px 4px;
+    min-height: 50px; /* avatar height */
+}
+
+.avatar {
+    float: left;
+    margin-right: 8px;
+}
+
+.comment_text {
+    margin-left: 58px; /* for avatar */
+}
+
+#comment_body {
+    width: 95%;
+}
+
+#comment_submit {
+    background-color: #999999;
+    background-image: -moz-linear-gradient(center bottom , #777777 7%, #CCCCCC 100%);
+    color: #272727;
+    font-size: 12px;
+    padding: 3px 15px;
+    border-radius: 5px 5px 5px 5px;
+    margin-top: 5px;
+}
+
+/*********************************
+      NEW POINT
+**********************************/
+
+/* also for "add comment" form */
+.pointform textarea {
+  width: 85%;
+  height: 50px;
+}
+
+/* also for "add comment" form */
+.pointform .count {
+    color: #C1C1C1;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+#new_point .count {
+  margin: 25px 0 20px 5px;
+}
+
+#new_point .expander {
+    margin-left: 10px;
+}
+
+#new_point .expandable {
+    width: 300px;
+    padding: 5px;
+    margin-left: 20px;
+    border: 1px solid black;
+}
+
+.point_link_block {
+    margin: 15px 0;
+}
+
+.point_link_form fieldset{
+    border: 1px solid #848484;
+    margin-top: 7px;
+    padding: 3px 8px;
+    width: 93%;
+}
+
+.point_link_form input[type="text"] {
+    width: 82%;
+    margin-left: -1px;
+}
+
+.point_link_form .delete {
+    float: right;
+    font-size: 8pt;
+    padding: 3px 5px;
+}
+
+.point-cancel {
+    float: right;
+    padding: 5px;
+}
+
+.point-submit {
+    float: right;
+    margin-right: 38px;
+}
+
+/*********************************
+      OPINION BREAKDOWN
+**********************************/
+.stance_chart {
+    margin-bottom: 20px;
+}
+
+.stance_segments > div {
+    width: 14%;
+    color: white;
+    font-size: 9pt;
+    float: left;
+    text-align: center;
+    position: relative;
+}
+
+.stance_chart .strong {
+    background-color: #bbbbbb;
+}
+
+.stance_chart .moderate {
+    background-color: #999999;
+}
+
+.stance_chart .light {
+    background-color: #777777;
+}
+
+.stance_chart .neutral {
+    background-color: #555555;
+}
+
+.stance_axis {
+    clear: both;
+    border-top: 3px solid #999999;
+}
+
+.user_segment {
+    position: relative;
+    color: #555555;
+    bottom: 32px;
+}
+
+.voter_segment {
+}
+
+#points_header {
+    clear: both;
+}
+
+#points_header h2 {
+    margin-bottom: 2px;
+}
+
+#points_header .point_options {
+    font-size: 10pt;
+}
+
+#show_user_points {
+    margin-right: 15px;
+}

@@ -1,0 +1,39 @@
+<!--
+
+Open issues:
+- Abbreviations in ballot measures OK? (Transportation Exp., LT Care Workers, Pres/VP Voting, Budget Acct.)
+- Showing/hiding text, adding elements on the fly OK?
+- Moving items up/down the list OK?
+- Sounds: useful or annoying?
+
+TODO:
+- character limits in textboxes
+- audio feedback?
+
+P1
+- Activity logging
+- Match existing JS semantics
+- Combine JS scripts - see http://net.tutsplus.com/tutorials/javascript-ajax/10-ways-to-instantly-increase-your-jquery-performance/
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+    <meta name = "viewport" content = "width = device-width">
+    <link rel="stylesheet" href="mobile.css" type="text/css">
+</head>
+<body class="all_options">
+<h1>Living Voters Guide</h1>
+<p>Welcome, citizen! Choose a ballot measure:</p>
+<ul class="initiative_list">
+    <li><a href="option.html">WA State 1125: Transportation Expenditure</a></li>
+    <li class="even"><div><a href="option.html">WA State 1163: Long-Term Care Workers</a></div></li>
+    <li><a href="option.html">WA State 1183: Liquor</a></li>
+    <li class="even"><a href="option.html">WA State 8205: Presidential/VP Voting</a></li>
+    <li><a href="option.html">WA State 8206: Budget Account</a></li>
+</ul>
+<div id="footer">Logged in as citizen. <a href="">Logout</a></div>
+</body>
+</html>

@@ -47,7 +47,7 @@
       %div{ :id => 'footer' }
         - if user_signed_in?
           = "Logged in as #{current_user.name}."
-          = link_to "Logout", ""
+          = link_to 'Log Out', destroy_user_session_path, :class => 'logout'
         - else
           = "You are not logged in."
           = link_to "Log in", mobile_user_path

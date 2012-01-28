@@ -81,4 +81,16 @@ module Mobile::MobileHelper
     return page_name
   end
 
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def devise_mapping
+    @device_mapping ||= Devise.mappings[:user]
+  end
+
 end

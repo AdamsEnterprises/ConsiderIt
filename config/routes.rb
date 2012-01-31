@@ -32,4 +32,8 @@ ConsiderIt::Application.routes.draw do
   match '/home/study/:category' => "home#study", :via => :post  
   match '/admin/dashboard' => "admin/dashboard#index", :via => :get, :module => :admin
 
+  # mobile site
+  match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile
+  match '/mobile/point' => "mobile/mobile#point", :via => :get, :module => :mobile
+
 end

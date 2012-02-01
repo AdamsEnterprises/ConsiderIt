@@ -1,1 +1,13 @@
-%h1 Index
+%p Welcome, citizen! Choose a ballot measure:
+%ul{ :class => "initiative_list" }
+  %li
+    = link_to "WA State 1125: Transportation Expenditure", "/mobile/options/115"
+  %li{ :class => "even" }
+    = link_to "WA State 1163: Long-Term Care Workers", "/mobile/options/115"
+  %li
+    = link_to "WA State 1183: Liquor", "/mobile/options/115"
+  %li{ :class => "even" }
+    = link_to "WA State 8205: Presidential/VP Voting", "/mobile/options/115"
+  %li
+    = link_to "WA State 8206: Budget Account", "/mobile/options/115"
+

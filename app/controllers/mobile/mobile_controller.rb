@@ -6,6 +6,8 @@ class Mobile::MobileController < ApplicationController
   end
 
   def option
+    @option = Option.find_by_id(params[:option_id])
+    @title = "#{@option.designator}"
   end
 
   def points

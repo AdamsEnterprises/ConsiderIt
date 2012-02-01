@@ -34,6 +34,12 @@ ConsiderIt::Application.routes.draw do
 
   # mobile site
   match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile
-  match '/mobile/point' => "mobile/mobile#point", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/points/add' => "mobile/mobile#add_point", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/points/new' => "mobile/mobile#new_point", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/points/:point_id' => "mobile/mobile#point_details", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/review' => "mobile/mobile#review", :via => :get, :module => :mobile
+  match '/mobile/options/:option_id/summary' => "mobile/mobile#summary", :via => :get, :module => :mobile
 
 end

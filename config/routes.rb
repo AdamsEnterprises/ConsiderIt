@@ -33,13 +33,13 @@ ConsiderIt::Application.routes.draw do
   match '/admin/dashboard' => "admin/dashboard#index", :via => :get, :module => :admin
 
   # mobile site
-  match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/points/add' => "mobile/mobile#add_point", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/points/new' => "mobile/mobile#new_point", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/points/:point_id' => "mobile/mobile#point_details", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/review' => "mobile/mobile#review", :via => :get, :module => :mobile
-  match '/mobile/options/:option_id/summary' => "mobile/mobile#summary", :via => :get, :module => :mobile
+  match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile, :as => :mobile_home
+  match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile, :as => :show_mobile_option
+  match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile, :as => :mobile_option_points
+  match '/mobile/options/:option_id/points/add' => "mobile/mobile#add_point", :via => :get, :module => :mobile, :as => :add_mobile_option_point
+  match '/mobile/options/:option_id/points/new' => "mobile/mobile#new_point", :via => :get, :module => :mobile, :as => :new_mobile_option_point
+  match '/mobile/options/:option_id/points/:point_id' => "mobile/mobile#point_details", :via => :get, :module => :mobile, :as => :show_mobile_option_point
+  match '/mobile/options/:option_id/review' => "mobile/mobile#review", :via => :get, :module => :mobile, :as => :mobile_option_review
+  match '/mobile/options/:option_id/summary' => "mobile/mobile#summary", :via => :get, :module => :mobile, :as => :mobile_option_summary
 
 end

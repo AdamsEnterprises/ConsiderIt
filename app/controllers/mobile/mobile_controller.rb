@@ -3,11 +3,12 @@ require 'date'
 class Mobile::MobileController < ApplicationController
   
   def index
+    @options = Option.all
   end
 
   def option
     @option = Option.find_by_id(params[:option_id])
-    @title = "#{@option.designator}"
+    @title = "#{@option.reference}"
   end
 
   def points

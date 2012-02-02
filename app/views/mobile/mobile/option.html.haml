@@ -1,29 +1,8 @@
-%p What's your current opinion of Initiative 1125?
-%ul{ :class => "opinion_list" }
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "strongYes", :id => "strongYesButton" }
-    %label{ :for => "strongYesButton" } Strongly support
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "moderateYes", :id => "moderateYesButton" }
-    %label{ :for => "moderateYesButton" } Moderately support
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "weakYes", :id => "weakYesButton" }
-    %label{ :for => "weakYesButton" } Lightly support
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "neutral", :id => "neutralButton" }
-    %label{ :for => "neutralButton" } Neutral
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "weakNo", :id => "weakNoButton" }
-    %label{ :for => "weakNoButton" } Lightly oppose
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "moderateNo", :id => "moderateNoButton" }
-    %label{ :for => "moderateNoButton" } Moderately oppose
-  %li
-    %input{ :type => "radio", :name => "opinion", :value => "strongNo", :id => "strongNoButton" }
-    %label{ :for => "Button" } Strongly oppose
+%p What's your initial opinion of #{@option.reference}?
+= render :partial => "mobile/partials/position_select"
 %div{ :id => "nav" }
   %div{ :class => "back" }
-    = link_to "Back", "/mobile"
+    = link_to "Back", mobile_home_path
   %div
-    = link_to "Consider pros & cons", "/mobile", :class => "forward"
+    = link_to "Consider pros & cons", mobile_option_points_path(:option_id => @option.id), :class => "forward"
 

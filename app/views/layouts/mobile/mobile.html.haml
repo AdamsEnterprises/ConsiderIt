@@ -18,13 +18,20 @@
     /[if lt IE 7]
       = stylesheet_link_tag 'ie6'
   %body
-    %h1 Living Voters Guide
+    %h1 #{APP_CONFIG['meta']['title']}
+
+    - if user_signed_in?
+      %p Hello, #{current_user.name}!
 
     = yield
 
     %div{ :id => 'footer' }
-      = "Logged in as citizen."
-      = link_to "Logout", ""
+      - if user_signed_in?
+        = "Logged in as #{current_user.name}."
+        = link_to "Logout", ""
+      - else
+        = "You are not logged in."
+        = link_to "Login", ""
 
     :javascript
       $j(document).ready(function(){

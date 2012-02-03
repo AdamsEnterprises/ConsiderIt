@@ -4,53 +4,70 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
     <meta name = "viewport" content = "width = device-width">
-    <link rel="stylesheet" href="/stylesheets/mobile.css" type="text/css">
-    <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
-    <script src="/javascripts/application.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../stylesheets/mobile.css" type="text/css">
+<link rel="stylesheet" href="mobile.css" type="text/css">
+    <script src="/javascripts/jquery.min.js" type="text/javascript"></script><script src="jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/application.js" type="text/javascript"></script><script src="mobile.js" type="text/javascript"></script><script src="mobile.js" type="text/javascript"></script>
 </head>
 
 <body>
+
+<div class="nav" id="nav_top">
+    <!--<h2>Navigation</h2>-->
+    <ul class="link_list">
+        <li><a href="position_initial.html" class="forward">Forward</a></li>
+        <li><a href=""  onClick="history.go(-1);">Back</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="option_desc.html">Initiative description</a></li>
+    </ul>
+</div>
 <div class="init_title">
     <h2 class="locality">State of Washington Initiative 1125</h2>
-    <h1 class="initiative_name">Concerning State Expenditures on Transportation. <a class="desc_link" href="option_desc.html">Read description</a></h1>
+    <h1 class="initiative_name">Concerning State Expenditures on Transportation.</h1>
 </div>
 <div class="pointform">
     <form id="new_point" method="post">
         <div class="point-title-group">
-            <textarea id="point_nutshell" class="has_example" name="point[nutshell]" title="(required) Summarize your point in 140 characters"></textarea>
-            <span class="count">140</span>
+            <div>Summarize your point in 140 characters (required):</div>
+            <textarea id="point_nutshell" class="has_example" name="point[nutshell]"></textarea>
+            <div class="count">Remaining characters: 140</div>
         </div>
         <div class="point-description-group">
-            <textarea id="point_text" class="has_example" name="point[text]" title="(optional) write a longer description of your point"></textarea>
-            <span class="count">700</span>
+            <div>Write a longer description of your point (optional):</div>
+            <textarea id="point_text" class="has_example" name="point[text]"></textarea>
+            <div class="count">Remaining characters: 700</div>
         </div>
         <div class="point_link_block">
-            <div> <!-- extra div makes JS expand/collapse function reusable on other pages -->
-                <span id="add_link" class="clickable">+ Link to a website</span>
-                <span class="clickable expander" origText="why should I?">why should I?</span>
+                <p><a href="" id="add_link" class="clickable">Insert link to a website below</a></p>
+                <p><a href="" onclick="alert('When you link to credible websites that support the point that you just wrote, other voters will be more likely to understand and believe your point.')">Why should I add a link?</a></p>
             </div>
-            <p class="hide expandable">
-                When you link to credible websites that support the point that you just wrote, other voters will be more likely to understand and believe your point.
-            </p>
         </div>
         <div class="hide_name">
             <input id="point_hide_name" type="checkbox" name="point[hide_name]">
             <label for="point_hide_name">Hide your name from other users (discouraged)</label>
-            <p id="point_hide_text" class="expandable hide">
-                We encourage you NOT to hide your name. Signing your point with your name lends it more weight to other LVG participants.
-            </p>
         </div>
         <div class="point-pledge">
             <p class="note">Remember your pledge!</p>
         </div>
         <div class="point-submit">
-            <input id="point_submit" type="submit" value="Add point" name="commit" />
+            <input id="point_submit" type="submit" value="Add pro" name="commit" />
         </div>
         <div class="point-cancel">
-            <a href="points.html">cancel</a>
+            <a href="points.html" onClick="history.go(-1);">cancel</a>
         </div>
     </form>
 </div>
-<div id="footer">Logged in as citizen. <a href="">Logout</a></div>
+    
+<div class="nav" id="nav_bottom">
+   <h2>Navigation</h2>
+    <ul class="link_list">
+        <li><a href="position_initial.html" class="forward">Forward</a></li>
+        <li><a href=""  onClick="history.go(-1);">Back</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="option_desc.html">Initiative description</a></li>
+    </ul>
+</div>
+
+<div id="footer"><a href="">Log out of John's account.</a></div>
 </body>
 </html>

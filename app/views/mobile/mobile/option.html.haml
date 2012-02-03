@@ -1,8 +1,8 @@
-%p What's your initial opinion of #{@option.reference}?
-= render :partial => "mobile/partials/position_select"
-%div{ :id => "nav" }
-  %div{ :class => "back" }
-    = link_to "Back", mobile_home_path
-  %div
-    = link_to "Consider pros & cons", mobile_option_points_path(:option_id => @option.id), :class => "forward"
+- @option.format_description.each do |paragraph|
+  %p #{paragraph}
+%p
+  = link_to "View Long Description", show_mobile_option_long_description_path(:option_id => @option.id)
+%p
+  = link_to "View Fiscal Impact Statement", show_mobile_option_fiscal_impact_path(:option_id => @option.id)
+= render :partial => "mobile/partials/nav", :locals => { :back_name => "Back", :back_path => mobile_home_path, :forward_name => "Make Opinion", :forward_path => mobile_option_initial_position_path(:option_id => @option.id) }
 

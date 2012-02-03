@@ -18,7 +18,12 @@
     /[if lt IE 7]
       = stylesheet_link_tag 'ie6'
   %body
-    %h1 #{APP_CONFIG['meta']['title']}
+    .init_title
+      - if @option
+        %h2.locality #{@option.domain} #{@option.reference}
+        %h1.initiative_name #{@option.name}
+      - else
+        %h1 #{APP_CONFIG['meta']['title']}
 
     - if user_signed_in?
       %p Hello, #{current_user.name}!

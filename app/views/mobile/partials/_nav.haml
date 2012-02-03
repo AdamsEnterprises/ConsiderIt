@@ -1,0 +1,8 @@
+#nav
+  .back
+    - if defined? back_name and defined? back_path
+      = link_to back_name, back_path
+  .forward
+    - if defined? forward_name and defined? forward_path
+      = link_to forward_name, forward_path
+

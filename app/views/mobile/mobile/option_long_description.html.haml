@@ -1,0 +1,5 @@
+%h2 Long Description
+= render :partial => "mobile/partials/nav", :locals => { :back_name => "Back", :back_path => show_mobile_option_path(:option_id => @option.id) }
+= @option.long_description.html_safe
+= render :partial => "mobile/partials/nav", :locals => { :back_name => "Back", :back_path => show_mobile_option_path(:option_id => @option.id) }
+

@@ -18,6 +18,9 @@
     /[if lt IE 7]
       = stylesheet_link_tag 'ie6'
   %body
+    - if @navigation
+      = render :partial => "mobile/partials/nav", :locals => { :id => "nav_top", :navigation => @navigation, :include_header => false }
+      
     .init_title
       - if @option
         %h2.locality #{@option.domain} #{@option.reference}
@@ -29,6 +32,9 @@
       %p Hello, #{current_user.name}!
 
     = yield
+
+    - if @navigation
+      = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true }
 
     %div{ :id => 'footer' }
       - if user_signed_in?

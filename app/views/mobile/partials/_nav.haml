@@ -1,8 +1,18 @@
-#nav
-  .back
-    - if defined? back_name and defined? back_path
-      = link_to back_name, back_path
-  .forward
-    - if defined? forward_name and defined? forward_path
-      = link_to forward_name, forward_path
+%div.nav{ :id => id }
+  - if include_header
+    %h2 Navigation
+  %ul.link_list
+    - if navigation[:forward_path]
+      %li
+        = link_to "Forward", navigation[:forward_path]
+    %li
+      - if navigation[:back_path]
+        = link_to "Back", navigation[:back_path]
+      - else
+        %a{ :href => "", :onClick => "history.go(-1);" } Back
+    %li
+      = link_to "Home", mobile_home_path
+    - if navigation[:link_description] and navigation[:option_id]
+      %li
+        = link_to "Initiative Description", show_mobile_option_path(:option_id => navigation[:option_id])
 

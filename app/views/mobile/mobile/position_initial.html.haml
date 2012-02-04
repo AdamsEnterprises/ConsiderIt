@@ -1,5 +1,2 @@
 %p What's your initial opinion of #{@option.reference}?
 = render :partial => "mobile/partials/position_select"
-
-= render :partial => "mobile/partials/nav", :locals => { :back_name => "Back", :back_path => show_mobile_option_path(:option_id => @option.id), :forward_name => "Consider pros & cons", :forward_path => mobile_option_points_path(:option_id => @option.id) }
-

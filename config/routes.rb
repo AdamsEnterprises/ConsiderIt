@@ -45,6 +45,7 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/points/:point_id' => "mobile/mobile#point_details", :via => :get, :module => :mobile, :as => :show_mobile_option_point
   match '/mobile/options/:option_id/positions/final' => "mobile/mobile#position_final", :via => :get, :module => :mobile, :as => :mobile_option_final_position
   match '/mobile/options/:option_id/summary' => "mobile/mobile#summary", :via => :get, :module => :mobile, :as => :mobile_option_summary
-  match '/mobile/options/:option_id/summary/:segment_type' => "mobile/mobile#segment", :via => :get, :module => :mobile, :as => :mobile_option_segment
+  match '/mobile/options/:option_id/summary/:stance_bucket' => "mobile/mobile#segment", :via => :get, :module => :mobile, :as => :mobile_option_segment
+  match '/mobile/options/:option_id/summary/:stance_bucket/:point_type' => "mobile/mobile#segment_list", :via => :get, :module => :mobile, :as => :mobile_option_segment_list
 
 end

@@ -1,1 +1,10 @@
-%h1 Segment #{@segment_type}
+%h2 #{@stance_name.capitalize}
+%p View a list of pros or cons ranked in order of importance for #{@stance_name}.
+#pro_con_nav
+  %ul.link_list
+    %li
+      = link_to "Pros (" + @pro_points.count.to_s + ")", mobile_option_segment_list_path(:option_id => @option.id, :stance_bucket => @stance_bucket, :point_type => :pro)
+    %li
+      = link_to "Cons (" + @con_points.count.to_s + ")", mobile_option_segment_list_path(:option_id => @option.id, :stance_bucket => @stance_bucket, :point_type => :con)
+-# Might have nav links to the other voter segments and/or "my points" here
+

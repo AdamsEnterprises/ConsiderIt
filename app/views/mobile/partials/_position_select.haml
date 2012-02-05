@@ -1,23 +1,23 @@
 %ul{ :class => "opinion_list" }
   %li
     %input{ :type => "radio", :name => "position", :value => "strongYes", :id => "strongYesButton" }
-    %label{ :for => "strongYesButton" } Strongly support
+    %label{ :for => "strongYesButton" } #{Position.stance_name_map(6).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "moderateYes", :id => "moderateYesButton" }
-    %label{ :for => "moderateYesButton" } Moderately support
+    %label{ :for => "moderateYesButton" } #{Position.stance_name_map(5).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "weakYes", :id => "weakYesButton" }
-    %label{ :for => "weakYesButton" } Lightly support
+    %label{ :for => "weakYesButton" } #{Position.stance_name_map(4).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "neutral", :id => "neutralButton" }
-    %label{ :for => "neutralButton" } Neutral
+    %label{ :for => "neutralButton" } #{Position.stance_name_map(3).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "weakNo", :id => "weakNoButton" }
-    %label{ :for => "weakNoButton" } Lightly oppose
+    %label{ :for => "weakNoButton" } #{Position.stance_name_map(2).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "moderateNo", :id => "moderateNoButton" }
-    %label{ :for => "moderateNoButton" } Moderately oppose
+    %label{ :for => "moderateNoButton" } #{Position.stance_name_map(1).capitalize}
   %li
     %input{ :type => "radio", :name => "position", :value => "strongNo", :id => "strongNoButton" }
-    %label{ :for => "Button" } Strongly oppose
+    %label{ :for => "Button" } #{Position.stance_name_map(0).capitalize}
 

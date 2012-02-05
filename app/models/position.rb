@@ -11,8 +11,8 @@ class Position < ActiveRecord::Base
   scope :published, where( :published => true )
 
   
-  def stance_name
-    case stance_bucket
+  def self.stance_name_map(stance_bucket_val)
+    case stance_bucket_val
       when 0
         return "strongly opposed"
       when 1
@@ -28,7 +28,11 @@ class Position < ActiveRecord::Base
       when 6
         return "strong support"
     end
-  end    
+  end
+
+  def stance_name
+    return Position.stance_name_map(stance_bucket)
+  end
 
 end
 

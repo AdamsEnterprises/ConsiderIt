@@ -1,0 +1,14 @@
+%h2 #{@point_type.pluralize.capitalize} Chosen by #{@stance_name.capitalize}
+%ul.link_list
+  - if @point_type == 'pro'
+    %li
+      = link_to "See my pros", mobile_option_list_points_path(:option_id => @option.id, :type => :pro)
+    %li 
+      = link_to "See cons for #{@stance_name}", mobile_option_segment_list_path(:option_id => @option.id, :stance_bucket => @stance_bucket, :point_type => :con)
+  - else
+    %li
+      = link_to "See my cons", mobile_option_list_points_path(:option_id => @option.id, :type => :con)
+    %li 
+      = link_to "See pros for #{@stance_name}", mobile_option_segment_list_path(:option_id => @option.id, :stance_bucket => @stance_bucket, :point_type => :pro)
+
+= render :partial => "mobile/partials/point_list", :locals => { :points => @points }

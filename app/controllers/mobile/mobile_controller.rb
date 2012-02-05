@@ -107,6 +107,10 @@ class Mobile::MobileController < ApplicationController
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = { }
+
+    @user_position = current_user ? current_user.positions.where(:option_id => @option.id).first : nil
+    # User stance bucket for this option (either -1 for no stance or a value in [0,6])
+    @user_stance_bucket = @user_position.nil? ? -1 : @user_position.stance_bucket
   end
 
   def segment
@@ -114,13 +118,85 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
     @navigation = { }
 
-    @segment_type = params[:segment_type]
+    @points = @option.points
+    @pro_points = @points.pros
+    @con_points = @points.cons
+
+    @stance_bucket = params[:stance_bucket].to_i
+    if (@stance_bucket == 7)
+      @pro_points = @pro_points.ranked_overall
+      @con_points = @con_points.ranked_overall
+    else
+      @pro_points = @pro_points.ranked_for_stance_segment(@stance_bucket)
+      @con_points = @con_points.ranked_for_stance_segment(@stance_bucket)
+    end
+
+    set_stance_name(@stance_bucket)
+  end
+
+  def segment_list
+    @option = Option.find_by_id(params[:option_id])
+    @title = "#{@option.reference}"
+    @navigation = { }
+    
+    #TODO: Refactor this out since copied from points_controller (index)
+    qry = @option.points
+
+    @point_type = params[:point_type]
+    if ( @point_type == 'pro' )
+      qry = qry.pros
+    elsif ( @point_type == 'con' )
+      qry = qry.cons
+    else
+      throw 'Invalid point type ' + @point_type
+    end
+    
+    @stance_bucket = params[:stance_bucket].to_i
+    if @stance_bucket == 7
+      ## All voters
+      qry = qry.ranked_overall
+    else
+      ## specific voter segment...
+      qry = qry.ranked_for_stance_segment(@stance_bucket)
+    end
+
+    set_stance_name(@stance_bucket)
+
+    @points = qry
   end
 
 protected
   def get_included_points is_pro
-    # TODO: Refactor this out since is replicated from positions_controller.rb
-    return Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
-           Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => is_pro)
+    #TEMPTEMP: Use this until get session setting correct(just handle null cases)
+    if session[@option.id]
+      # TODO: Refactor this out since is replicated from positions_controller.rb
+      return Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
+             Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => is_pro)
+    else
+      return []
+    end
+  end
+
+  def set_stance_name(stance_bucket)
+    case stance_bucket
+      when 7
+        @stance_name = "all voters"
+      when 6
+        @stance_name = "strong supporters"
+      when 5
+        @stance_name = "moderate supporters"
+      when 4
+        @stance_name = "slight supporters"
+      when 3
+        @stance_name = "undecided voters"
+      when 2
+        @stance_name = "slightly opposed voters"
+      when 1
+        @stance_name = "moderately opposed voters"
+      when 0
+        @stance_name = "strongly opposed voters"
+      else
+        throw "Invalid stance bucket " + @stance_bucket
+    end
   end
 end

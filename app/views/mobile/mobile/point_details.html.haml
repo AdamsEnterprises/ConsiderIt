@@ -1,1 +1,47 @@
-%h1 Point Details
+%div.point_details
+  .avatar
+    = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
+    
+  %div
+    %a{ :href => "", :onClick => "confirm('Are you sure you want to remove this point from your list?')" } Remove from my list
+    
+  .summary
+    %h1 Summary
+    %p.description #{@point.nutshell}
+    %p.author by #{@point.user.name}
+  .details
+    %h1 Details
+    %p.the_details #{ @point.text.empty? ? "None" : @point.text }
+  .link
+    %h1 External Links
+    %ul
+      - if @point.point_links.any?
+        - @point.point_links.each do |point_link|
+          %li 
+            = link_to point_link.description, point_link.url
+      - else
+        %li none provided
+  .discuss
+    %h1 Discussion (#{@point.comments.count})</h1>
+    %ul.comment_section
+      - if @point.comments.any?
+        - even = false
+        - @point.comments.each do |comment|
+          %li{ :class => ("even" if even) }
+            .avatar
+              = image_tag comment.user.avatar.url(:thumb), :alt => "#{h comment.user.name}'s profile picture"
+            .comment_text
+              = comment.body
+              %span.author (by #{comment.user.name}
+          - even = !even
+      - else
+        %li No discussion
+      %li.even
+        .comment_text.pointform
+          -#<form>
+          %textarea.has_example#comment_body{ :title => "Type your comment here..." }
+          .count Remaining characters: 1000
+          %p.note
+            %strong Remember your pledge!
+          %input{ :type => "submit", :id => "comment_submit", :value => "Add comment", :name => "commit" }
+

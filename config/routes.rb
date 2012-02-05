@@ -39,10 +39,12 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/fiscal_impact' => "mobile/mobile#option_fiscal_impact", :via => :get, :module => :mobile, :as => :show_mobile_option_fiscal_impact
   match '/mobile/options/:option_id/positions/initial' => "mobile/mobile#position_initial", :via => :get, :module => :mobile, :as => :mobile_option_initial_position
   match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile, :as => :mobile_option_points
-  match '/mobile/options/:option_id/points/add' => "mobile/mobile#add_point", :via => :get, :module => :mobile, :as => :add_mobile_option_point
-  match '/mobile/options/:option_id/points/new' => "mobile/mobile#new_point", :via => :get, :module => :mobile, :as => :new_mobile_option_point
+  match '/mobile/options/:option_id/points/list/:type' => "mobile/mobile#list_points", :via => :get, :module => :mobile, :as => :mobile_option_list_points
+  match '/mobile/options/:option_id/points/add/:type' => "mobile/mobile#add_point", :via => :get, :module => :mobile, :as => :add_mobile_option_point
+  match '/mobile/options/:option_id/points/new/:type' => "mobile/mobile#new_point", :via => :get, :module => :mobile, :as => :new_mobile_option_point
   match '/mobile/options/:option_id/points/:point_id' => "mobile/mobile#point_details", :via => :get, :module => :mobile, :as => :show_mobile_option_point
   match '/mobile/options/:option_id/positions/final' => "mobile/mobile#position_final", :via => :get, :module => :mobile, :as => :mobile_option_final_position
   match '/mobile/options/:option_id/summary' => "mobile/mobile#summary", :via => :get, :module => :mobile, :as => :mobile_option_summary
+  match '/mobile/options/:option_id/summary/:segment_type' => "mobile/mobile#segment", :via => :get, :module => :mobile, :as => :mobile_option_segment
 
 end

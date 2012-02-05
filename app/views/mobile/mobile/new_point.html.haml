@@ -1,1 +1,25 @@
-%h1 New point
+%div.pointform
+  -# <form id="new_point" method="post">
+  .point-title-group
+    %div Summarize your point in 140 characters (required):
+    %textarea.has_example#point_nutshell{ :name => "point[nutshell]" }
+    .count Remaining characters: 140
+  .point-description-group
+    %div Write a longer description of your point (optional):
+    %textarea.has_example#point_text{ :name => "point[text]" }
+    .count Remaining characters: 700
+  .point_link_block
+    %p
+      %a{ :href => "", :id => "add_link", :class => "clickable" } Insert link to a website below
+    %p
+      %a{ :href => "", :onClick => "alert('When you link to credible websites that support the point that you just wrote, other voters will be more likely to understand and believe your point.')" } Why should I add a link?
+  .hide_name
+    %input#point_hide_name{ :type => "checkbox", :name => "point[hide_name]" }
+    %label{ :for => "point_hide_name" } Hide your name from other users (discouraged)
+  .point-pledge
+    %p.note Remember your pledge!
+  .point-submit
+    %input#point_submit{ :type => "submit", :value => "Add pro", :name => "commit" }
+  .point-cancel
+    = link_to "cancel", mobile_option_points_path(:option_id => @option.id)
+

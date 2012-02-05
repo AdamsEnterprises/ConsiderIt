@@ -1,1 +1,22 @@
-%h1 Summary
+%p Now explore a breakdown of what other voters feel about #{@option.designator}!
+%p Select a segment of voters below to see a ranked list of the points that segment finds most important.
+%ul.link_list
+  %li
+    = link_to "My point list", mobile_option_points_path(:option_id => @option.id)
+  %li
+    = link_to "All voters", mobile_option_segment_path(:option_id => @option.id, :segment_type => :all)
+  %li
+    = link_to "Strong supporters (" + 9.3.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 7)
+  %li
+    = link_to "Moderate supporters (" + 10.9.to_s + "%) (includes you)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 6)
+  %li
+    = link_to "Light supporters (" + 3.3.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 5)
+  %li
+    = link_to "Undecided voters (" + 1.5.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 4)
+  %li
+    = link_to "Light opposers (" + 7.1.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 3)
+  %li
+    = link_to "Moderate opposers (" + 24.6.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 2)
+  %li
+    = link_to "Strong opposers (" + 42.6.to_s + "%)", mobile_option_segment_path(:option_id => @option.id, :segment_type => 1)
+

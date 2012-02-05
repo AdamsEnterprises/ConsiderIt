@@ -1,0 +1,9 @@
+%ul.point_list
+  - even = false
+  - points.each do |point|
+    %li{ :class => ("even" if even) }
+      .point_text #{point.nutshell} (#{point.comments.count} comments)</div>
+      .point_links
+        = link_to "Details", show_mobile_option_point_path(:option_id => @option.id, :point_id => point.id)
+    - even = !even
+

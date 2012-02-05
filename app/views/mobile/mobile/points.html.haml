@@ -1,1 +1,19 @@
-%h1 Points
+%p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.
+#pro_con_nav
+  %h2 My Pros (#{@included_pros.count})
+  %ul.link_list
+    %li
+      = link_to "See my pros", mobile_option_list_points_path(:option_id => @option.id, :type => :pro)
+    %li
+      = link_to "Add an existing pro", add_mobile_option_point_path(:option_id => @option.id, :type => :pro)
+    %li
+      = link_to "Write a new pro", new_mobile_option_point_path(:option_id => @option.id, :type => :pro)
+  %h2 My Cons (#{@included_cons.count})
+  %ul.link_list
+    %li
+      = link_to "See my cons", mobile_option_list_points_path(:option_id => @option.id, :type => :con)
+    %li
+      = link_to "Add an existing con", add_mobile_option_point_path(:option_id => @option.id, :type => :con)
+    %li
+      = link_to "Write a new con", new_mobile_option_point_path(:option_id => @option.id, :type => :con)
+

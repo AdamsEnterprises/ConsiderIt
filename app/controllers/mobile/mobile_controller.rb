@@ -2,10 +2,12 @@ require 'date'
 
 class Mobile::MobileController < ApplicationController
   
+  # GET /mobile
   def index
     @options = Option.all
   end
 
+  # GET /mobile/options/:option_id
   def option
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -18,18 +20,21 @@ class Mobile::MobileController < ApplicationController
     end
   end
 
+  # GET /mobile/options/:option_id/description
   def option_long_description
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = {  }
   end
 
+  # GET /mobile/options/:option_id/fiscal_impact
   def option_fiscal_impact
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = {  }
   end
 
+  # GET /mobile/options/:option_id/positions/initial
   def position_initial
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -37,20 +42,28 @@ class Mobile::MobileController < ApplicationController
                     :link_description => true, :option_id => @option.id }
   end
 
+  # GET /mobile/options/:option_id/points
   def points
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = { :forward_path => mobile_option_final_position_path(:option_id => @option.id),
                     :link_description => true, :option_id => @option.id }
 
+    #TODO: Temporary so doesn't fail next
+    fill_temp_session_data
+
     @included_pros = get_included_points(true)
     @included_cons = get_included_points(false)
   end
 
+  # GET /mobile/options/:option_id/points/list/:type
   def list_points
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = { :link_description => true, :option_id => @option.id }
+
+    #TODO: Temporary so doesn't fail next
+    fill_temp_session_data
 
     @type = params[:type]
     if @type == 'pro'
@@ -62,11 +75,15 @@ class Mobile::MobileController < ApplicationController
     end
   end
 
+  # GET /mobile/options/:option_id/points/add/:type
   def add_point
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @navigation = { :link_description => true, :option_id => @option.id }
     
+    #TODO: Temporary so doesn't fail next
+    fill_temp_session_data
+
     @type = params[:type]
     if @type == 'pro'
       @points = @option.points.pros.not_included_by(current_user, session[@option.id][:included_points].keys).ranked_persuasiveness
@@ -77,6 +94,7 @@ class Mobile::MobileController < ApplicationController
     end
   end
 
+  # GET /mobile/options/:option_id/points/new/:type
   def new_point
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -85,6 +103,7 @@ class Mobile::MobileController < ApplicationController
     @type = params[:type]
   end
 
+  # GET /mobile/options/:option_id/points/:point_id
   def point_details
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -96,6 +115,7 @@ class Mobile::MobileController < ApplicationController
     end
   end
 
+  # GET /mobile/options/:option_id/positions/final
   def position_final
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -103,6 +123,7 @@ class Mobile::MobileController < ApplicationController
                     :link_description => true, :option_id => @option.id }
   end
 
+  # GET /mobile/options/:option_id/summary
   def summary
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -113,6 +134,7 @@ class Mobile::MobileController < ApplicationController
     @user_stance_bucket = @user_position.nil? ? -1 : @user_position.stance_bucket
   end
 
+  # GET /mobile/options/:option_id/segment/:stance_bucket
   def segment
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -134,6 +156,7 @@ class Mobile::MobileController < ApplicationController
     set_stance_name(@stance_bucket)
   end
 
+  # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
@@ -165,7 +188,21 @@ class Mobile::MobileController < ApplicationController
     @points = qry
   end
 
+  
+
 protected
+  #TODO: Temporary so doesn't fail when lookup points
+  def fill_temp_session_data
+    if session[@option.id].nil?
+      session[@option.id] = { :included_points => { } }
+      @option.points.each do |point|
+        if rand < 0.5
+          session[@option.id][:included_points][point.id] = 1
+        end
+      end
+    end
+  end
+
   def get_included_points is_pro
     #TEMPTEMP: Use this until get session setting correct(just handle null cases)
     if session[@option.id]

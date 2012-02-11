@@ -1,2 +1,5 @@
 %p What's your initial opinion of #{@option.reference}?
-= render :partial => "mobile/partials/position_select"
+= form_for @data, :url => mobile_navigate_path do |f|
+  = render :partial => "mobile/partials/position_select", :locals => { :form => f }
+  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+

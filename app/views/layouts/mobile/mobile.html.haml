@@ -1,14 +1,16 @@
 !!! Strict
 %html(xmlns="http://www.w3.org/1999/xhtml")
   %head{ :profile => "http://gmpg.org/xfn/1" }
-    - if @title
-      %title #{@title} – #{APP_CONFIG['meta']['title']}
+    - if @option
+      %title #{get_page_name} - #{@option.reference} – #{APP_CONFIG['meta']['title']}
     - else
-      %title Mobile – #{APP_CONFIG['meta']['title']}
+      %title #{get_page_name} – #{APP_CONFIG['meta']['title']}
     %link{ :href => "/favicon.ico", :rel => "icon", :type => "image/vnd.microsoft.icon" }
     %meta{ :content => 'text/html; charset=UTF-8', "http-equiv" => "Content-Type" }
     %meta{ :name => 'viewport', :content => 'width = device-width' }
     = stylesheet_link_tag 'mobile'
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
     /[if IE]
       = javascript_include_tag "svg", :"data-path" => "/javascripts/"
       %meta{ :content => "true", :name => "svg.render.forceflash"}
@@ -18,23 +20,26 @@
     /[if lt IE 7]
       = stylesheet_link_tag 'ie6'
   %body
-    - if @navigation
-      = render :partial => "mobile/partials/nav", :locals => { :id => "nav_top", :navigation => @navigation, :include_header => false }
-      
-    .init_title
-      - if @option
-        %h2.locality #{@option.domain} #{@option.reference}
-        %h1.initiative_name #{@option.name}
-      - else
-        %h1 #{APP_CONFIG['meta']['title']}
 
-    - if user_signed_in?
-      %p Hello, #{current_user.name}!
+    - if @option
+      %p #{session[@option.id]}
+
+    .init_title
+
+      - if @option
+        %h1.page_title #{get_page_name}
+        %h2.locality #{@option.domain_short}: #{@option.designator} - #{@option.short_name}
+      - else
+        %h1.page_title #{APP_CONFIG['meta']['title']}
+        - if user_signed_in?
+          %p Hello, #{current_user.name}!
+
+    - if flash[:notice]
+      %p.flash_message #{flash[:notice]}
+    - if flash[:error]
+      %p.flash_error #{flash[:error]}
 
     = yield
-
-    - if @navigation
-      = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true }
 
     %div{ :id => 'footer' }
       - if user_signed_in?

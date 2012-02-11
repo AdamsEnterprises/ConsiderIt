@@ -1,8 +1,9 @@
-%h1 #{@type.pluralize.capitalize}
-%p The following points have not yet been added to your #{@type} list. View a point's details to read more, discuss it, and add it to your list.
-- if @points.any?
+= form_for :navigate, :url => mobile_navigate_path do |f|
+  %p The following points have not yet been added to your #{@type} list. View a point's details to read more, discuss it, and add it to your list.
+  - if @points.any?
   = render :partial => "mobile/partials/point_list", :locals => { :points => @points }
-- else
-  %strong There are no unused #{@type.pluralize}
+  - else
+    %strong There are no unused #{@type.pluralize}
+  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 
 

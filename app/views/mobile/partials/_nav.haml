@@ -2,17 +2,14 @@
   - if include_header
     %h2 Navigation
   %ul.link_list
-    - if navigation[:forward_path]
+    - if navigation[:next]
       %li
-        = link_to "Forward", navigation[:forward_path]
+        = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{request.request_uri}][#{navigation[:next][:path]}]"
     %li
-      - if navigation[:back_path]
-        = link_to "Back", navigation[:back_path]
-      - else
-        %a{ :href => "", :onClick => "history.go(-1);" } Back
+      = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
     %li
-      = link_to "Home", mobile_home_path
-    - if navigation[:link_description] and navigation[:option_id]
+      = form.submit "Home", :name => "button[home]"
+    - if navigation[:show_description]
       %li
-        = link_to "Initiative Description", show_mobile_option_path(:option_id => navigation[:option_id])
+        = form.submit "Initiative Description", :name => "button[initiative_description][#{request.request_uri}]"
 

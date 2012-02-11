@@ -1,3 +1,4 @@
-%h2 Fiscal Impact Statement
 = @option.additional_details.html_safe
+= form_for :navigate, :url => mobile_navigate_path do |f|
+  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

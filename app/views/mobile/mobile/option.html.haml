@@ -8,24 +8,3 @@
       = f.submit "View Fiscal Impact Statement", :name => 'button[fiscal_impact]'
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 
--# Tests all the page_name possibilities
--#%p #{get_page_name mobile_home_path}
--#%p #{get_page_name show_mobile_option_path(@option)}
--#%p #{get_page_name show_mobile_option_long_description_path(@option)}
--#%p #{get_page_name show_mobile_option_fiscal_impact_path(@option)}
--#%p #{get_page_name mobile_option_initial_position_path(@option)}
--#%p #{get_page_name mobile_option_points_path(@option)}
--#%p #{get_page_name mobile_option_list_points_path(@option, :pro)}
--#%p #{get_page_name mobile_option_list_points_path(@option, :con)}
--#%p #{get_page_name add_mobile_option_point_path(@option, :pro)}
--#%p #{get_page_name add_mobile_option_point_path(@option, :con)}
--#%p #{get_page_name new_mobile_option_point_path(@option, :pro)}
--#%p #{get_page_name new_mobile_option_point_path(@option, :con)}
--#%p #{get_page_name mobile_option_final_position_path(@option)}
--#%p #{get_page_name mobile_option_summary_path(@option)}
--#%p #{get_page_name show_mobile_option_point_path(@option, 5)}
--#- (0..6).each do |stance_bucket|
--#  %p #{get_page_name mobile_option_segment_path(@option, stance_bucket)}
--#  %p #{get_page_name mobile_option_segment_list_path(@option, stance_bucket, :pro)}
--#  %p #{get_page_name mobile_option_segment_list_path(@option, stance_bucket, :con)}
-

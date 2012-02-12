@@ -12,10 +12,10 @@
     %h2 My Cons (#{@included_cons.count})
     %ul.link_list
       %li
-        = f.submit "See my pros", :name => "button[my_cons]"
+        = f.submit "See my cons", :name => "button[my_cons]"
       %li
-        = f.submit "Add an existing pro", :name => "button[add_cons]"
+        = f.submit "Add an existing con", :name => "button[add_cons]"
       %li
-        = f.submit "Write a new pro", :name => "button[new_con]"
+        = f.submit "Write a new con", :name => "button[new_con]"
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

@@ -10,6 +10,7 @@
     %meta{ :name => 'viewport', :content => 'width = device-width' }
     = stylesheet_link_tag 'mobile'
     = javascript_include_tag :defaults
+    = javascript_include_tag "mobile", :"data-path" => "/javscripts/"
     = csrf_meta_tag
     /[if IE]
       = javascript_include_tag "svg", :"data-path" => "/javascripts/"

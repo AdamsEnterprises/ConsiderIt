@@ -34,7 +34,6 @@ ConsiderIt::Application.routes.draw do
 
   # mobile site
   match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile, :as => :mobile_home
-  match '/mobile/options/:option_id/navigate' => "mobile/mobile#navigate", :module => :mobile, :via => :post, :as => :mobile_navigate
   match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile, :as => :show_mobile_option
   match '/mobile/options/:option_id/description' => "mobile/mobile#option_long_description", :via => :get, :module => :mobile, :as => :show_mobile_option_long_description
   match '/mobile/options/:option_id/fiscal_impact' => "mobile/mobile#option_fiscal_impact", :via => :get, :module => :mobile, :as => :show_mobile_option_fiscal_impact
@@ -49,4 +48,6 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/summary/:stance_bucket' => "mobile/mobile#segment", :via => :get, :module => :mobile, :as => :mobile_option_segment
   match '/mobile/options/:option_id/summary/:stance_bucket/:point_type' => "mobile/mobile#segment_list", :via => :get, :module => :mobile, :as => :mobile_option_segment_list
 
+  # Mobile Navigation
+  match '/mobile/options/:option_id/navigate' => "mobile/navigation#navigate", :module => :mobile, :via => :post, :as => :mobile_navigate
 end

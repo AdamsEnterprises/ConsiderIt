@@ -4,6 +4,11 @@
     %li{ :class => ("even" if even) }
       .point_text #{point.nutshell} (#{point.comments.count} comments)</div>
       .point_links
-        = link_to "Details", show_mobile_option_point_path(:option_id => @option.id, :point_id => point.id)
+        - if session[@option.id][:included_points].keys.include?(point.id.to_s)
+          = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]"
+        - else
+          = form.submit "Add Point", :name => "button[add_point][#{point.id}]"
+        %br
+        = form.submit "Details", :name => "button[point_details][#{request.request_uri}][#{point.id}]"
     - even = !even
 

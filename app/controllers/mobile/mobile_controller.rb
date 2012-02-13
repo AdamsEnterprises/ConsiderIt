@@ -143,9 +143,8 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
     define_navigation nil, true
 
-    @user_position = current_user ? current_user.positions.where(:option_id => @option.id).first : nil
-    # User stance bucket for this option (either -1 for no stance or a value in [0,6])
-    @user_stance_bucket = @user_position.nil? ? -1 : @user_position.stance_bucket
+    # TODO: Figure out how they actually get the user position
+    @user_stance_bucket = session[@option.id][:position].to_i
   end
 
   # GET /mobile/options/:option_id/segment/:stance_bucket

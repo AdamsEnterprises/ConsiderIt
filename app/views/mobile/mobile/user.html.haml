@@ -15,17 +15,21 @@
 
 %div#lvg_account.login_method
   %p.login_title Or, if you created an account with us:
-  %ul
-    %li.email_field
-      %label{:for => "user_email"} Email
-      %input#user_email{:type => "email", :name => "user[email]"}
-    %li.password_field
-      %label{:for => "user_password"} Password
-      %input#user_password{:type => "password", :name => "user[password]"}
-  %div.submit_footer
-    %input#user_submit{:type => "submit", :value => "Log in"}
+
+  %p
+    = form_for(resource, :as => resource_name, :url => user_session_path) do |f|
+      %ul
+        %li.email_field
+          = f.label :email
+          = f.text_field :email
+        %li.password_field
+          = f.label :password
+          = f.password_field :password
+      
+      %div.submit_footer
+        = f.submit "Log in"
+ 
     %div
       %button.cancel Cancel
   %p
     = link_to "Forgot your password?", new_mobile_password_path
-

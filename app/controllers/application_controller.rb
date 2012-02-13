@@ -1,3 +1,5 @@
+require 'uri'
+
 class ApplicationController < ActionController::Base
   #protect_from_forgery
   theme :theme_resolver
@@ -20,6 +22,27 @@ private
 
   def store_location(path)
     session[:return_to] = path
+  end
+
+  def after_sign_in_path_for(resource)
+    if is_mobile_call(request.referrer)
+      return "#{root_url}mobile"
+    else
+      super
+    end
+  end
+
+  def after_sign_out_path_for(resource)
+    if is_mobile_call(request.referrer)
+      return request.referrer
+    else
+      super
+    end 
+  end
+
+  def is_mobile_call(url)
+    uri = URI(url)
+    return /^\/mobile/ === uri.path
   end
 
 end

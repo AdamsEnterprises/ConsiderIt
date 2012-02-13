@@ -3,7 +3,7 @@
 = form_for :navigate, :url => mobile_navigate_path do |f|
   %ul.link_list
     %li
-      = f.submit "My point list", :name => "button[my_points]"
+      = f.submit "My pros and cons", :name => "button[my_points]"
     %li
       = f.submit "All voters", :name => "button[segment][7]"
     - all_positions_count = Position.where(:option_id => @option.id).count

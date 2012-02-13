@@ -13,23 +13,23 @@ module Mobile::MobileHelper
       elsif path == mobile_option_initial_position_path(@option)
         page_name = "Choose an Initial Position"
       elsif path == mobile_option_points_path(@option)
-        page_name = "Your Pros and Cons"
+        page_name = "My Pros and Cons"
       elsif path == mobile_option_list_points_path(@option, :pro)
-        page_name = "Your Pros"
+        page_name = "My Pros"
       elsif path == mobile_option_list_points_path(@option, :con)
-        page_name = "Your Cons"
+        page_name = "My Cons"
       elsif path == add_mobile_option_point_path(@option, :pro)
         page_name = "Add an Existing Pro"
       elsif path == add_mobile_option_point_path(@option, :con)
         page_name = "Add an Existing Con"
       elsif path == new_mobile_option_point_path(@option, :pro)
-        page_name = "Make a New Pro"
+        page_name = "Write a New Pro"
       elsif path == new_mobile_option_point_path(@option, :con)
-        page_name = "Make a New Con"
+        page_name = "Write a New Con"
       elsif path == mobile_option_final_position_path(@option)
-        page_name = "Choose a Final Position"
+        page_name = "Update Your Position"
       elsif path == mobile_option_summary_path(@option)
-        page_name = "User Distributions"
+        page_name = "Voter Distribution"
       # TODO: Fix this up (won't work @point not defined)
       # elsif @point and path == show_mobile_option_point_path(@option, @point)
       # TEMPTEMP Fix for it (only works because no other path has this)
@@ -38,18 +38,21 @@ module Mobile::MobileHelper
       else
         (0..7).each do |stance_bucket|
           if path == mobile_option_segment_path(@option, stance_bucket)
-            temp = " Pros and Cons"
+            temp = "$' Pros and Cons"
           elsif path == mobile_option_segment_list_path(@option, stance_bucket, :pro)
-            temp = " Pro List"
+            temp = "Pros Chosen By $"
           elsif path == mobile_option_segment_list_path(@option, stance_bucket, :con)
-            temp = " Con List"
+            temp = "Cons Chosen By $"
           end
 
           # Set up either stance name or "All Voters"...only if actually set page_name
-          if temp and stance_bucket == 7
-            page_name = "All voters" + temp
-          elsif temp
-            page_name = Position.stance_name_map(stance_bucket).capitalize + temp
+          if temp
+            if stance_bucket == 7
+              segment = "All Voters"
+            else
+              segment = @stance_name.split(" ").each{|word| word.capitalize!}.join(" ")
+            end
+            page_name = temp.gsub("$", segment)
           end
         end
       end

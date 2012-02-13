@@ -241,11 +241,11 @@ protected
       when 3
         @stance_name = "undecided voters"
       when 2
-        @stance_name = "slightly opposed voters"
+        @stance_name = "slight opposers"
       when 1
-        @stance_name = "moderately opposed voters"
+        @stance_name = "moderate opposers"
       when 0
-        @stance_name = "strongly opposed voters"
+        @stance_name = "strong opposers"
       else
         throw "Invalid stance bucket " + @stance_bucket
     end

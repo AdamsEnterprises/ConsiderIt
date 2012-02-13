@@ -1,8 +1,8 @@
-%p
+%p.fineprint
   = "Don't have an account?"
   = link_to "Sign up", new_mobile_user_path
 %div#third_party.login_method
-  %p Log in with your account from:
+  %p.login_title Log in with your account from:
   %ul
     %li
       = link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
@@ -14,18 +14,18 @@
       = link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
 
 %div#lvg_account.login_method
-  %p Or, if you created an account with us:
+  %p.login_title Or, if you created an account with us:
   %ul
     %li.email_field
-      %label Email
-      %input{:type => "text"}
+      %label{:for => "user_email"} Email
+      %input#user_email{:type => "email", :name => "user[email]"}
     %li.password_field
-      %label Password
-      %input{:type => "password"}
+      %label{:for => "user_password"} Password
+      %input#user_password{:type => "password", :name => "user[password]"}
   %div.submit_footer
-    %input{:type => "submit", :value => "Log in"}
+    %input#user_submit{:type => "submit", :value => "Log in"}
     %div
       %button.cancel Cancel
   %p
-    = link_to "Forgot your password?", "new_mobile_password_path"
+    = link_to "Forgot your password?", new_mobile_password_path
 

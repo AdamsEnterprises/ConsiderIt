@@ -420,7 +420,20 @@ div.author {
     margin: 0 0 30px 0;
 }
 
-/* login page */
+/* login/signup page */
 .login_method p {
     margin-bottom: 0;
+}
+
+.login_title {
+    font-weight: bold;
+}
+
+.fineprint {
+    color: #999999;
+    font-size: 13px;
+}
+
+#third_party {
+    border-bottom: 2px solid #E1E1E1;
 }

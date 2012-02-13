@@ -6,10 +6,6 @@ class Mobile::MobileController < ApplicationController
   def index
   end
 
-  # GET /mobile/user/
-  def user
-  end
-
   # GET /mobile/options/:option_id
   def option
     @option = Option.find_by_id(params[:option_id])

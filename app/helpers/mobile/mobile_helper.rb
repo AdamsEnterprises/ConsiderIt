@@ -1,4 +1,11 @@
 module Mobile::MobileHelper
+  def is_login_page
+    path = request.request_uri
+    return (path == mobile_user_path ||
+            path == new_mobile_user_path ||
+            path == new_mobile_password_path ||
+            path == new_mobile_confirmation_path)
+  end
 
   def get_page_name(path = request.request_uri)
     if path == mobile_home_path
@@ -7,8 +14,10 @@ module Mobile::MobileHelper
       page_name = "Log In to the Living Voters Guide"
     elsif path == new_mobile_user_path
       page_name = "Join the Living Voters Guide"
-    elsif path == mobile_password_path
+    elsif path == new_mobile_password_path
       page_name = "Reset Password"
+    elsif path == new_mobile_confirmation_path
+      page_name = "Resend Confirmation Instructions"
     elsif @option
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"

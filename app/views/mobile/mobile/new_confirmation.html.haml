@@ -1,0 +1,8 @@
+%p Didn't receive confirmation instructions?
+%label{:for => "user_email"} Email
+%input#user_email{:type => "email", :name => "user[email]"}
+%div.submit_footer
+  %input#user_submit{:type => "submit", :value => "Resend confirmation instructions"}
+  %div
+    %button.cancel Cancel
+= link_to "Forgot your password?", new_mobile_password_path

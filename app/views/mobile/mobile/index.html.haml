@@ -10,3 +10,7 @@
       %li
         = link_to "#{option.domain_short}: #{option.reference} - #{option.short_name}", show_mobile_option_path(:option_id => option.id)
 
+%p Or enter your zip code to unlock your local measures:
+%div
+  %input#domain{:type => "text"}
+  %input{:type => "submit", :value => "set"}

@@ -1,6 +1,6 @@
 %p
   = "Don't have an account?"
-  = link_to "Sign up!", new_mobile_user_path
+  = link_to "Sign up", new_mobile_user_path
 %div#third_party.login_method
   %p Log in with your account from:
   %ul
@@ -23,7 +23,7 @@
       %label Password
       %input{:type => "password"}
   %div.submit_footer
-    %input{:type => "submit", :value => "Login"}
+    %input{:type => "submit", :value => "Log in"}
     %div
       %button.cancel Cancel
   %p

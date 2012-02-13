@@ -4,9 +4,9 @@ module Mobile::MobileHelper
     if path == mobile_home_path
       page_name = "Homepage"
     elsif path == mobile_user_path
-      page_name = "Log In"
+      page_name = "Log In to the Living Voters Guide"
     elsif path == new_mobile_user_path
-      page_name = "Create Account"
+      page_name = "Join the Living Voters Guide"
     elsif path == mobile_password_path
       page_name = "Reset Password"
     elsif @option

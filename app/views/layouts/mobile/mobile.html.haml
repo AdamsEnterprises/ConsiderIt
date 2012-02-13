@@ -49,8 +49,9 @@
         = link_to "Logout", ""
       - else
         = "You are not logged in."
-        = link_to "Login", mobile_user_path
-
+        = link_to "Log in", mobile_user_path
+        = "or"
+        = link_to "sign up", new_mobile_user_path
     :javascript
       $j(document).ready(function(){
         ConsiderIt.init();     

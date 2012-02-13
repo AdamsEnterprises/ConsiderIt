@@ -1,1 +1,37 @@
-%p Create account
+%p
+  = "Already have an account?"
+  = link_to "Log in", mobile_user_path
+%div#third_party.login_method
+  %p Use your account from:
+  %ul
+    %li
+      = link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
+    %li
+      = link_to image_tag("/images/twitter.png", {:alt => "Twitter"}), "twitter_path"
+    %li
+      = link_to image_tag("/images/google.png", {:alt => "Google"}), "google_path"
+    %li
+      = link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
+  %p We won't post to your news feed or share your info.
+
+%div#lvg_account.login_method
+  %p Or, sign up the old-fashioned way!
+  %ul
+    %li.name_field
+      %label First and last name:
+      = link_to "(why?)", "",
+        {:onClick => "alert('You stand behind your opinions, don’t you? When possible, we believe it is best to avoid anonymity.'); return false;"}
+      %input{:type => "text"}
+    %li.email_field
+      %label Email:
+      = link_to "(why?)", "",
+        {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
+      %input{:type => "text"}
+
+    %li.password_field
+      %label Password:
+      %input{:type => "password"}
+  %div.submit_footer
+    %input{:type => "submit", :value => "Join"}
+    %div
+      %button.cancel Cancel

@@ -1,0 +1,29 @@
+%p
+  = "Don't have an account?"
+  = link_to "Sign up", new_mobile_user_path
+%div#third_party.login_method
+  %p If you used your account from:
+  %ul
+    %li
+      =link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
+    %li
+      =link_to image_tag("/images/twitter.png", {:alt => "Twitter"}), "twitter_path"
+    %li
+      =link_to image_tag("/images/google.png", {:alt => "Google"}), "google_path"
+    %li
+      =link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
+
+%div#lvg_account.login_method
+  %p Or, if you created an account with us:
+  %ul
+    %li.email_field
+      %label Email
+      %input{:type => "text"}
+    %li.password_field
+      %label Password
+      %input{:type => "password"}
+  %div.submit_footer
+    %input{:type => "submit", :value => "Login"}
+  %p
+    = link_to "Forgot your password?", "new_mobile_password_path"
+

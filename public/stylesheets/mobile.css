@@ -39,26 +39,6 @@ li.even {
     margin-bottom: 10px;
     border-bottom: 1px solid rgb(192,192,192);
 }
-/*
-#main_content {
-    max-height: 84%;
-    overflow-y: scroll;
-    position: fixed;
-    border-bottom: 1px solid rgb(192,192,192);
-}
-
-#nav.fixed {
-    position: fixed;
-    bottom: 5%;
-}
-
-#footer.fixed {
-    clear: both;
-    position: fixed;
-    bottom: 0;
-}
-*/
-
 
 #footer {
     clear: both;
@@ -85,7 +65,6 @@ h2.locality {
     font-weight: normal;
     text-transform: lowercase;
 }
-
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -439,4 +418,9 @@ div.author {
 
 #pro_con_nav .link_list {
     margin: 0 0 30px 0;
+}
+
+/* login page */
+.login_method p {
+    margin-bottom: 0;
 }

@@ -3,6 +3,12 @@ module Mobile::MobileHelper
   def get_page_name(path = request.request_uri)
     if path == mobile_home_path
       page_name = "Homepage"
+    elsif path == mobile_user_path
+      page_name = "Login"
+    elsif path == new_mobile_user_path
+      page_name = "Create account"
+    elsif path == mobile_password_path
+      page_name = "Reset Password"
     elsif @option
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"

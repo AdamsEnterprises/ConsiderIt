@@ -30,6 +30,10 @@
       - if @option
         %h1.page_title #{get_page_name}
         %h2.locality #{@option.domain_short}: #{@option.designator} - #{@option.short_name}
+      - elsif get_page_name == 'Login'
+        %h1.page_title Log in to the Living Voters Guide
+      - elsif get_page_name == 'Create Account'
+        %h1.page_title Create Account
       - else
         %h1.page_title #{APP_CONFIG['meta']['title']}
         - if user_signed_in?

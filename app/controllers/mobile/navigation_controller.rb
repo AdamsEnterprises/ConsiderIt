@@ -26,7 +26,40 @@ class Mobile::NavigationController < Mobile::MobileController
           redirect_path = request.referrer
           push_to_stack = false
         end
-      elsif redirect_path == nil
+      elsif coming_from == mobile_option_final_position_path(option_id)
+        # Next from choosing final position.  Save in session data and actually save everything
+        if params[:position] and params[:position][:stance_bucket]
+          position_bucket = params[:position][:stance_bucket]
+          session[option_id][:position] = position_bucket
+
+          # Save everything
+          if current_user
+            # TODO: Figure out how to instantiate positions correctly (and get rid of old position)
+            position = Position.new(:option_id => option_id, :user_id => current_user.id, :stance => (position_bucket.to_i / 6.0), :stance_bucket => position_bucket, :published => true)
+            if position.save
+              session[option_id][:included_points].keys.each do |point_id|
+                # TODO: Figure out how to instantiate inclusions correctly
+                inclusion = Inclusion.new(:option_id => option_id, :position_id => position.id, :point_id => point_id, :user_id => current_user.id)
+                if inclusion.save
+                  # All succeeded!
+                  flash[:notice] = "Success!"
+                else
+                  throw "Could not save inclusion: " + inclusion.errors
+                end
+              end
+            else
+              throw "Could not save position: " + position.errors
+            end
+          else
+            # TODO: Redirect to login if haven't done this
+            throw "Must be signed in!"
+          end
+        else
+          # Didn't input correct data.  Tell them that
+          flash[:error] = "No position chosen"
+          redirect_path = request.referrer
+          push_to_stack = false
+        end
       end
 
       if push_to_stack
@@ -115,6 +148,15 @@ class Mobile::NavigationController < Mobile::MobileController
 
       # Push referrer path onto stack
       session[option_id][:navigate].push referrer_path
+    elsif params[:button][:add_comment]
+      # Add comment
+      comment = Comment.new(params[:navigate][:comment])
+      if comment.save
+        # Worked.  Redirect to where came from
+        redirect_path = request.referrer
+      else
+        throw "Could not save comment: " + comment.errors
+      end
     elsif params[:button][:segment]
       stance_bucket = params[:button][:segment].keys.first
       

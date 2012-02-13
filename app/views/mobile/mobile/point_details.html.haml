@@ -4,7 +4,10 @@
       = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
     
     %div
-      %a{ :href => "", :onClick => "confirm('Are you sure you want to remove this point from your list?')" } Remove from my list
+      - if session[@option.id][:included_points].keys.include?(@point.id.to_s)
+        = f.submit "Remove Point", :name => "button[remove_point][#{@point.id}]"
+      - else
+        = f.submit "Add Point", :name => "button[add_point][#{@point.id}]"
     
     .summary
       %h1 Summary
@@ -33,16 +36,21 @@
                 = image_tag comment.user.avatar.url(:thumb), :alt => "#{h comment.user.name}'s profile picture"
               .comment_text
                 = comment.body
-                %span.author (by #{comment.user.name}
+                %span.author (by #{comment.user.name})
             - even = !even
         - else
           %li No discussion
-        %li.even
-          .comment_text.pointform
-            %textarea.has_example#comment_body{ :title => "Type your comment here..." }
-            .count Remaining characters: 1000
-            %p.note
-              %strong Remember your pledge!
-            %input{ :type => "submit", :id => "comment_submit", :value => "Add comment", :name => "commit" }
+        - if current_user
+          = f.hidden_field "comment[user_id]", :value => current_user.id
+          = f.hidden_field "comment[commentable_type]", :value => "Option"
+          = f.hidden_field "comment[commentable_id]", :value => @option.id
+          = f.hidden_field "comment[point_id]", :value => @point.id
+          %li.even
+            .comment_text.pointform
+              = f.text_area "comment[body]", :class => "has_example", :id => "comment_body", :title => "Type your comment here..."
+              .count Remaining characters: 1000
+              %p.note
+                %strong Remember your pledge!
+              = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

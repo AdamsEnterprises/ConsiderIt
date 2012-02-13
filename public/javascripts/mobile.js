@@ -4,7 +4,8 @@ window.onload = function() {
     /*** New point page ***/
 //    $("#add_link").click(addLink);
     $j("#point_hide_name").click(warnHideName);
-    
+
+    $j(".cancel").click(function() { history.go(-1); });
 }
 /*
 function addLink() {

@@ -1,17 +1,17 @@
 %p
   = "Don't have an account?"
-  = link_to "Sign up", new_mobile_user_path
+  = link_to "Sign up!", new_mobile_user_path
 %div#third_party.login_method
-  %p If you used your account from:
+  %p Log in with your account from:
   %ul
     %li
-      =link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
+      = link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
     %li
-      =link_to image_tag("/images/twitter.png", {:alt => "Twitter"}), "twitter_path"
+      = link_to image_tag("/images/twitter.png", {:alt => "Twitter"}), "twitter_path"
     %li
-      =link_to image_tag("/images/google.png", {:alt => "Google"}), "google_path"
+      = link_to image_tag("/images/google.png", {:alt => "Google"}), "google_path"
     %li
-      =link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
+      = link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
 
 %div#lvg_account.login_method
   %p Or, if you created an account with us:
@@ -24,6 +24,8 @@
       %input{:type => "password"}
   %div.submit_footer
     %input{:type => "submit", :value => "Login"}
+    %div
+      %button.cancel Cancel
   %p
     = link_to "Forgot your password?", "new_mobile_password_path"
 

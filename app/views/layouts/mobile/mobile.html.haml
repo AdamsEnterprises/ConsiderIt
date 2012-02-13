@@ -30,15 +30,12 @@
       - if @option
         %h1.page_title #{get_page_name}
         %h2.locality #{@option.domain_short}: #{@option.designator} - #{@option.short_name}
-      - elsif get_page_name == 'Login'
-        %h1.page_title Log in to the Living Voters Guide
-      - elsif get_page_name == 'Create Account'
-        %h1.page_title Create Account
-      - else
+      - elsif get_page_name == 'Homepage'
         %h1.page_title #{APP_CONFIG['meta']['title']}
         - if user_signed_in?
           %p Hello, #{current_user.name}!
-
+      - else
+        %h1.page_title #{get_page_name}
     - if flash[:notice]
       %p.flash_message #{flash[:notice]}
     - if flash[:error]
@@ -52,7 +49,7 @@
         = link_to "Logout", ""
       - else
         = "You are not logged in."
-        = link_to "Login", ""
+        = link_to "Login", mobile_user_path
 
     :javascript
       $j(document).ready(function(){

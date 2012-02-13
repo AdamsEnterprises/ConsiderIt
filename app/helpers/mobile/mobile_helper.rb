@@ -4,9 +4,9 @@ module Mobile::MobileHelper
     if path == mobile_home_path
       page_name = "Homepage"
     elsif path == mobile_user_path
-      page_name = "Login"
+      page_name = "Log In"
     elsif path == new_mobile_user_path
-      page_name = "Create account"
+      page_name = "Create Account"
     elsif path == mobile_password_path
       page_name = "Reset Password"
     elsif @option

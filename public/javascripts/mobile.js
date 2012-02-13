@@ -6,7 +6,29 @@ window.onload = function() {
     $j("#point_hide_name").click(warnHideName);
 
     $j(".cancel").click(function() { history.go(-1); });
+
+    $j("input.has_example")
+	.focus(hideExample)
+	.blur(setExample)
+	.blur();
 }
+
+// For textboxes with watermark text when empty
+function setExample() {
+    var input = $j(this);
+    if (input.val() == "") {
+	input.addClass("example")
+	input.val(input.attr("title"));
+    }
+}
+function hideExample() {
+    var input = $j(this);
+    if (input.hasClass("example")) {
+	input.removeClass("example");
+	input.val("");
+    }
+}
+
 /*
 function addLink() {
   var fieldset = $("<fieldset />")

@@ -1,17 +1,21 @@
-var hideClass = "hide";  // for hidden elements
-
 window.onload = function() {
-    /*** New point page ***/
-//    $("#add_link").click(addLink);
+    // New point page
+    $j("#add_link").click(addLink);
     $j("#point_hide_name").click(warnHideName);
 
+    // "Remove point" button
+    $j(".remove_point").click(confirmDeletePoint);
+
+    // Cancel button on login - should be replaced with stack nav
     $j(".cancel").click(function() { history.go(-1); });
 
+    // Textboxes with watermark
     $j(".has_example")
 	.focus(hideExample)
 	.blur(setExample)
 	.blur();
     
+    // Textboxes with character limit
     $j("textarea.char_limit").keyup(adjustCharLimit);
 }
 
@@ -49,48 +53,46 @@ function hideExample() {
     }
 }
 
-/*
+
 function addLink() {
-  var fieldset = $("<fieldset />")
-    .append($("<div>")
+  var fieldset = $j("<fieldset />")
+    .append($j("<div>")
               .addClass("delete")
               .addClass("clickable")
               .click(deleteLink)
               .text("delete"))
-    .append($("<input />")
+    .append($j("<input />")
               .attr("type", "text")
-              .attr("size", "30")
               .attr("id", "point_point_links_attributes_longcrazynumber_url")
               .attr("title", "http://...")
               .addClass("has_example")
-              .addClass("example")
-              .blur(showPlaceholder)
-              .focus(hidePlaceholder)
+              .blur(setExample)
+              .focus(hideExample)
               .blur())
-    .append($("<input />")
+    .append($j("<input />")
               .attr("type", "text")
-              .attr("size", "30")
               .attr("id", "point_point_links_attributes_longcrazynumber_description")
               .attr("title", "A brief description")
               .addClass("has_example")
-              .addClass("example")
-              .blur(showPlaceholder)
-              .focus(hidePlaceholder)
+              .blur(setExample)
+              .focus(hideExample)
               .blur());    
-  $("<div/>")
+  $j("<div/>")
     .addClass("point_link_form")
     .append(fieldset)
-    .appendTo(".point_link_block");
+     .appendTo($j("#point_links"));
+
+  return false;
 }
-*/
+
 function deleteLink() {
   if (confirm("This link will be deleted.")) {
     $j(this).closest(".point_link_form").remove();
   }
 }
 
-function deletePoint() {
-    var del = confirm("This point will be removed from your list.\n\nDon't worry, though - if you change your mind later, you can always add it back.");
+function confirmDeletePoint() {
+    return confirm("This point will be removed from your list.");
 
 }
 

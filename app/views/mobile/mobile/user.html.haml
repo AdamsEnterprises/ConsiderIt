@@ -2,19 +2,15 @@
   = "Don't have an account?"
   = link_to "Sign up", new_mobile_user_path
 %div#third_party.login_method
-  %p.login_title Log in with your account from:
+  %h3 If you used your account from:
   %ul
+  - ['facebook', 'twitter', 'google', 'yahoo'].each do |provider|
     %li
-      = link_to image_tag("/images/facebook.png", {:alt => "Facebook"}), "facebook_path"
-    %li
-      = link_to image_tag("/images/twitter.png", {:alt => "Twitter"}), "twitter_path"
-    %li
-      = link_to image_tag("/images/google.png", {:alt => "Google"}), "google_path"
-    %li
-      = link_to image_tag("/images/yahoo.png", {:alt => "Yahoo"}), "yahoo_path"
+      %a{ :onclick => "javascript:login('#{new_user_session_path(:third_party=>true, :provider=>"#{provider}")}',500, 500)" }
+        = image_tag("#{provider}.png")
 
 %div#lvg_account.login_method
-  %p.login_title Or, if you created an account with us:
+  %h3 Or, if you created an account with us:
 
   %p
     = form_for(resource, :as => resource_name, :url => user_session_path) do |f|

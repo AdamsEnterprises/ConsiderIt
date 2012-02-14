@@ -5,7 +5,7 @@
       .point_text #{point.nutshell} (#{point.comments.count} comments)</div>
       .point_links
         - if session[@option.id][:included_points].keys.include?(point.id.to_s)
-          = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]"
+          = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point"
         - else
           = form.submit "Add Point", :name => "button[add_point][#{point.id}]"
         %br

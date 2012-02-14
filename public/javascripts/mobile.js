@@ -19,8 +19,14 @@ function adjustCharLimit() {
     var textarea = $j(this);
     var limit = textarea.attr("count");
     var length = textarea.val().length;
-    if (length > limit) {  // prevent character from being added
+    if (length > limit) {
+	// Prevent character from being added
 	textarea.val(textarea.val().substr(0,limit));
+	// Play alert sound. Should probably remove old sound
+	// elements to keep things clean, but it seems like this
+	// slows things down slightly.
+	$j("body").append('<embed src="tonk.wav" autostart="true" loop="false" ' +
+			 'style="visibility:hidden;" />');
     } else {
 	textarea.siblings(".count")
             .text("Remaining characters: " + (limit - length));

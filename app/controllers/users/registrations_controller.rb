@@ -19,8 +19,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
         if session.has_key?('position_to_be_published')
           session['reify_activities'] = true 
         end
-        redirect_to request.referer
 
+        # TODO: post-registration actions go here, including error handling
+        if /^\/mobile/ === URI(request.referer).path
+          # for now just go to home on login
+          redirect_to "#{root_url}mobile"
+	else
+          redirect_to request.referer
+        end
       else
         set_flash_message :notice, :inactive_signed_up, :reason => inactive_reason(resource) if is_navigational_format?
         expire_session_data_after_sign_in!

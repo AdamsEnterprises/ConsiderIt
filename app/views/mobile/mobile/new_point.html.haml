@@ -2,11 +2,11 @@
   = form_for :navigate, :url => mobile_navigate_path do |f|
     .point-title-group
       %div Summarize your point in 140 characters (required):
-      %textarea.has_example#point_nutshell{ :name => "point[nutshell]" }
+      %textarea#point_nutshell{ :name => "point[nutshell]", :count => "140" }
       .count Remaining characters: 140
     .point-description-group
-      %div Write a longer description of your point (optional):
-      %textarea.has_example#point_text{ :name => "point[text]" }
+      %div Write a longer description of your point, up to 700 characters (optional):
+      %textarea.char_limit#point_text{ :name => "point[text]", :count => "700" }
       .count Remaining characters: 700
     .point_link_block
       %p

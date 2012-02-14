@@ -7,10 +7,24 @@ window.onload = function() {
 
     $j(".cancel").click(function() { history.go(-1); });
 
-    $j("input.has_example")
+    $j(".has_example")
 	.focus(hideExample)
 	.blur(setExample)
 	.blur();
+    
+    $j("textarea.char_limit").keyup(adjustCharLimit);
+}
+
+function adjustCharLimit() {
+    var textarea = $j(this);
+    var limit = textarea.attr("count");
+    var length = textarea.val().length;
+    if (length > limit) {  // prevent character from being added
+	textarea.val(textarea.val().substr(0,limit));
+    } else {
+	textarea.siblings(".count")
+            .text("Remaining characters: " + (limit - length));
+    }
 }
 
 // For textboxes with watermark text when empty

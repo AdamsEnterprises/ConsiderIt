@@ -47,7 +47,11 @@
           = f.hidden_field "comment[point_id]", :value => @point.id
           %li.even
             .comment_text.pointform
-              = f.text_area "comment[body]", :class => "has_example", :id => "comment_body", :title => "Type your comment here..."
+              - if @point.comments.any?
+                %p Contribute to this discussion:
+              - else
+                %p Be the first to discuss this point:
+              = f.text_area "comment[body]", :class => "has_example char_limit", :id => "comment_body", :title => "Type your comment here (up to 1000 characters)...", :count => "1000"
               .count Remaining characters: 1000
               %p.note
                 %strong Remember your pledge!

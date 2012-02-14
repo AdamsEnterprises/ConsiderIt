@@ -16,24 +16,29 @@
 
 %div#lvg_account
   %p.login_title Or, sign up the old-fashioned way!
-  %ul
-    %li.name_field
-      %label{:for => "user_name"}
-        = "First and last name:"
-        = link_to "(why?)", "",
-          {:onClick => "alert('You stand behind your opinions, don’t you? When possible, we believe it is best to avoid anonymity.'); return false;"}
-      %input#user_name{:type => "text", :name => "user[name]"}
-    %li.email_field
-      %label{:for => "user_email"}
-        = "Email:"
-        = link_to "(why?)", "",
-          {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
-      %input#user_email{:type => "email", :name => "user[email]"}
 
-    %li.password_field
-      %label{:for => "user_password"} Password:
-      %input#user_password{:type => "password", :name => "user[password]"}
-  %div.submit_footer
-    %input#user_submit{:type => "submit", :value => "Join"}
-    %div
-      %button.cancel Cancel
+  = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
+
+    %ul
+  
+    %ul
+      %li.name_field
+        %label{:for => "user_name"}
+          = "First and last name:"
+          = link_to "(why?)", "",
+            {:onClick => "alert('You stand behind your opinions, don’t you? When possible, we believe it is best to avoid anonymity.'); return false;"}
+        = f.text_field :name, :class => 'has_example'
+      %li.email_field
+        %label{:for => "user_email"}
+          = "Email:"
+          = link_to "(why?)", "",
+            {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
+        = f.email_field :email, :class => 'has_example'
+
+      %li.password_field
+        %label{:for => "user_password"} Password:
+        = f.password_field :password, :class => 'has_example'
+    %div.submit_footer
+      = f.submit "Sign up"
+      %div
+        %button.cancel Cancel

@@ -6,14 +6,7 @@ class Mobile::NavigationController < Mobile::MobileController
   def navigate
     option_id = params[:option_id]
 
-    if params[:button][:home]
-      # Going home.  Clear the navigation stack and go to the home side
-      session[option_id][:navigate].clear
-      redirect_path = mobile_home_path
-    elsif params[:button][:next]
-      # Next button.  Push onto stack and redirect
-      coming_from = params[:button][:next].keys.first
-      redirect_path = params[:button][:next][coming_from].keys.first
+    redirect_path = handle_nav(option_id) {|coming_from, redirect_path|
       push_to_stack = true
 
       if coming_from == mobile_option_initial_position_path(option_id)
@@ -61,11 +54,58 @@ class Mobile::NavigationController < Mobile::MobileController
           push_to_stack = false
         end
       end
-
+     
       if push_to_stack
         # Push coming_from onto stack
         session[option_id][:navigate].push coming_from
       end
+
+      redirect_path
+    }
+
+    if redirect_path.nil?
+      redirect_path = handle_overview_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_points_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_add_remove_point_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_details_button(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_add_comment_button(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_segment_buttons(option_id)
+    end
+    
+    if redirect_path.nil?
+      throw "No button action for " + params[:button].keys.first.to_s
+    end
+
+    redirect_to redirect_path
+  end
+
+protected
+  def handle_nav(option_id)
+    if params[:button][:home]
+      # Going home.  Clear the navigation stack and go to the home side
+      session[option_id][:navigate].clear
+      redirect_path = mobile_home_path
+    elsif params[:button][:next]
+      # Next button.  Push onto stack and redirect
+      coming_from = params[:button][:next].keys.first
+      redirect_path = params[:button][:next][coming_from].keys.first
+
+      redirect_path = yield(coming_from, redirect_path)
     elsif params[:button][:initiative_description]
       # Initiative Description button
       redirect_path = show_mobile_option_path(option_id)
@@ -75,53 +115,54 @@ class Mobile::NavigationController < Mobile::MobileController
     elsif params[:button][:previous]
       # Back button.  Pop off stack and go back
       redirect_path = session[option_id][:navigate].pop
-    elsif params[:button][:description]
+    end
+
+    return redirect_path
+  end
+
+  def handle_overview_buttons(option_id)
+    if params[:button][:description]
       # Show long description pushed
       redirect_path = show_mobile_option_long_description_path(params[:option_id])
-
-      # Push option overview path onto stack
-      session[option_id][:navigate].push show_mobile_option_path(option_id)
     elsif params[:button][:fiscal_impact]
       redirect_path = show_mobile_option_fiscal_impact_path(params[:option_id])
+    end
 
+    if redirect_path
       # Push option overview path onto stack
       session[option_id][:navigate].push show_mobile_option_path(option_id)
-    elsif params[:button][:my_pros]
-      redirect_path = mobile_option_list_points_path(option_id, :pro)
+    end
+    
+    return redirect_path
+  end
 
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
+  def handle_points_buttons(option_id)
+    if params[:button][:my_pros]
+      redirect_path = mobile_option_list_points_path(option_id, :pro)
     elsif params[:button][:add_pros]
       redirect_path = add_mobile_option_point_path(option_id, :pro)
-
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
     elsif params[:button][:new_pro]
       redirect_path = new_mobile_option_point_path(option_id, :pro)
-
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
     elsif params[:button][:my_cons]
       redirect_path = mobile_option_list_points_path(option_id, :con)
-
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
     elsif params[:button][:add_cons]
       redirect_path = add_mobile_option_point_path(option_id, :con)
-
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
     elsif params[:button][:new_con]
       redirect_path = new_mobile_option_point_path(option_id, :con)
-
-      # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
     elsif params[:button][:my_points]
       redirect_path = mobile_option_points_path(option_id)
+    end
 
+    if redirect_path
       # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_summary_path(option_id)
-    elsif params[:button][:remove_point]
+      session[option_id][:navigate].push mobile_option_points_path(option_id)
+    end
+
+    return redirect_path
+  end
+
+  def handle_add_remove_point_buttons(option_id)
+    if params[:button][:remove_point]
       redirect_path = request.referrer
 
       point_id = params[:button][:remove_point].keys.first
@@ -141,14 +182,26 @@ class Mobile::NavigationController < Mobile::MobileController
       else
         session[option_id][:included_points][point_id] = 1
       end
-    elsif params[:button][:point_details]
+    end
+
+    return redirect_path
+  end
+
+  def handle_details_button(option_id)
+    if params[:button][:point_details]
       referrer_path = params[:button][:point_details].keys.first
       point_id = params[:button][:point_details][referrer_path].keys.first
       redirect_path = show_mobile_option_point_path(option_id, point_id)
 
       # Push referrer path onto stack
       session[option_id][:navigate].push referrer_path
-    elsif params[:button][:add_comment]
+    end
+
+    return redirect_path
+  end
+
+  def handle_add_comment_button(option_id)
+    if params[:button][:add_comment]
       # Add comment
       comment = Comment.new(params[:navigate][:comment])
       if comment.save
@@ -157,13 +210,19 @@ class Mobile::NavigationController < Mobile::MobileController
       else
         throw "Could not save comment: " + comment.errors
       end
-    elsif params[:button][:segment]
+    end
+
+    return redirect_path
+  end
+
+  def handle_segment_buttons(option_id)
+    if params[:button][:segment]
       stance_bucket = params[:button][:segment].keys.first
       
       if params[:button][:segment][stance_bucket].is_a?(Hash) and
          (params[:button][:segment][stance_bucket][:pro] or
           params[:button][:segment][stance_bucket][:con])
-        # Going to the list of segments
+        # Going to the list of points for a segment
         redirect_path = mobile_option_segment_list_path(option_id, stance_bucket,
                                                    params[:button][:segment][stance_bucket].keys.first)
         # Push segment overview path onto stack
@@ -174,10 +233,8 @@ class Mobile::NavigationController < Mobile::MobileController
         # Push summary path onto stack
         session[option_id][:navigate].push mobile_option_summary_path(option_id)
       end
-    else
-      throw "No button action for " + params[:button].keys.first.to_s
     end
 
-    redirect_to redirect_path
+    return redirect_path
   end
 end

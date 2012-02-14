@@ -8,7 +8,7 @@
       - opposite_type = @type == "pro" ? "con" : "pro"
       = link_to "See my " + opposite_type.pluralize, mobile_option_list_points_path(:option_id => @option.id, :type => opposite_type)
   - if @included_points.any?
-    = render :partial => "mobile/partials/point_list", :locals => { :points => @included_points, :form => f }
+    = render :partial => "mobile/partials/point_list", :locals => { :points => @included_points, :included_points => @included_points, :form => f }
   - else
     %strong You currently have no included #{@type.pluralize}
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }

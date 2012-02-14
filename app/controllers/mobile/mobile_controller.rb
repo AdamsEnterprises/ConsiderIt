@@ -101,8 +101,10 @@ class Mobile::MobileController < ApplicationController
     @type = params[:type]
     if @type == 'pro'
       @points = @option.points.pros.not_included_by(current_user, session[@option.id][:included_points].keys).ranked_persuasiveness
+      @included_points = get_included_points(true)
     elsif @type == 'con'
       @points = @option.points.cons.not_included_by(current_user, session[@option.id][:included_points].keys).ranked_persuasiveness
+      @included_points = get_included_points(false)
     else
       throw 'Invalid type ' + @type
     end
@@ -181,8 +183,10 @@ class Mobile::MobileController < ApplicationController
     @point_type = params[:point_type]
     if ( @point_type == 'pro' )
       qry = qry.pros
+      @included_points = get_included_points(true)
     elsif ( @point_type == 'con' )
       qry = qry.cons
+      @included_points = get_included_points(false)
     else
       throw 'Invalid point type ' + @point_type
     end
@@ -199,6 +203,7 @@ class Mobile::MobileController < ApplicationController
     set_stance_name(@stance_bucket)
 
     @points = qry
+    
   end
 
 protected

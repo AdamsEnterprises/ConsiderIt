@@ -225,8 +225,8 @@ protected
     #TEMPTEMP: Use this until get session setting correct(just handle null cases)
     if session[@option.id]
       # TODO: Refactor this out since is replicated from positions_controller.rb
-      return Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
-             Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => is_pro)
+      return (Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
+             Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => is_pro)).uniq
     else
       return []
     end

@@ -11,7 +11,7 @@
       %li 
         = link_to "See pros for #{@stance_name}", mobile_option_segment_list_path(:option_id => @option.id, :stance_bucket => @stance_bucket, :point_type => :pro)
   - if @points.any?
-    = render :partial => "mobile/partials/point_list", :locals => { :points => @points, :form => f }
+    = render :partial => "mobile/partials/point_list", :locals => { :points => @points, :included_points => @included_points, :form => f }
   - else
     %strong No #{@point_type.pluralize} listed by #{@stance_name}
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }

@@ -12,7 +12,7 @@ class Mobile::NavigationController < Mobile::MobileController
       if coming_from == mobile_option_initial_position_path(option_id)
         # Next from choosing initial position.  Save in session data
         if params[:position] and params[:position][:stance_bucket]
-          session[option_id][:position] = params[:position][:stance_bucket]
+          set_position(option_id, params[:position][:stance_bucket])
         else
           # Didn't input correct data.  Tell them that
           flash[:error] = "No position chosen"
@@ -23,28 +23,34 @@ class Mobile::NavigationController < Mobile::MobileController
         # Next from choosing final position.  Save in session data and actually save everything
         if params[:position] and params[:position][:stance_bucket]
           position_bucket = params[:position][:stance_bucket]
-          session[option_id][:position] = position_bucket
 
-          # Save everything
+          position = set_position(option_id, position_bucket)
+
+          # Save inclusions
           if current_user
-            # TODO: Figure out how to instantiate positions correctly (and get rid of old position)
-            position = Position.new(:option_id => option_id, :user_id => current_user.id, :stance => (position_bucket.to_i / 6.0), :stance_bucket => position_bucket, :published => true)
-            if position.save
-              session[option_id][:included_points].keys.each do |point_id|
-                # TODO: Figure out how to instantiate inclusions correctly
-                inclusion = Inclusion.new(:option_id => option_id, :position_id => position.id, :point_id => point_id, :user_id => current_user.id)
-                if inclusion.save
-                  # All succeeded!
-                  flash[:notice] = "Success!"
+            # Get old inclusions for this option
+            prev_inclusions = Inclusion.unscoped.where(:option_id => option_id, :user_id => current_user.id)
+
+            session[option_id][:included_points].keys.each do |point_id|
+              # Copy everything over if don't already exist
+              prev_inclusion = prev_inclusions.where(:point_id => point_id)
+              if prev_inclusion.any?
+                if prev_inclusion.count == 1
+                  inclusion = prev_inclusion.first
+                  inclusion.update_attributes(:position_id => position.id)
                 else
-                  throw "Could not save inclusion: " + inclusion.errors
+                  throw "Invalid inclusion count (" + prev_inclusion.count.to_s + "): " + prev_inclusion.inspect
                 end
+              else
+                inclusion = Inclusion.new(:option_id => option_id, :position_id => position.id, :point_id => point_id, :user_id => current_user.id)
               end
-            else
-              throw "Could not save position: " + position.errors
+
+              if not inclusion.save
+                throw "Could not save inclusion: " + inclusion.errors
+              end
             end
           else
-            # TODO: Redirect to login if haven't done this
+            # TODO: Redirect to login if no current_user
             throw "Must be signed in!"
           end
         else
@@ -95,6 +101,33 @@ class Mobile::NavigationController < Mobile::MobileController
   end
 
 protected
+  def set_position(option_id, stance_bucket)
+    # Update session
+    session[option_id][:position] = stance_bucket
+    
+    # Update user position if applicable
+    if current_user
+      positions = Position.where(:option_id => option_id, :user_id => current_user.id)
+      stance = stance_bucket.to_i / 6.0
+      if positions.any?
+        if positions.count == 1
+          position = positions.first
+          position.update_attributes(:stance => stance, :stance_bucket => stance_bucket)
+        else
+          throw "Invalid positions count (" + positions.count.to_s + "): " + positions.inspect
+        end
+      else
+        position = Position.new(:option_id => option_id, :user_id => current_user.id, :stance => stance, :stance_bucket => stance_bucket, :published => true)
+      end
+
+      if not position.save
+        throw "Could not save position: " + position.inspect
+      end
+    end
+
+    return position
+  end
+
   def handle_nav(option_id)
     if params[:button][:home]
       # Going home.  Clear the navigation stack and go to the home side
@@ -166,21 +199,49 @@ protected
       redirect_path = request.referrer
 
       point_id = params[:button][:remove_point].keys.first
-      # Add point to included_points
+
+      # Check if actually had that point originally
+      point_is_included = false
+
+      # Check session inclusions to remove
       if session[option_id][:included_points].keys.include? point_id
         session[option_id][:included_points].delete(point_id)
-      else
+        point_is_included = true
+      end
+
+      # Check database inclusions to remove
+      if current_user
+        inclusions = current_user.inclusions.where(:option_id => option_id, :point_id => point_id)
+
+        inclusions.each do |i|
+          # Should only have one inclusion that matches the users option and point
+          i.destroy
+          point_is_included = true
+        end
+      end
+
+      if !point_is_included
         throw "Point is not in your list yet"
       end
     elsif params[:button][:add_point]
       redirect_path = request.referrer
 
       point_id = params[:button][:add_point].keys.first
-      # Add point to included_points
-      if session[option_id][:included_points].keys.include? point_id
-        throw "Point already in your list"
-      else
+
+      # Check session inclusions to add (only if haven't added it yet)
+      if not session[option_id][:included_points].keys.include? point_id
         session[option_id][:included_points][point_id] = 1
+      end
+
+      # Check database inclusions to add
+      if current_user
+        inclusions = current_user.inclusions.where(:option_id => option_id, :point_id => point_id)
+        if inclusions.count == 0
+          # Should not have any inclusions that match the users option and point
+          # TODO: Figure out how to add inclusion if don't have a position yet
+        else
+          throw "Should not already have included the point: " + inclusions.inspect
+        end
       end
     end
 

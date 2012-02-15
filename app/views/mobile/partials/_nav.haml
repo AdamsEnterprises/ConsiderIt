@@ -7,8 +7,11 @@
         = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{navigation[:next][:path]}]"
     %li
       = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
-    %li
-      = form.submit "Home", :name => "button[home]"
+
+    - if get_page_name(navigation[:previous][:path]) != "Homepage"
+      %li
+        = form.submit "Home", :name => "button[home]"
+
     - if navigation[:show_description]
       %li
         = form.submit "Initiative Description", :name => "button[initiative_description][#{request.request_uri}]"

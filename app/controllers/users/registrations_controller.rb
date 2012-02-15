@@ -22,8 +22,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
         # TODO: post-registration actions go here, including error handling
         if /^\/mobile/ === URI(request.referer).path
-          # for now just go to home on login
-          redirect_to "#{root_url}mobile"
+          # redirect to instructions about confirmation
+          redirect_to new_mobile_user_confirm_path
 	else
           redirect_to request.referer
         end

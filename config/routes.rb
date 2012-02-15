@@ -36,7 +36,9 @@ ConsiderIt::Application.routes.draw do
   match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile, :as => :mobile_home
   match '/mobile/user' => "mobile/mobile#user", :via => :get, :module => :mobile, :as => :mobile_user
   match '/mobile/user/new' => "mobile/mobile#new_user", :via => :get, :module => :mobile, :as => :new_mobile_user
-  match '/mobile/user/confirmation/new' => "mobile/mobile#new_confirmation", :via => :get, :module => :mobile, :as => :new_mobile_confirmation
+  match '/mobile/user/new/pledge' => "mobile/mobile#new_user_pledge", :via => :get, :module => :mobile, :as => :new_mobile_user_pledge
+  match '/mobile/user/new/confirm' => "mobile/mobile#new_user_confirm", :via => :get, :module => :mobile, :as => :new_mobile_user_confirm
+  match '/mobile/user/confirm/resend' => "mobile/mobile#confirm_resend", :via => :get, :module => :mobile, :as => :mobile_confirm_resend
   match '/mobile/user/password/new' => "mobile/mobile#new_password", :via => :get, :module => :mobile, :as => :new_mobile_password
   match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile, :as => :show_mobile_option
   match '/mobile/options/:option_id/description' => "mobile/mobile#option_long_description", :via => :get, :module => :mobile, :as => :show_mobile_option_long_description

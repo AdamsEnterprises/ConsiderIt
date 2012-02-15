@@ -1,7 +1,8 @@
 %p.fineprint
   = "Don't have an account?"
-  = link_to "Sign up", new_mobile_user_path
-%div#third_party.login_method
+  = link_to("Sign up!", new_mobile_user_pledge_path)
+-#%div#third_party.login_method
+-#
   %h3 If you used your account from:
   %ul
   - ['facebook', 'twitter', 'google', 'yahoo'].each do |provider|
@@ -10,17 +11,17 @@
         = image_tag("#{provider}.png")
 
 %div#lvg_account.login_method
-  %h3 Or, if you created an account with us:
+  -#%h3 Or, if you created an account with us:
 
   %p
     = form_for(resource, :as => resource_name, :url => user_session_path) do |f|
       %ul
         %li.email_field
           = f.label :email
-          = f.text_field :email
+          = f.text_field :email, :autocapitalize => 'off'
         %li.password_field
           = f.label :password
-          = f.password_field :password
+          = f.password_field :password, :autocapitalize => 'off'
       
       %div.submit_footer
         = f.submit "Log in"

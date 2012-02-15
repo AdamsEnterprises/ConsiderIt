@@ -1,7 +1,8 @@
 %p.fineprint
   = "Already have an account?"
-  = link_to "Log in", mobile_user_path
-%div#third_party
+  = link_to("Log in!", mobile_user_path)
+-#%div#third_party
+-#
   %h3
     Use your account from:
   %ul
@@ -13,7 +14,7 @@
   %p.fineprint We won't post to your news feed or share your info.
 
 %div#lvg_account
-  %h3 Or, sign up the old-fashioned way!
+  -#%h3 Or, sign up the old-fashioned way!
 
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
 
@@ -31,12 +32,15 @@
           = "Email:"
           = link_to "(why?)", "",
             {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
-        = f.email_field :email, :class => 'has_example'
+        = f.email_field :email, :class => 'has_example', :autocapitalize => 'off'
 
       %li.password_field
         %label{:for => "user_password"} Password:
-        = f.password_field :password, :class => 'has_example'
+        = f.password_field :password, :class => 'has_example', :autocapitalize => 'off'
     %div.submit_footer
       = f.submit "Sign up"
       %div
         %button.cancel Cancel
+%div
+  = "By signing up, you acknowledge that you have read, agree to and were bored by the "
+  = link_to("Terms of Use", "") + "."

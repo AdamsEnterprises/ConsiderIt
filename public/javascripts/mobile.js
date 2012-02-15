@@ -17,6 +17,9 @@ window.onload = function() {
     
     // Textboxes with character limit
     $j("textarea.char_limit").keyup(adjustCharLimit);
+
+    // Signup pledge page
+    $j("#pledge_agree").click(togglePledgeSubmit);
 }
 
 function adjustCharLimit() {
@@ -94,6 +97,17 @@ function deleteLink() {
 function confirmDeletePoint() {
     return confirm("This point will be removed from your list.");
 
+}
+
+// When the user checks/unchecks the box agreeing to the conditions
+// of the site pledge, enable/disable the button to go to the
+// signup page accordingly
+function togglePledgeSubmit() {
+    var signup = $j("#pledge_submit");  // signup button
+    if ($j(this).attr("checked"))
+	signup.attr("disabled", null);
+    else
+	signup.attr("disabled", "disabled");
 }
 
 function warnHideName() {

@@ -1,6 +1,7 @@
 %p Didn't receive confirmation instructions?
 %label{:for => "user_email"} Email
-%input#user_email{:type => "email", :name => "user[email]"}
+%input#user_email{:type => "email", :name => "user[email]",
+  :autocapitalize => 'off'}
 %div.submit_footer
   %input#user_submit{:type => "submit", :value => "Resend confirmation instructions"}
   %div

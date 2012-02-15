@@ -18,6 +18,13 @@ h3 {
     margin: 6px 0;
 }
 
+/* text of button within a link (e.g. pledge page)
+should not be underlined. Applying style to "a button"
+doesn't work - needs to be applied to "a" directly */
+a.button {
+    text-decoration: none;
+}
+
 .home {
     float: right;
 }
@@ -441,4 +448,12 @@ div.author {
 
 #third_party {
     border-bottom: 2px solid #E1E1E1;
+}
+
+#pledge_form .summary {
+    font-weight: bold;
+}
+
+#pledge_form p {
+    margin: 3px 0 10px 15px;
 }

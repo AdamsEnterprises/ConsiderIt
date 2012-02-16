@@ -4,15 +4,13 @@ class Mobile::NavigationController < Mobile::MobileController
   
   # POST /mobile/options/:option_id/navigate/option
   def option
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
-      session[option_id][:navigate].push show_mobile_option_path
+    redirect_path = handle_nav {|redirect_path|
+      session[:mobile][option_id][:navigate].push show_mobile_option_path
       redirect_path
     }
 
     if redirect_path.nil?
-      redirect_path = handle_overview_buttons(option_id)
+      redirect_path = handle_overview_buttons
     end
 
     handle_redirection redirect_path
@@ -20,9 +18,7 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/long_description
   def long_description
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for long description"
     }
 
@@ -31,9 +27,7 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/fiscal_impact
   def fiscal_impact
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for fiscal impact"
     }
 
@@ -42,14 +36,12 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/position_initial
   def position_initial
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       push_to_stack = true
  
       # Next from choosing initial position.  Save in session data
       if params[:position] and params[:position][:stance_bucket]
-        set_position(option_id, params[:position][:stance_bucket])
+        set_position(params[:position][:stance_bucket])
       else
         # Didn't input correct data.  Tell them that
         flash[:error] = "No position chosen"
@@ -59,7 +51,7 @@ class Mobile::NavigationController < Mobile::MobileController
 
       if push_to_stack
         # Push coming_from onto stack
-        session[option_id][:navigate].push mobile_option_initial_position_path
+        session[:mobile][option_id][:navigate].push mobile_option_initial_position_path
       end
 
       redirect_path
@@ -70,15 +62,13 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/points
   def points
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
-      session[option_id][:navigate].push mobile_option_points_path
+    redirect_path = handle_nav {|redirect_path|
+      session[:mobile][option_id][:navigate].push mobile_option_points_path
       redirect_path
     }
 
     if redirect_path.nil?
-      redirect_path = handle_points_buttons(option_id)
+      redirect_path = handle_points_buttons
     end
 
     handle_redirection redirect_path
@@ -86,18 +76,16 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/list_points/:type
   def list_points
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for list_points"
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons(option_id)
+      redirect_path = handle_add_remove_point_buttons
     end
 
     if redirect_path.nil?
-      redirect_path = handle_details_button(option_id)
+      redirect_path = handle_details_button
     end
 
     handle_redirection redirect_path
@@ -105,18 +93,16 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/add_point/:type
   def add_point
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for add_point"
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons(option_id)
+      redirect_path = handle_add_remove_point_buttons
     end
 
     if redirect_path.nil?
-      redirect_path = handle_details_button(option_id)
+      redirect_path = handle_details_button
     end
 
     handle_redirection redirect_path
@@ -124,9 +110,7 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/new_point/:type
   def new_point
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for new_point"
     }
 
@@ -135,18 +119,16 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/point_details/:point_id
   def point_details
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for point_details"
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons(option_id)
+      redirect_path = handle_add_remove_point_buttons
     end
 
     if redirect_path.nil?
-      redirect_path = handle_add_comment_button(option_id)
+      redirect_path = handle_add_comment_button
     end
 
     handle_redirection redirect_path
@@ -154,23 +136,21 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/position_final
   def position_final
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path| 
+    redirect_path = handle_nav {|redirect_path| 
       push_to_stack = true
 
       # Next from choosing final position.  Save in session data and actually save everything
       if params[:position] and params[:position][:stance_bucket]
         position_bucket = params[:position][:stance_bucket]
 
-        position = set_position(option_id, position_bucket)
+        position = set_position(position_bucket)
 
         # Save inclusions
         if current_user
           # Get old inclusions for this option
           prev_inclusions = Inclusion.unscoped.where(:option_id => option_id, :user_id => current_user.id)
 
-          session[option_id][:included_points].keys.each do |point_id|
+          session[:mobile][option_id][:included_points].keys.each do |point_id|
             # Copy everything over if don't already exist
             prev_inclusion = prev_inclusions.where(:point_id => point_id)
             if prev_inclusion.any?
@@ -201,7 +181,7 @@ class Mobile::NavigationController < Mobile::MobileController
      
       if push_to_stack
         # Push coming_from onto stack
-        session[option_id][:navigate].push mobile_option_final_position_path
+        session[:mobile][option_id][:navigate].push mobile_option_final_position_path
       end
 
       redirect_path
@@ -212,19 +192,17 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/summary
   def summary
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for summary"
     }
 
     if params[:button][:my_points]
-      redirect_path = mobile_option_points_path(option_id)
-      session[option_id][:navigate].push mobile_option_summary_path(option_id)
+      redirect_path = mobile_option_points_path
+      session[:mobile][option_id][:navigate].push mobile_option_summary_path
     end
 
     if redirect_path.nil?
-      redirect_path = handle_segment_buttons(option_id)
+      redirect_path = handle_segment_buttons
     end
 
     handle_redirection redirect_path
@@ -232,14 +210,12 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/segment/:stance_bucket
   def segment
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for segment"
     }
 
     if redirect_path.nil?
-      redirect_path = handle_segment_buttons(option_id)
+      redirect_path = handle_segment_buttons
     end
 
     handle_redirection redirect_path
@@ -247,28 +223,30 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/segment_list/:stance_bucket/:point_type
   def segment_list
-    option_id = params[:option_id]
-
-    redirect_path = handle_nav(option_id) {|redirect_path|
+    redirect_path = handle_nav {|redirect_path|
       throw "Should not have next for segment_list"
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons(option_id)
+      redirect_path = handle_add_remove_point_buttons
     end
 
     if redirect_path.nil?
-      redirect_path = handle_details_button(option_id)
+      redirect_path = handle_details_button
     end
 
     if redirect_path.nil?
-      redirect_path = handle_segment_buttons(option_id)
+      redirect_path = handle_segment_buttons
     end
 
     handle_redirection redirect_path
   end
 
 protected
+  def option_id
+    return params[:option_id].to_i
+  end
+
   def handle_redirection redirect_path
     if redirect_path.nil?
       throw "No button action for " + params[:button].keys.first.to_s
@@ -277,9 +255,9 @@ protected
     redirect_to redirect_path
   end
 
-  def set_position(option_id, stance_bucket)
+  def set_position(stance_bucket)
     # Update session
-    session[option_id][:position] = stance_bucket
+    session[:mobile][option_id][:position] = stance_bucket
     
     # Update user position if applicable
     if current_user
@@ -304,10 +282,10 @@ protected
     return position
   end
 
-  def handle_nav(option_id)
+  def handle_nav
     if params[:button][:home]
       # Going home.  Clear the navigation stack and go to the home side
-      session[option_id][:navigate].clear
+      session[:mobile][option_id][:navigate].clear
       redirect_path = mobile_home_path
     elsif params[:button][:next]
       # Next button.  Push onto stack and redirect
@@ -316,19 +294,19 @@ protected
       redirect_path = yield(redirect_path)
     elsif params[:button][:initiative_description]
       # Initiative Description button
-      redirect_path = show_mobile_option_path(option_id)
+      redirect_path = show_mobile_option_path
 
       # Push old page onto stack
-      session[option_id][:navigate].push params[:button][:initiative_description].keys.first
+      session[:mobile][option_id][:navigate].push params[:button][:initiative_description].keys.first
     elsif params[:button][:previous]
       # Back button.  Pop off stack and go back
-      redirect_path = session[option_id][:navigate].pop
+      redirect_path = session[:mobile][option_id][:navigate].pop
     end
 
     return redirect_path
   end
 
-  def handle_overview_buttons(option_id)
+  def handle_overview_buttons
     if params[:button][:description]
       # Show long description pushed
       redirect_path = show_mobile_option_long_description_path(params[:option_id])
@@ -338,13 +316,13 @@ protected
 
     if redirect_path
       # Push option overview path onto stack
-      session[option_id][:navigate].push show_mobile_option_path(option_id)
+      session[:mobile][option_id][:navigate].push show_mobile_option_path
     end
     
     return redirect_path
   end
 
-  def handle_points_buttons(option_id)
+  def handle_points_buttons
     if params[:button][:my_pros]
       redirect_path = mobile_option_list_points_path(option_id, :pro)
     elsif params[:button][:add_pros]
@@ -358,18 +336,18 @@ protected
     elsif params[:button][:new_con]
       redirect_path = new_mobile_option_point_path(option_id, :con)
     elsif params[:button][:my_points]
-      redirect_path = mobile_option_points_path(option_id)
+      redirect_path = mobile_option_points_path
     end
 
     if redirect_path
       # Push "my pros and cons" path onto stack
-      session[option_id][:navigate].push mobile_option_points_path(option_id)
+      session[:mobile][option_id][:navigate].push mobile_option_points_path
     end
 
     return redirect_path
   end
 
-  def handle_add_remove_point_buttons(option_id)
+  def handle_add_remove_point_buttons
     if params[:button][:remove_point]
       redirect_path = request.referrer
 
@@ -379,8 +357,8 @@ protected
       point_is_included = false
 
       # Check session inclusions to remove
-      if session[option_id][:included_points].keys.include? point_id
-        session[option_id][:included_points].delete(point_id)
+      if session[:mobile][option_id][:included_points].keys.include? point_id
+        session[:mobile][option_id][:included_points].delete(point_id)
         point_is_included = true
       end
 
@@ -404,8 +382,8 @@ protected
       point_id = params[:button][:add_point].keys.first
 
       # Check session inclusions to add (only if haven't added it yet)
-      if not session[option_id][:included_points].keys.include? point_id
-        session[option_id][:included_points][point_id] = 1
+      if not session[:mobile][option_id][:included_points].keys.include? point_id
+        session[:mobile][option_id][:included_points][point_id] = 1
       end
 
       # Check database inclusions to add
@@ -423,20 +401,20 @@ protected
     return redirect_path
   end
 
-  def handle_details_button(option_id)
+  def handle_details_button
     if params[:button][:point_details]
       referrer_path = params[:button][:point_details].keys.first
       point_id = params[:button][:point_details][referrer_path].keys.first
       redirect_path = show_mobile_option_point_path(option_id, point_id)
 
       # Push referrer path onto stack
-      session[option_id][:navigate].push referrer_path
+      session[:mobile][option_id][:navigate].push referrer_path
     end
 
     return redirect_path
   end
 
-  def handle_add_comment_button(option_id)
+  def handle_add_comment_button
     if params[:button][:add_comment]
       # Add comment
       comment = Comment.new(params[:navigate][:comment])
@@ -451,7 +429,7 @@ protected
     return redirect_path
   end
 
-  def handle_segment_buttons(option_id)
+  def handle_segment_buttons
     if params[:button][:segment]
       stance_bucket = params[:button][:segment].keys.first
       
@@ -462,12 +440,12 @@ protected
         redirect_path = mobile_option_segment_list_path(option_id, stance_bucket,
                                                    params[:button][:segment][stance_bucket].keys.first)
         # Push segment overview path onto stack
-        session[option_id][:navigate].push mobile_option_segment_path(option_id, stance_bucket)
+        session[:mobile][option_id][:navigate].push mobile_option_segment_path(option_id, stance_bucket)
       else
         # Going to segment overview
         redirect_path = mobile_option_segment_path(option_id, stance_bucket)
         # Push summary path onto stack
-        session[option_id][:navigate].push mobile_option_summary_path(option_id)
+        session[:mobile][option_id][:navigate].push mobile_option_summary_path
       end
     end
 

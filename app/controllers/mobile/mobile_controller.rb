@@ -11,28 +11,31 @@ class Mobile::MobileController < ApplicationController
     @option = Option.find_by_id(params[:option_id])
 
     # Initialize the session data for the option
-    if session[@option.id].nil?
-      session[@option.id] = {
+    if session[:mobile].nil?
+      session[:mobile] = {}
+    end
+    if session[:mobile][@option.id].nil?
+      session[:mobile][@option.id] = {
                               :included_points => { }, # No included points at first
                               :navigate => []          # Navigate used to move next/previous in mobile site
                             }
     end
-    if session[@option.id][:included_points].nil?
-      session[@option.id][:included_points] = { } # No included points at first
+    if session[:mobile][@option.id][:included_points].nil?
+      session[:mobile][@option.id][:included_points] = { } # No included points at first
     end
-    if (session[@option.id][:navigate].nil? or 
-        session[@option.id][:navigate].empty? or 
+    if (session[:mobile][@option.id][:navigate].nil? or 
+        session[:mobile][@option.id][:navigate].empty? or 
         request.referrer == mobile_home_url)
-      session[@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
+      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
 
       # Set initial navigate to home path
-      session[@option.id][:navigate].push(mobile_home_path)
+      session[:mobile][@option.id][:navigate].push(mobile_home_path)
     end
 
 
     # Determine if we have the forward button available since we also link to this page 
     # from the nav and we don't want a forward option then (might be a buggy way to determine)
-    if (session[@option.id][:navigate].last == mobile_home_path)
+    if (session[:mobile][@option.id][:navigate].last == mobile_home_path)
       define_navigation mobile_option_initial_position_path(@option)
     else
       define_navigation
@@ -55,7 +58,7 @@ class Mobile::MobileController < ApplicationController
   def position_initial
     @option = Option.find_by_id(params[:option_id])
     define_navigation mobile_option_points_path(:option_id => @option.id), true
-    @data = Position.new(:stance_bucket => session[@option.id][:position])
+    @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
   end
 
   # GET /mobile/options/:option_id/points
@@ -66,7 +69,7 @@ class Mobile::MobileController < ApplicationController
     # Determine if we have the forward button available since we link to this page from 
     # from the initial position and summary pages and we don't want a forward option when
     # coming from summary (might be a buggy way to determine...copied from option)
-    if (session[@option.id][:navigate].last == mobile_option_initial_position_path(@option.id))
+    if (session[:mobile][@option.id][:navigate].last == mobile_option_initial_position_path(@option.id))
       define_navigation mobile_option_final_position_path(@option), true
     else
       define_navigation nil, true
@@ -100,10 +103,10 @@ class Mobile::MobileController < ApplicationController
     
     @type = params[:type]
     if @type == 'pro'
-      @points = @option.points.pros.not_included_by(current_user, session[@option.id][:included_points].keys).ranked_persuasiveness
+      @points = @option.points.pros.not_included_by(current_user, session[:mobile][@option.id][:included_points].keys).ranked_persuasiveness
       @included_points = get_included_points(true)
     elsif @type == 'con'
-      @points = @option.points.cons.not_included_by(current_user, session[@option.id][:included_points].keys).ranked_persuasiveness
+      @points = @option.points.cons.not_included_by(current_user, session[:mobile][@option.id][:included_points].keys).ranked_persuasiveness
       @included_points = get_included_points(false)
     else
       throw 'Invalid type ' + @type
@@ -135,7 +138,7 @@ class Mobile::MobileController < ApplicationController
   def position_final
     @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
-    @data = Position.new(:stance_bucket => session[@option.id][:position])
+    @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
     define_navigation mobile_option_summary_path(@option), true
   end
 
@@ -146,7 +149,7 @@ class Mobile::MobileController < ApplicationController
     define_navigation nil, true
 
     # TODO: Figure out how they actually get the user position
-    @user_stance_bucket = session[@option.id][:position].to_i
+    @user_stance_bucket = session[:mobile][@option.id][:position].to_i
   end
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
@@ -209,10 +212,10 @@ class Mobile::MobileController < ApplicationController
 protected
   def define_navigation(next_path = nil, show_description = false)
     if next_path.nil?
-      @navigation = { :previous => { :path => session[@option.id][:navigate].last } }
+      @navigation = { :previous => { :path => session[:mobile][@option.id][:navigate].last } }
     else
       @navigation = { :next => { :path => next_path }, 
-                      :previous => { :path => session[@option.id][:navigate].last } 
+                      :previous => { :path => session[:mobile][@option.id][:navigate].last } 
                     }
     end
 
@@ -223,10 +226,10 @@ protected
 
   def get_included_points is_pro
     #TEMPTEMP: Use this until get session setting correct(just handle null cases)
-    if session[@option.id]
+    if session[:mobile][@option.id]
       # TODO: Refactor this out since is replicated from positions_controller.rb
       return (Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
-             Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => is_pro)).uniq
+             Point.included_by_unstored(session[:mobile][@option.id][:included_points].keys, @option).where(:is_pro => is_pro)).uniq
     else
       return []
     end

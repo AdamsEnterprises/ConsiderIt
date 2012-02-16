@@ -4,6 +4,10 @@ class Mobile::MobileController < ApplicationController
   
   # GET /mobile
   def index
+    if session[:domain] and session[:domain].is_a?(Fixnum)
+      # Domain is set.  Get the data
+      @domain = Domain.where(:identifier => session[:domain]).first()
+    end
   end
 
   # GET /mobile/options/:option_id

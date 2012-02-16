@@ -1,4 +1,4 @@
-= form_for :navigate, :url => mobile_navigate_path do |f|
+= form_for :navigate, :url => mobile_navigate_point_details_path do |f|
   %div.point_details
     .avatar
       = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"

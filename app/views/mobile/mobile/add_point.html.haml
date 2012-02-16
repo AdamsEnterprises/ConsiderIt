@@ -1,4 +1,4 @@
-= form_for :navigate, :url => mobile_navigate_path do |f|
+= form_for :navigate, :url => mobile_navigate_add_point_path do |f|
   %p The following points have not yet been added to your #{@type} list. View a point's details to read more, discuss it, and add it to your list.
   - if @points.any?
     = render :partial => "mobile/partials/point_list", :locals => { :points => @points, :included_points => @included_points, :form => f }

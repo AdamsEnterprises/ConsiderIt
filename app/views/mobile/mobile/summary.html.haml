@@ -1,6 +1,6 @@
 %p Now explore a breakdown of what other voters feel about #{@option.designator}!
 %p Select a segment of voters below to see a ranked list of the points that segment finds most important.
-= form_for :navigate, :url => mobile_navigate_path do |f|
+= form_for :navigate, :url => mobile_navigate_summary_path do |f|
   %ul.link_list
     %li
       = f.submit "My pros and cons", :name => "button[my_points]"

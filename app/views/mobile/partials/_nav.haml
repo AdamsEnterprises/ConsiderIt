@@ -4,7 +4,7 @@
   %ul.link_list
     - if navigation[:next]
       %li
-        = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{request.request_uri}][#{navigation[:next][:path]}]"
+        = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{navigation[:next][:path]}]"
     %li
       = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
     %li

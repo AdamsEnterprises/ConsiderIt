@@ -2,70 +2,12 @@ require 'date'
 
 class Mobile::NavigationController < Mobile::MobileController
   
-  # POST /mobile/options/:option_id/navigate
-  def navigate
+  # POST /mobile/options/:option_id/navigate/option
+  def option
     option_id = params[:option_id]
 
-    redirect_path = handle_nav(option_id) {|coming_from, redirect_path|
-      push_to_stack = true
-
-      if coming_from == mobile_option_initial_position_path(option_id)
-        # Next from choosing initial position.  Save in session data
-        if params[:position] and params[:position][:stance_bucket]
-          set_position(option_id, params[:position][:stance_bucket])
-        else
-          # Didn't input correct data.  Tell them that
-          flash[:error] = "No position chosen"
-          redirect_path = request.referrer
-          push_to_stack = false
-        end
-      elsif coming_from == mobile_option_final_position_path(option_id)
-        # Next from choosing final position.  Save in session data and actually save everything
-        if params[:position] and params[:position][:stance_bucket]
-          position_bucket = params[:position][:stance_bucket]
-
-          position = set_position(option_id, position_bucket)
-
-          # Save inclusions
-          if current_user
-            # Get old inclusions for this option
-            prev_inclusions = Inclusion.unscoped.where(:option_id => option_id, :user_id => current_user.id)
-
-            session[option_id][:included_points].keys.each do |point_id|
-              # Copy everything over if don't already exist
-              prev_inclusion = prev_inclusions.where(:point_id => point_id)
-              if prev_inclusion.any?
-                if prev_inclusion.count == 1
-                  inclusion = prev_inclusion.first
-                  inclusion.update_attributes(:position_id => position.id)
-                else
-                  throw "Invalid inclusion count (" + prev_inclusion.count.to_s + "): " + prev_inclusion.inspect
-                end
-              else
-                inclusion = Inclusion.new(:option_id => option_id, :position_id => position.id, :point_id => point_id, :user_id => current_user.id)
-              end
-
-              if not inclusion.save
-                throw "Could not save inclusion: " + inclusion.errors
-              end
-            end
-          else
-            # TODO: Redirect to login if no current_user
-            throw "Must be signed in!"
-          end
-        else
-          # Didn't input correct data.  Tell them that
-          flash[:error] = "No position chosen"
-          redirect_path = request.referrer
-          push_to_stack = false
-        end
-      end
-     
-      if push_to_stack
-        # Push coming_from onto stack
-        session[option_id][:navigate].push coming_from
-      end
-
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      session[option_id][:navigate].push show_mobile_option_path
       redirect_path
     }
 
@@ -73,9 +15,243 @@ class Mobile::NavigationController < Mobile::MobileController
       redirect_path = handle_overview_buttons(option_id)
     end
 
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/long_description
+  def long_description
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for long description"
+    }
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/fiscal_impact
+  def fiscal_impact
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for fiscal impact"
+    }
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/position_initial
+  def position_initial
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      push_to_stack = true
+ 
+      # Next from choosing initial position.  Save in session data
+      if params[:position] and params[:position][:stance_bucket]
+        set_position(option_id, params[:position][:stance_bucket])
+      else
+        # Didn't input correct data.  Tell them that
+        flash[:error] = "No position chosen"
+        redirect_path = request.referrer
+        push_to_stack = false
+      end
+
+      if push_to_stack
+        # Push coming_from onto stack
+        session[option_id][:navigate].push mobile_option_initial_position_path
+      end
+
+      redirect_path
+    }
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/points
+  def points
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      session[option_id][:navigate].push mobile_option_points_path
+      redirect_path
+    }
+
     if redirect_path.nil?
       redirect_path = handle_points_buttons(option_id)
     end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/list_points/:type
+  def list_points
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for list_points"
+    }
+
+    if redirect_path.nil?
+      redirect_path = handle_add_remove_point_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_details_button(option_id)
+    end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/add_point/:type
+  def add_point
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for add_point"
+    }
+
+    if redirect_path.nil?
+      redirect_path = handle_add_remove_point_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_details_button(option_id)
+    end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/new_point/:type
+  def new_point
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for new_point"
+    }
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/point_details/:point_id
+  def point_details
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for point_details"
+    }
+
+    if redirect_path.nil?
+      redirect_path = handle_add_remove_point_buttons(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_add_comment_button(option_id)
+    end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/position_final
+  def position_final
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path| 
+      push_to_stack = true
+
+      # Next from choosing final position.  Save in session data and actually save everything
+      if params[:position] and params[:position][:stance_bucket]
+        position_bucket = params[:position][:stance_bucket]
+
+        position = set_position(option_id, position_bucket)
+
+        # Save inclusions
+        if current_user
+          # Get old inclusions for this option
+          prev_inclusions = Inclusion.unscoped.where(:option_id => option_id, :user_id => current_user.id)
+
+          session[option_id][:included_points].keys.each do |point_id|
+            # Copy everything over if don't already exist
+            prev_inclusion = prev_inclusions.where(:point_id => point_id)
+            if prev_inclusion.any?
+              if prev_inclusion.count == 1
+                inclusion = prev_inclusion.first
+                inclusion.update_attributes(:position_id => position.id)
+              else
+                throw "Invalid inclusion count (" + prev_inclusion.count.to_s + "): " + prev_inclusion.inspect
+              end
+            else
+              inclusion = Inclusion.new(:option_id => option_id, :position_id => position.id, :point_id => point_id, :user_id => current_user.id)
+            end
+
+            if not inclusion.save
+              throw "Could not save inclusion: " + inclusion.errors
+            end
+          end
+        else
+          # TODO: Redirect to login if no current_user
+          throw "Must be signed in!"
+        end
+      else
+        # Didn't input correct data.  Tell them that
+        flash[:error] = "No position chosen"
+        redirect_path = request.referrer
+        push_to_stack = false
+      end
+     
+      if push_to_stack
+        # Push coming_from onto stack
+        session[option_id][:navigate].push mobile_option_final_position_path
+      end
+
+      redirect_path
+    }
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/summary
+  def summary
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for summary"
+    }
+
+    if params[:button][:my_points]
+      redirect_path = mobile_option_points_path(option_id)
+      session[option_id][:navigate].push mobile_option_summary_path(option_id)
+    end
+
+    if redirect_path.nil?
+      redirect_path = handle_segment_buttons(option_id)
+    end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/segment/:stance_bucket
+  def segment
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for segment"
+    }
+
+    if redirect_path.nil?
+      redirect_path = handle_segment_buttons(option_id)
+    end
+
+    handle_redirection redirect_path
+  end
+
+  # POST /mobile/options/:option_id/navigate/segment_list/:stance_bucket/:point_type
+  def segment_list
+    option_id = params[:option_id]
+
+    redirect_path = handle_nav(option_id) {|redirect_path|
+      throw "Should not have next for segment_list"
+    }
 
     if redirect_path.nil?
       redirect_path = handle_add_remove_point_buttons(option_id)
@@ -86,13 +262,14 @@ class Mobile::NavigationController < Mobile::MobileController
     end
 
     if redirect_path.nil?
-      redirect_path = handle_add_comment_button(option_id)
-    end
-
-    if redirect_path.nil?
       redirect_path = handle_segment_buttons(option_id)
     end
-    
+
+    handle_redirection redirect_path
+  end
+
+protected
+  def handle_redirection redirect_path
     if redirect_path.nil?
       throw "No button action for " + params[:button].keys.first.to_s
     end
@@ -100,7 +277,6 @@ class Mobile::NavigationController < Mobile::MobileController
     redirect_to redirect_path
   end
 
-protected
   def set_position(option_id, stance_bucket)
     # Update session
     session[option_id][:position] = stance_bucket
@@ -135,10 +311,9 @@ protected
       redirect_path = mobile_home_path
     elsif params[:button][:next]
       # Next button.  Push onto stack and redirect
-      coming_from = params[:button][:next].keys.first
-      redirect_path = params[:button][:next][coming_from].keys.first
+      redirect_path = params[:button][:next].keys.first
 
-      redirect_path = yield(coming_from, redirect_path)
+      redirect_path = yield(redirect_path)
     elsif params[:button][:initiative_description]
       # Initiative Description button
       redirect_path = show_mobile_option_path(option_id)

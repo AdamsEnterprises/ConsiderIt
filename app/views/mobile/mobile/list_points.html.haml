@@ -1,4 +1,4 @@
-= form_for :navigate, :url => mobile_navigate_path do |f|
+= form_for :navigate, :url => mobile_navigate_list_points_path do |f|
   %ul.link_list
     %li
       = link_to "Add an existing " + @type, add_mobile_option_point_path(:option_id => @option.id, :type => @type)

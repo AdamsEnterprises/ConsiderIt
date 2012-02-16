@@ -1,5 +1,5 @@
 %p Update your opinion on #{@option.reference} if it has changed.
-= form_for @data, :url => mobile_navigate_path do |f|
+= form_for @data, :url => mobile_navigate_position_final_path do |f|
   = render :partial => "mobile/partials/position_select", :locals => { :form => f }
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

@@ -13,8 +13,8 @@
     = javascript_include_tag "mobile"
   %body
 
-    -# if @option
-    -#  %p #{session[@option.id]}
+    -# if session[:mobile]
+    -#  %p #{session[:mobile]}
 
     .init_title
 

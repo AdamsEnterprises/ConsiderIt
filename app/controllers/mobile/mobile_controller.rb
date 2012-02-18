@@ -17,39 +17,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id
   def option
-    @option = Option.find_by_id(params[:option_id])
-
-    # Initialize the session data for the option
-    if session[:mobile].nil?
-      session[:mobile] = {}
-    end
-    if session[:mobile][@option.id].nil?
-      session[:mobile][@option.id] = {
-                              :included_points => { }, # No included points at first
-                              :deleted_points => { },  # No deleted points at first
-                              :written_points => [],    # No written points at first
-                              :navigate => []          # Navigate used to move next/previous in mobile site
-                            }
-    end
-    if session[:mobile][@option.id][:included_points].nil?
-      session[:mobile][@option.id][:included_points] = { } # No included points at first
-    end
-    if session[:mobile][@option.id][:deleted_points].nil?
-      session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
-    end
-    if session[:mobile][@option.id][:written_points].nil?
-      session[:mobile][@option.id][:written_points] = []   # No written points at first
-    end
-    if (session[:mobile][@option.id][:navigate].nil? or 
-        session[:mobile][@option.id][:navigate].empty? or 
-        request.referrer == mobile_home_url)
-      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
-
-      # Set initial navigate to home path
-      session[:mobile][@option.id][:navigate].push(mobile_home_path)
-    end
-
-
     # Determine if we have the forward button available since we also link to this page 
     # from the nav and we don't want a forward option then (might be a buggy way to determine)
     if (session[:mobile][@option.id][:navigate].last == mobile_home_path)

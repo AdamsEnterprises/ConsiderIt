@@ -3,12 +3,8 @@
   - @even = true
   - get_initiatives.each do |option|
     - @even = !@even
-    - if (@even)
-      %li.even
-        = link_to "#{option.domain_short}: #{option.reference} - #{option.short_name}", show_mobile_option_path(:option_id => option.id)
-    - else
-      %li
-        = link_to "#{option.domain_short}: #{option.reference} - #{option.short_name}", show_mobile_option_path(:option_id => option.id)
+    %li{:class => ((@even) ? "even" : "")}
+      = link_to "#{option.domain_short}: #{option.reference} - #{option.short_name}", has_stance(option) ? mobile_option_points_path(:option_id => option.id) : show_mobile_option_path(:option_id => option.id)
 
 - if @domain
   - if (cnt = @domain.domain_maps.count) == 0

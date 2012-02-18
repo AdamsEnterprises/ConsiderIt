@@ -17,10 +17,14 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id
   def option
+    @option = Option.find_by_id(params[:option_id])
+
+    initialize_session
+
     # Determine if we have the forward button available since we also link to this page 
     # from the nav and we don't want a forward option then (might be a buggy way to determine)
     if (session[:mobile][@option.id][:navigate].last == mobile_home_path)
-      define_navigation mobile_option_initial_position_path(@option)
+      define_navigation mobile_option_update_position_path
     else
       define_navigation
     end
@@ -36,21 +40,31 @@ class Mobile::MobileController < ApplicationController
     define_navigation
   end
 
-  # GET /mobile/options/:option_id/positions/initial
-  def position_initial
-    define_navigation mobile_option_points_path(:option_id => @option.id), true
-    @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
+  # GET /mobile/options/:option_id/position
+  def position_update
+    @option = Option.find_by_id(params[:option_id])
+    @position = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
+
+    @required_update = session[:mobile][@option.id][:navigate] == [mobile_home_path, show_mobile_option_path]
+    if @required_update
+      define_navigation mobile_option_points_path, true
+    else
+      define_navigation nil, true
+    end
   end
 
   # GET /mobile/options/:option_id/points
   def points
     @title = "#{@option.reference}"
 
+    initialize_session
+    
     # Determine if we have the forward button available since we link to this page from 
-    # from the initial position and summary pages and we don't want a forward option when
-    # coming from summary (might be a buggy way to determine...copied from option)
-    if (session[:mobile][@option.id][:navigate].last == mobile_option_initial_position_path(@option.id))
-      define_navigation mobile_option_final_position_path(@option), true
+    # from the update position/home and summary pages and we don't want a forward option when
+    # coming from summary (might be a buggy way to determine)
+    if (session[:mobile][@option.id][:navigate].last == mobile_option_update_position_path(@option.id) ||
+        session[:mobile][@option.id][:navigate].last == mobile_home_path)
+      define_navigation mobile_option_summary_path(@option), true
     else
       define_navigation nil, true
     end
@@ -111,13 +125,6 @@ class Mobile::MobileController < ApplicationController
     if @point.option != @option
       throw "Point not valid for the specified option"
     end
-  end
-
-  # GET /mobile/options/:option_id/positions/final
-  def position_final
-    @title = "#{@option.reference}"
-    @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
-    define_navigation mobile_option_summary_path(@option), true
   end
 
   # GET /mobile/options/:option_id/summary
@@ -185,6 +192,38 @@ class Mobile::MobileController < ApplicationController
   end
 
 protected
+  def initialize_session
+    # Initialize the session data for the option
+    if session[:mobile].nil?
+      session[:mobile] = {}
+    end
+    if session[:mobile][@option.id].nil?
+      session[:mobile][@option.id] = {
+                              :included_points => { }, # No included points at first
+                              :deleted_points => { },  # No deleted points at first
+                              :written_points => [],    # No written points at first
+                              :navigate => []          # Navigate used to move next/previous in mobile site
+                            }
+    end
+    if session[:mobile][@option.id][:included_points].nil?
+      session[:mobile][@option.id][:included_points] = { } # No included points at first
+    end
+    if session[:mobile][@option.id][:deleted_points].nil?
+      session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
+    end
+    if session[:mobile][@option.id][:written_points].nil?
+      session[:mobile][@option.id][:written_points] = []   # No written points at first
+    end
+    if (session[:mobile][@option.id][:navigate].nil? or 
+        session[:mobile][@option.id][:navigate].empty? or 
+        request.referrer == mobile_home_url)
+      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
+
+      # Set initial navigate to home path
+      session[:mobile][@option.id][:navigate].push(mobile_home_path)
+    end
+  end
+
   def define_navigation(next_path = nil, show_description = false)
     if next_path.nil?
       @navigation = { :previous => { :path => session[:mobile][@option.id][:navigate].last } }

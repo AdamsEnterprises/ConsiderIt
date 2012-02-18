@@ -5,12 +5,12 @@
     - if navigation[:next]
       %li
         = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{navigation[:next][:path]}]"
-    %li
-      = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
-
-    - if get_page_name(navigation[:previous][:path]) != "Homepage"
+    - if navigation[:previous][:path] != mobile_home_path
       %li
-        = form.submit "Home", :name => "button[home]"
+        = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
+
+    %li
+      = form.submit "Home", :name => "button[home]"
 
     - if navigation[:show_description]
       %li

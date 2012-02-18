@@ -34,7 +34,11 @@ ConsiderIt::Application.routes.draw do
 
   # mobile site
   match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile, :as => :mobile_home
-  match '/mobile/:page' => "mobile/mobile#show", :via => :get, :module => :mobile, :as => :mobile_static, :constraints => { :page => "terms-of-use"}
+  # I wanted this to eliminate redundancy on a few static pages, but
+  # get_page_name in mobile_controller would fail when the case for
+  # mobile_static was evaluated
+  #match '/mobile/:page' => "mobile/mobile#show", :via => :get, :module => :mobile, :as => :mobile_static, :constraints => { :page => "terms-of-use"}
+  match '/mobile/terms-of-use' => "mobile/mobile#terms-of-use", :via => :get, :module => :mobile, :as => :mobile_tou
   match '/mobile/user' => "mobile/mobile#user", :via => :get, :module => :mobile, :as => :mobile_user
   match '/mobile/user/new' => "mobile/mobile#new_user", :via => :get, :module => :mobile, :as => :new_mobile_user
   match '/mobile/user/new/why' => "mobile/mobile#new_user_why", :via => :get, :module => :mobile, :as => :new_mobile_user_why

@@ -1,5 +1,14 @@
 %div.pointform
   = form_for :navigate, :url => mobile_navigate_new_point_path do |f|
+    %ul.link_list
+      %li
+        = link_to "See my " + @type.pluralize, mobile_option_list_points_path(:option_id => @option.id, :type => @type)
+      %li
+        = link_to "Add an existing " + @type, add_mobile_option_point_path(:option_id => @option.id, :type => @type)
+      %li
+        - opposite_type = @type == "pro" ? "con" : "pro"
+        = link_to "Write a new " + opposite_type, new_mobile_option_point_path(:option_id => @option.id, :type => opposite_type)
+
     .point-title-group
       %div Summarize your point in 140 characters (required):
       %textarea.char_limit#point_nutshell{ :name => "point[nutshell]", :count => "140" }
@@ -20,7 +29,7 @@
     .point-pledge
       %p.note Remember your pledge!
     .point-submit
-      %input#point_submit{ :type => "submit", :value => "Add pro", :name => "commit" }
+      %input#point_submit{ :type => "submit", :value => "Add "+ @type, :name => "commit" }
     .point-cancel
       = link_to "cancel", mobile_option_points_path(:option_id => @option.id)
     = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }

@@ -27,15 +27,17 @@ ConsiderIt::Application.routes.draw do
   match "/theme" => "theme#set", :via => :post
   match "/home/domain" => "home#set_domain", :via => :post
   match "/home/pledge" => "home#take_pledge", :via => :post
-  match '/home/:page' => "home#show", :via => :get, :constraints => { :page => /terms-of-use|considerit|media|help/ } 
+  match '/home/:page' => "home#show", :via => :get, :constraints => { :page => /terms-of-use|considerit|media|help/ }
 
   match '/home/study/:category' => "home#study", :via => :post  
   match '/admin/dashboard' => "admin/dashboard#index", :via => :get, :module => :admin
 
   # mobile site
   match '/mobile' => "mobile/mobile#index", :via => :get, :module => :mobile, :as => :mobile_home
+  match '/mobile/:page' => "mobile/mobile#show", :via => :get, :module => :mobile, :as => :mobile_static, :constraints => { :page => "terms-of-use"}
   match '/mobile/user' => "mobile/mobile#user", :via => :get, :module => :mobile, :as => :mobile_user
   match '/mobile/user/new' => "mobile/mobile#new_user", :via => :get, :module => :mobile, :as => :new_mobile_user
+  match '/mobile/user/new/why' => "mobile/mobile#new_user_why", :via => :get, :module => :mobile, :as => :new_mobile_user_why
   match '/mobile/user/new/pledge' => "mobile/mobile#new_user_pledge", :via => :get, :module => :mobile, :as => :new_mobile_user_pledge
   match '/mobile/user/new/confirm' => "mobile/mobile#new_user_confirm", :via => :get, :module => :mobile, :as => :new_mobile_user_confirm
   match '/mobile/user/confirm/resend' => "mobile/mobile#confirm_resend", :via => :get, :module => :mobile, :as => :mobile_confirm_resend

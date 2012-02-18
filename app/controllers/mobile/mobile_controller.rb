@@ -1,6 +1,7 @@
 require 'date'
 
 class Mobile::MobileController < ApplicationController
+  before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :new_user, :new_user_confirm, :new_user_pledge, :user]
   
   # GET /mobile
   def index
@@ -25,11 +26,19 @@ class Mobile::MobileController < ApplicationController
     if session[:mobile][@option.id].nil?
       session[:mobile][@option.id] = {
                               :included_points => { }, # No included points at first
+                              :deleted_points => { },  # No deleted points at first
+                              :written_points => [],    # No written points at first
                               :navigate => []          # Navigate used to move next/previous in mobile site
                             }
     end
     if session[:mobile][@option.id][:included_points].nil?
       session[:mobile][@option.id][:included_points] = { } # No included points at first
+    end
+    if session[:mobile][@option.id][:deleted_points].nil?
+      session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
+    end
+    if session[:mobile][@option.id][:written_points].nil?
+      session[:mobile][@option.id][:written_points] = []   # No written points at first
     end
     if (session[:mobile][@option.id][:navigate].nil? or 
         session[:mobile][@option.id][:navigate].empty? or 
@@ -52,26 +61,22 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/description
   def option_long_description
-    @option = Option.find_by_id(params[:option_id])
     define_navigation
   end
 
   # GET /mobile/options/:option_id/fiscal_impact
   def option_fiscal_impact
-    @option = Option.find_by_id(params[:option_id])
     define_navigation
   end
 
   # GET /mobile/options/:option_id/positions/initial
   def position_initial
-    @option = Option.find_by_id(params[:option_id])
     define_navigation mobile_option_points_path(:option_id => @option.id), true
     @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
   end
 
   # GET /mobile/options/:option_id/points
   def points
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
 
     # Determine if we have the forward button available since we link to this page from 
@@ -89,7 +94,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/list/:type
   def list_points
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
 
@@ -105,7 +109,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/add/:type
   def add_point
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
     
@@ -123,20 +126,21 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/new/:type
   def new_point
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
+
+    @point = Point.new
 
     @type = params[:type]
   end
 
   # GET /mobile/options/:option_id/points/:point_id
   def point_details
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
     
-    @point = Point.find_by_id(params[:point_id])
+    @point = Point.unscoped.find_by_id(params[:point_id])
+    @included_points = get_included_points(@point.is_pro)
     if @point.option != @option
       throw "Point not valid for the specified option"
     end
@@ -144,7 +148,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/positions/final
   def position_final
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     @data = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
     define_navigation mobile_option_summary_path(@option), true
@@ -152,7 +155,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/summary
   def summary
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
 
@@ -162,7 +164,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
   def segment
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
 
@@ -184,7 +185,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
-    @option = Option.find_by_id(params[:option_id])
     @title = "#{@option.reference}"
     define_navigation nil, true
     
@@ -265,4 +265,31 @@ protected
         throw "Invalid stance bucket " + @stance_bucket
     end
   end
+
+  def init_option_session
+    @option = Option.find_by_id(params[:option_id])
+
+    # Initialize the session data for the option
+    if session[:mobile].nil?
+      session[:mobile] = {}
+    end
+    if session[:mobile][@option.id].nil?
+      session[:mobile][@option.id] = {
+                              :included_points => { }, # No included points at first
+                              :navigate => []          # Navigate used to move next/previous in mobile site
+                            }
+    end
+    if session[:mobile][@option.id][:included_points].nil?
+      session[:mobile][@option.id][:included_points] = { } # No included points at first
+    end
+    if (session[:mobile][@option.id][:navigate].nil? or 
+        session[:mobile][@option.id][:navigate].empty? or 
+        request.referrer == mobile_home_url)
+      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
+
+      # Set initial navigate to home path
+      session[:mobile][@option.id][:navigate].push(mobile_home_path)
+    end
+  end
+
 end

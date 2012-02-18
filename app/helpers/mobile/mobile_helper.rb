@@ -26,11 +26,8 @@ module Mobile::MobileHelper
       page_name = "Forgot Your Password?"
     elsif path == mobile_confirm_resend_path
       page_name = "Didn't receive confirmation instructions?"
-    elsif path == mobile_static_path
-      page = request.params[:page]
-      if page == "terms-of-use"
-        page_name = "ConsiderIt Terms of Use"
-      end
+    elsif path == mobile_tou_path
+      page_name = "ConsiderIt Terms of Use"
     elsif @option
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"

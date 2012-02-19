@@ -2,9 +2,9 @@
   - @option.format_description.each do |paragraph|
     %p #{paragraph}
   .option_desc_links
-    %p
+    %div
       = f.submit "View Long Description", :name => 'button[description]'
-    %p
+    %div
       = f.submit "View Fiscal Impact Statement", :name => 'button[fiscal_impact]'
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

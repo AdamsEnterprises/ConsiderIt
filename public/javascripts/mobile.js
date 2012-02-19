@@ -1,4 +1,5 @@
 window.onload = function() {
+
     // New point page
     $j("#add_link").click(addLink);
     $j("#point_hide_name").click(warnHideName);
@@ -13,9 +14,9 @@ window.onload = function() {
 
     // Textboxes with watermark
     $j(".has_example")
-	.focus(hideExample)
-	.blur(setExample)
-	.blur();
+        .focus(hideExample)
+        .blur(setExample)
+        .blur();
     
     // Textboxes with character limit
     $j("textarea.char_limit").keyup(adjustCharLimit);
@@ -29,15 +30,15 @@ function adjustCharLimit() {
     var limit = textarea.attr("count");
     var length = textarea.val().length;
     if (length > limit) {
-	// Prevent character from being added
-	textarea.val(textarea.val().substr(0,limit));
-	// Play alert sound. Should probably remove old sound
-	// elements to keep things clean, but it seems like this
-	// slows things down slightly.
-	$j("body").append('<embed src="tonk.wav" autostart="true" loop="false" ' +
-			 'style="visibility:hidden;" />');
+        // Prevent character from being added
+        textarea.val(textarea.val().substr(0,limit));
+        // Play alert sound. Should probably remove old sound
+        // elements to keep things clean, but it seems like this
+        // slows things down slightly.
+        $j("body").append('<embed src="tonk.wav" autostart="true" loop="false" ' +
+			  'style="visibility:hidden;" />');
     } else {
-	textarea.siblings(".count")
+        textarea.siblings(".count")
             .text("Remaining characters: " + (limit - length));
     }
 }
@@ -46,15 +47,15 @@ function adjustCharLimit() {
 function setExample() {
     var input = $j(this);
     if (input.val() == "") {
-	input.addClass("example")
-	input.val(input.attr("title"));
+        input.addClass("example")
+        input.val(input.attr("title"));
     }
 }
 function hideExample() {
     var input = $j(this);
     if (input.hasClass("example")) {
-	input.removeClass("example");
-	input.val("");
+        input.removeClass("example");
+        input.val("");
     }
 }
 
@@ -97,9 +98,9 @@ function addLink() {
 }
 
 function deleteLink() {
-  if (confirm("This link will be deleted.")) {
-    $j(this).closest(".point_link_form").remove();
-  }
+    if (confirm("This link will be deleted.")) {
+        $j(this).closest(".point_link_form").remove();
+    }
 }
 
 function confirmRemovePoint() {
@@ -116,9 +117,9 @@ function confirmDeletePoint() {
 function togglePledgeSubmit() {
     var signup = $j("#pledge_submit");  // signup button
     if ($j(this).attr("checked"))
-	signup.attr("disabled", null);
+        signup.attr("disabled", null);
     else
-	signup.attr("disabled", "disabled");
+        signup.attr("disabled", "disabled");
 }
 
 function warnHideName() {
@@ -126,3 +127,4 @@ function warnHideName() {
         alert("We encourage you NOT to hide your name. Signing your point with your name " +
             "lends it more weight to other LVG participants.");
 }
+

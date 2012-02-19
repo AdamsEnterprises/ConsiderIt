@@ -14,6 +14,8 @@ module Mobile::MobileHelper
       page_name = "Homepage"
     elsif path == mobile_user_path
       page_name = "Log In to the Living Voters Guide"
+    elsif path == new_mobile_user_why_path
+      page_name = "Why Join ConsiderIt?"
     elsif path == new_mobile_user_path
       page_name = "Join the Living Voters Guide"
     elsif path == new_mobile_user_pledge_path
@@ -21,9 +23,11 @@ module Mobile::MobileHelper
     elsif path == new_mobile_user_confirm_path
       page_name = "Welcome to the ConsiderIt Community!"
     elsif path == new_mobile_password_path
-      page_name = "Reset Password"
+      page_name = "Forgot Your Password?"
     elsif path == mobile_confirm_resend_path
-      page_name = "Resend Confirmation Instructions"
+      page_name = "Didn't receive confirmation instructions?"
+    elsif path == mobile_tou_path
+      page_name = "ConsiderIt Terms of Use"
     elsif @option
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"

@@ -1,31 +1,33 @@
-%p Before you sign up, please review a few rules for using ConsiderIt.
+%p.fineprint.login
+  = "Already have an account?"
+  = link_to("Log in!", mobile_user_path)
+
+%p Before you sign up, please review a few short rules for using ConsiderIt.
 
 %p
-  = "(Already have an account?"
-  = link_to("Log in!", mobile_user_path)+")"
+  = link_to("Why should I join ConsiderIt?", new_mobile_user_why_path)
 
-%div#pledge_form
-  %ul
-    %li
-      .summary Please refrain from personal attacks.
-      %p
-        Political discussion can get heated. We ask that you please
-        refrain from personal attacks on other participants. We can
-        disagree without demonizing.
+%ul#pledge_form
+  %li
+    %h2 Please refrain from personal attacks.
+    %p
+      Political discussion can get heated. We ask that you please
+      refrain from personal attacks on other participants. We can
+      disagree without demonizing.
 
-    %li
-      .summary Speak your opinions.
-      %p      
-        The opinions of everyday citizens are often not heard. We ask that you 
-        speak your own opinions, not the positions of any campaign, candidate
-        or party to which you may belong.
+  %li
+    %h2 Speak your opinions.
+    %p      
+      The opinions of everyday citizens are often not heard. We ask that you 
+      speak your own opinions, not the positions of any campaign, candidate
+      or party to which you may belong.
 
-    %li
-      .summary Do not create multiple accounts.
-      %p
-        Opinions can be maliciously manipulated. We ask that you 
-        do not create multiple accounts.
-        You are free to update your opinion, but please do so from a single account.
+  %li
+    %h2 Do not create multiple accounts.
+    %p
+      Opinions can be maliciously manipulated. We ask that you 
+      do not create multiple accounts.
+      You are free to update your opinion, but please do so from a single account.
 
   %div.submit_footer
     -# builtin label and check_box functions are inconvenient here

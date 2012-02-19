@@ -1,6 +1,10 @@
-%p.fineprint
+%p.fineprint.login
   = "Already have an account?"
   = link_to("Log in!", mobile_user_path)
+
+%p
+  = link_to("Why should I join ConsiderIt?", new_mobile_user_why_path)
+
 -#%div#third_party
 -#
   %h3
@@ -17,8 +21,6 @@
   -#%h3 Or, sign up the old-fashioned way!
 
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
-
-    %ul
   
     %ul
       %li.name_field
@@ -37,10 +39,12 @@
       %li.password_field
         %label{:for => "user_password"} Password:
         = f.password_field :password, :class => 'has_example', :autocapitalize => 'off'
+
+    %p.acknowledgment
+      = "By signing up, you acknowledge that you have read, agree to and were bored by the "
+      = link_to("Terms of Use", mobile_tou_path) + "."
+
     %div.submit_footer
       = f.submit "Sign up"
-      %div
-        %button.cancel Cancel
 %div
-  = "By signing up, you acknowledge that you have read, agree to and were bored by the "
-  = link_to("Terms of Use", "") + "."
+  %button.cancel Cancel

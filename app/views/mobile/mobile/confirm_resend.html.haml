@@ -1,9 +1,11 @@
-%p Didn't receive confirmation instructions?
+%p Enter your email address below to have your confirmation instructions resent.
+%p Be sure to check your junk mail folder if you still don't receive the instructions.
 %label{:for => "user_email"} Email
 %input#user_email{:type => "email", :name => "user[email]",
   :autocapitalize => 'off'}
 %div.submit_footer
-  %input#user_submit{:type => "submit", :value => "Resend confirmation instructions"}
+  %input#user_submit{:type => "submit", :value => "Resend instructions"}
   %div
     %button.cancel Cancel
-= link_to "Forgot your password?", new_mobile_password_path
+%p
+  = link_to "Forgot your password?", new_mobile_password_path

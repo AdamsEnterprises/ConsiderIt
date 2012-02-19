@@ -11,6 +11,10 @@ class Mobile::MobileController < ApplicationController
     end
   end
 
+  def show
+    render :action => params[:page]
+  end  
+
   # GET /mobile/options/:option_id
   def option
     @option = Option.find_by_id(params[:option_id])

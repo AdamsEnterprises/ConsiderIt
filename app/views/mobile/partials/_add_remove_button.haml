@@ -1,5 +1,7 @@
 - if included_points.include?(point)
-  - if session[:mobile][@option.id][:written_points].include?(point.id)
+  - point_creator = (current_user && point.user_id == current_user.id) || session[:mobile][@option.id][:written_points].include?(point.id)
+
+  - if point_creator
     = form.submit "Delete Point", :name => "button[delete_point][#{point.id}]", :class => "delete_point"
   - else
     = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point"

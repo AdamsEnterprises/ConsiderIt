@@ -20,7 +20,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
           session['reify_activities'] = true 
         end
 
-        # TODO: post-registration actions go here, including error handling
         if /^\/mobile/ === URI(request.referer).path
           # redirect to instructions about confirmation
           redirect_to new_mobile_user_confirm_path
@@ -34,7 +33,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords(resource)
-      respond_with_navigational(resource) { render_with_scope :new }
+      flash[:notice] = "Email is already in use."
+
+      if /^\/mobile/ === URI(request.referer).path
+        # redirect to instructions about confirmation
+        redirect_to request.referrer
+      else
+        respond_with_navigational(resource) { render_with_scope :new }
+      end
     end
     
   end

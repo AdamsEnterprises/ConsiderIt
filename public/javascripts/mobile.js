@@ -4,7 +4,9 @@ window.onload = function() {
     $j("#point_hide_name").click(warnHideName);
 
     // "Remove point" button
-    $j(".remove_point").click(confirmDeletePoint);
+    $j(".remove_point").click(confirmRemovePoint);
+    // "Delete point" button
+    $j(".delete_point").click(confirmDeletePoint);
 
     // Cancel button on login - should be replaced with stack nav
     $j(".cancel").click(function() { history.go(-1); });
@@ -56,8 +58,10 @@ function hideExample() {
     }
 }
 
+LinkCount = 0
 
 function addLink() {
+  
   var fieldset = $j("<fieldset />")
     .append($j("<div>")
               .addClass("delete")
@@ -66,7 +70,8 @@ function addLink() {
               .text("delete"))
     .append($j("<input />")
               .attr("type", "text")
-              .attr("id", "point_point_links_attributes_longcrazynumber_url")
+              .attr("id", "point_point_links_attributes_" + LinkCount + "_url")
+              .attr("name", "point[point_links_attributes][" + LinkCount + "][url]")
               .attr("title", "http://...")
               .addClass("has_example")
               .blur(setExample)
@@ -74,7 +79,8 @@ function addLink() {
               .blur())
     .append($j("<input />")
               .attr("type", "text")
-              .attr("id", "point_point_links_attributes_longcrazynumber_description")
+              .attr("id", "point_point_links_attributes_" + LinkCount + "_description")
+              .attr("name", "point[point_links_attributes][" + LinkCount + "][description]")
               .attr("title", "A brief description")
               .addClass("has_example")
               .blur(setExample)
@@ -85,6 +91,8 @@ function addLink() {
     .append(fieldset)
      .appendTo($j("#point_links"));
 
+  LinkCount++;
+
   return false;
 }
 
@@ -94,9 +102,12 @@ function deleteLink() {
   }
 }
 
-function confirmDeletePoint() {
+function confirmRemovePoint() {
     return confirm("This point will be removed from your list.");
+}
 
+function confirmDeletePoint() {
+    return confirm("This unpublished point will be removed from your list\nand cannot be added again.");
 }
 
 // When the user checks/unchecks the box agreeing to the conditions

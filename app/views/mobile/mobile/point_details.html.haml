@@ -1,19 +1,22 @@
 = form_for :navigate, :url => mobile_navigate_point_details_path do |f|
   %div.point_details
-    .avatar
-      = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
+    - if !@point.hide_name && @point.user
+      .avatar
+        = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
     
     %div
-      - if session[:mobile][@option.id][:included_points].keys.include?(@point.id.to_s)
-        = f.submit "Remove Point", :name => "button[remove_point][#{@point.id}]",
-          :class => "remove_point"
-      - else
-        = f.submit "Add Point", :name => "button[add_point][#{@point.id}]"
-    
+      = render :partial => 'mobile/partials/add_remove_button', :locals => { :form => f, :point => @point, :included_points => @included_points }
     .summary
       %h1 Summary
       %p.description #{@point.nutshell}
-      %p.author by #{@point.user.name}
+      %p.author
+        by 
+        - if @point.hide_name
+          anonymous
+        - elsif @point.user
+          = @point.user.name
+        - else
+          unknown
     .details
       %h1 Details
       %p.the_details #{ @point.text.empty? ? "None" : @point.text }
@@ -24,6 +27,7 @@
           - @point.point_links.each do |point_link|
             %li 
               = link_to point_link.description, point_link.url
+              [#{point_link.url}]
         - else
           %li none provided
     .discuss

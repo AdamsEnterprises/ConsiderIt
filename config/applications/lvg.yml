@@ -34,7 +34,7 @@ development:
   decisions:
     name: 
       short: option
-      full: Option
+      full: option
   
   footer:
     has_custom_resources: true

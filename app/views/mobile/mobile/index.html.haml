@@ -1,5 +1,11 @@
 - @option_name = APP_CONFIG['decisions']['name']['full']
-%p Choose a #{@option_name} below:
+%p
+  = "Choose "
+  - if %w(a e i o u).include?(@option_name.downcase[0])
+    = "an"
+  - else
+    = "a"
+  = "#{@option_name} below:"
 %ul.initiative_list
   - @even = true
   - get_initiatives.uniq.each do |option|

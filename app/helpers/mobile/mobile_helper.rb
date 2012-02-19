@@ -52,7 +52,7 @@ module Mobile::MobileHelper
       elsif path == new_mobile_option_point_path(@option, :con)
         page_name = "Write a New Con"
       elsif path == mobile_option_summary_path(@option)
-        page_name = "User Distribution"
+        page_name = "Other Users' Opinions"
       # TODO: Fix this up (won't work @point not defined)
       # elsif @point and path == show_mobile_option_point_path(@option, @point)
       # TEMPTEMP Fix for it (only works because no other path has this)

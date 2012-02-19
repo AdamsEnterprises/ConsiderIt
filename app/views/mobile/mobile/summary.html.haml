@@ -11,6 +11,6 @@
       - current_stance_count = Position.where(:option_id => @option.id, :stance_bucket => stance).count
       - percentage = (all_positions_count == 0) ? 0 : (100.0 * current_stance_count / all_positions_count).round(2)
       %li
-        = f.submit Position.stance_name_map(stance).capitalize + " (" + percentage.to_s + "%)" + (@user_stance_bucket == stance ? " (your position)" : ""), :name => "button[segment][#{stance}]"
+        = f.submit Position.stance_name_map(stance).capitalize + " (" + percentage.to_s + "%)" + (@position.stance_bucket == stance ? " (your position)" : ""), :name => "button[segment][#{stance}]"
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

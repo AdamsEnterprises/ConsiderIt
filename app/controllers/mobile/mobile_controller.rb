@@ -229,7 +229,9 @@ protected
   def define_position
     if current_user
       @position = current_user.positions.where(:option_id => @option.id).first
-    else
+    end
+
+    if @position.nil?
       @position = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
     end
   end

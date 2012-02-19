@@ -34,7 +34,7 @@
           = "Email:"
           = link_to "(why?)", "",
             {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
-        = f.email_field :email, :class => 'has_example', :autocapitalize => 'off'
+        = f.text_field :email, :class => 'has_example', :autocapitalize => 'off'
 
       %li.password_field
         %label{:for => "user_password"} Password:

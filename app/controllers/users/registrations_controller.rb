@@ -8,8 +8,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
     build_resource
+    is_mobile = /^\/mobile/ === URI(request.referer).path
+    
+    if is_mobile
+      error = true
+      if params[:user][:name] == ""
+        flash[:notice] = "Please enter your first and last name."
+      elsif params[:user][:email] == ""
+        flash[:notice] = "Please enter an email address."
+      # email regex: a@a.a, where a is one or more non-whitespace chars
+      elsif !(params[:user][:email] =~ /\A\S+@\S+\.\S+\Z/ )
+        flash[:notice] = "Invalid email address."
+      elsif params[:user][:password].length < 6
+        flash[:notice] = "Password must be at least 6 characters"
+      else
+        error = false
+      end
+    end
 
-    if resource.save
+    if !error && resource.save
       if resource.active_for_authentication?
         sign_in(resource_name, resource)
         if current_user && session[:domain] != current_user.domain_id
@@ -20,7 +37,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
           session['reify_activities'] = true 
         end
 
-        if /^\/mobile/ === URI(request.referer).path
+        if is_mobile
           # redirect to instructions about confirmation
           redirect_to new_mobile_user_confirm_path
 	else
@@ -33,9 +50,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords(resource)
-      flash[:notice] = "Email is already in use."
+      if !error
+        flash[:notice] = "Email is already in use."
+      end
 
-      if /^\/mobile/ === URI(request.referer).path
+      if is_mobile
         # redirect to instructions about confirmation
         redirect_to request.referrer
       else

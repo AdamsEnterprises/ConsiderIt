@@ -77,6 +77,7 @@ h2.locality {
     font-weight: normal;
     text-transform: lowercase;
 }
+
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -471,4 +472,11 @@ div.author {
 #terms_of_use ul {
     list-style-type: disc;
     padding-left: 40px;
+}
+
+/* to fit on one line on the iPod screen */
+.login_method input[type="text"],
+.login_method input[type="password"],
+.login_method input[type="email"] {
+    width: 200px;
 }

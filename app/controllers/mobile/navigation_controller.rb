@@ -71,12 +71,12 @@ class Mobile::NavigationController < Mobile::MobileController
   # POST /mobile/options/:option_id/navigate/points
   def points
     redirect_path = handle_nav {|redirect_path|
-      if current_user.nil?
-        # TODO: Redirect to login if no current_user
-        throw "Must be signed in!"
-      end
       session[:mobile][option_id][:navigate].push mobile_option_points_path
-      redirect_path
+      if current_user.nil?
+        redirect_path = mobile_user_path
+      else
+        redirect_path
+      end
     }
 
     if redirect_path.nil?

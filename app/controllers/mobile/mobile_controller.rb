@@ -17,10 +17,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id
   def option
-    @option = Option.find_by_id(params[:option_id])
-
-    initialize_session
-
     # Determine if we have the forward button available since we also link to this page 
     # from the nav and we don't want a forward option then (might be a buggy way to determine)
     if (session[:mobile][@option.id][:navigate].last == mobile_home_path)
@@ -42,8 +38,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/position
   def position_update
-    @option = Option.find_by_id(params[:option_id])
-
     define_position
 
     @required_update = session[:mobile][@option.id][:navigate] == [mobile_home_path, show_mobile_option_path]
@@ -59,8 +53,6 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
 
     define_position
-
-    initialize_session
     
     # Determine if we have the forward button available since we link to this page from 
     # from the update position/home and summary pages and we don't want a forward option when
@@ -194,7 +186,9 @@ class Mobile::MobileController < ApplicationController
   end
 
 protected
-  def initialize_session
+  def init_option_session
+    @option = Option.find_by_id(params[:option_id])
+
     # Initialize the session data for the option
     if session[:mobile].nil?
       session[:mobile] = {}
@@ -283,31 +277,4 @@ protected
         throw "Invalid stance bucket " + @stance_bucket
     end
   end
-
-  def init_option_session
-    @option = Option.find_by_id(params[:option_id])
-
-    # Initialize the session data for the option
-    if session[:mobile].nil?
-      session[:mobile] = {}
-    end
-    if session[:mobile][@option.id].nil?
-      session[:mobile][@option.id] = {
-                              :included_points => { }, # No included points at first
-                              :navigate => []          # Navigate used to move next/previous in mobile site
-                            }
-    end
-    if session[:mobile][@option.id][:included_points].nil?
-      session[:mobile][@option.id][:included_points] = { } # No included points at first
-    end
-    if (session[:mobile][@option.id][:navigate].nil? or 
-        session[:mobile][@option.id][:navigate].empty? or 
-        request.referrer == mobile_home_url)
-      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
-
-      # Set initial navigate to home path
-      session[:mobile][@option.id][:navigate].push(mobile_home_path)
-    end
-  end
-
 end

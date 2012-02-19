@@ -63,8 +63,8 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/navigate' => "mobile/navigation#option", :via => :post, :module => :mobile, :as => :mobile_navigate_option
   match '/mobile/options/:option_id/navigate/long_description' => "mobile/navigation#long_description", :via => :post, :module => :mobile, :as => :mobile_navigate_long_description
   match '/mobile/options/:option_id/navigate/fiscal_impact' => "mobile/navigation#fiscal_impact", :via => :post, :module => :mobile, :as => :mobile_navigate_fiscal_impact
-  match '/mobile/options/:option_id/navigate/position' => "mobile/navigation#position_update", :via => :post, :module => :mobile, :as => :mobile_navigate_position_update
   match '/mobile/options/:option_id/navigate/points' => "mobile/navigation#points", :via => :post, :module => :mobile, :as => :mobile_navigate_points
+  match '/mobile/options/:option_id/navigate/position' => "mobile/navigation#position_update", :via => [:post, :put], :module => :mobile, :as => :mobile_navigate_position_update
   match '/mobile/options/:option_id/navigate/list_points/:type' => "mobile/navigation#list_points", :via => :post, :module => :mobile, :as => :mobile_navigate_list_points
   match '/mobile/options/:option_id/navigate/add_point/:type' => "mobile/navigation#add_point", :via => :post, :module => :mobile, :as => :mobile_navigate_add_point
   match '/mobile/options/:option_id/navigate/new_point/:type' => "mobile/navigation#new_point", :via => :post, :module => :mobile, :as => :mobile_navigate_new_point

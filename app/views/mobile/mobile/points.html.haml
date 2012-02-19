@@ -1,4 +1,4 @@
-%p Your current position: #{Position.stance_name_map(session[:mobile][@option.id][:position].to_i).capitalize}
+%p Your current position: #{Position.stance_name_map(@position.stance_bucket).capitalize}
 = form_for :navigate, :url => mobile_navigate_points_path do |f|
   = f.submit "Update Position", :name => "button[update_position]"
   %p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.

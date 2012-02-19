@@ -43,7 +43,8 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/options/:option_id/position
   def position_update
     @option = Option.find_by_id(params[:option_id])
-    @position = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
+
+    define_position
 
     @required_update = session[:mobile][@option.id][:navigate] == [mobile_home_path, show_mobile_option_path]
     if @required_update
@@ -56,6 +57,8 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/options/:option_id/points
   def points
     @title = "#{@option.reference}"
+
+    define_position
 
     initialize_session
     
@@ -132,8 +135,7 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
     define_navigation nil, true
 
-    # TODO: Figure out how they actually get the user position
-    @user_stance_bucket = session[:mobile][@option.id][:position].to_i
+    define_position
   end
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
@@ -221,6 +223,16 @@ protected
 
       # Set initial navigate to home path
       session[:mobile][@option.id][:navigate].push(mobile_home_path)
+    end
+  end
+
+  def define_position
+    if current_user
+      @position = current_user.positions.where(:option_id => @option.id).first
+    end
+
+    if @position.nil?
+      @position = Position.new(:stance_bucket => session[:mobile][@option.id][:position])
     end
   end
 

@@ -61,5 +61,9 @@
               %p.note
                 %strong Remember your pledge!
               = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
+        - else
+          %li.even
+            = link_to("Log in", mobile_user_path) 
+            = " to add your comments!"
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

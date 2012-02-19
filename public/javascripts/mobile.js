@@ -108,7 +108,7 @@ function confirmRemovePoint() {
 }
 
 function confirmDeletePoint() {
-    return confirm("This unpublished point will be removed from your list\nand cannot be added again.");
+    return confirm("This point will be permanently deleted and cannot be added again.");
 }
 
 // When the user checks/unchecks the box agreeing to the conditions

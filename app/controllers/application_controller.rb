@@ -26,7 +26,7 @@ private
 
   def after_sign_in_path_for(resource)
     if is_mobile_call(request.referrer)
-      return "#{root_url}mobile"
+      return mobile_home_path
     else
       super
     end
@@ -34,7 +34,8 @@ private
 
   def after_sign_out_path_for(resource)
     if is_mobile_call(request.referrer)
-      return request.referrer
+      session[:mobile] = nil
+      return mobile_home_path
     else
       super
     end 

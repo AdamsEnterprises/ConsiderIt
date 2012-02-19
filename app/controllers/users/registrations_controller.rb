@@ -27,6 +27,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
 
     if !error && resource.save
+
       if resource.active_for_authentication?
         sign_in(resource_name, resource)
         if current_user && session[:domain] != current_user.domain_id
@@ -38,7 +39,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         end
 
         if is_mobile
-          # redirect to instructions about confirmation
+          # redirect to instructions about confirmation on success
           redirect_to new_mobile_user_confirm_path
 	else
           redirect_to request.referer
@@ -55,7 +56,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
 
       if is_mobile
-        # redirect to instructions about confirmation
+        # redirect to signup page on fail
         redirect_to request.referrer
       else
         respond_with_navigational(resource) { render_with_scope :new }

@@ -27,6 +27,7 @@
           - @point.point_links.each do |point_link|
             %li 
               = link_to point_link.description, point_link.url
+              [#{point_link.url}]
         - else
           %li none provided
     .discuss

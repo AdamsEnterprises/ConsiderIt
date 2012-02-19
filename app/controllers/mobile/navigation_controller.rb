@@ -81,7 +81,7 @@ class Mobile::NavigationController < Mobile::MobileController
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons
+      redirect_path = handle_add_remove_point_buttons(mobile_option_list_points_path)
     end
 
     if redirect_path.nil?
@@ -98,7 +98,7 @@ class Mobile::NavigationController < Mobile::MobileController
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons
+      redirect_path = handle_add_remove_point_buttons(add_mobile_option_point_path)
     end
 
     if redirect_path.nil?
@@ -116,6 +116,7 @@ class Mobile::NavigationController < Mobile::MobileController
 
     if params[:button][:add_point]
       @point = Point.new(params[:point])
+      #throw @point.inspect
       if @point.save
         # Add point to included points
         session[:mobile][option_id][:included_points][@point.id] = 1
@@ -142,7 +143,7 @@ class Mobile::NavigationController < Mobile::MobileController
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons
+      redirect_path = handle_add_remove_point_buttons(session[:mobile][option_id][:navigate].pop)
     end
 
     if redirect_path.nil?
@@ -225,7 +226,7 @@ class Mobile::NavigationController < Mobile::MobileController
     }
 
     if redirect_path.nil?
-      redirect_path = handle_add_remove_point_buttons
+      redirect_path = handle_add_remove_point_buttons(mobile_option_segment_list_path)
     end
 
     if redirect_path.nil?
@@ -391,7 +392,7 @@ protected
     return redirect_path
   end
 
-  def handle_add_remove_point_buttons
+  def handle_add_remove_point_buttons(delete_path)
     if params[:button][:remove_point]
       redirect_path = request.referrer
 
@@ -412,7 +413,7 @@ protected
         session[:mobile][option_id][:deleted_points].delete(point_id)
       end
     elsif params[:button][:delete_point]
-      redirect_path = session[:mobile][option_id][:navigate].pop
+      redirect_path = delete_path
 
       point_id = params[:button][:delete_point].keys.first.to_i
 

@@ -4,7 +4,9 @@ window.onload = function() {
     $j("#point_hide_name").click(warnHideName);
 
     // "Remove point" button
-    $j(".remove_point").click(confirmDeletePoint);
+    $j(".remove_point").click(confirmRemovePoint);
+    // "Delete point" button
+    $j(".delete_point").click(confirmDeletePoint);
 
     // Cancel button on login - should be replaced with stack nav
     $j(".cancel").click(function() { history.go(-1); });
@@ -94,9 +96,12 @@ function deleteLink() {
   }
 }
 
-function confirmDeletePoint() {
+function confirmRemovePoint() {
     return confirm("This point will be removed from your list.");
+}
 
+function confirmDeletePoint() {
+    return confirm("This unpublished point will be removed from your list\nand cannot be added again.");
 }
 
 // When the user checks/unchecks the box agreeing to the conditions

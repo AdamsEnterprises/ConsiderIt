@@ -4,10 +4,7 @@
     %li{ :class => ("even" if even) }
       .point_text #{point.nutshell} (#{point.comments.count} comments)</div>
       .point_links
-        - if included_points.include?(point)
-          = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point"
-        - else
-          = form.submit "Add Point", :name => "button[add_point][#{point.id}]"
+        = render :partial => 'mobile/partials/add_remove_button', :locals => { :form => form, :point => point, :included_points => included_points }
         %br
         = form.submit "Details", :name => "button[point_details][#{request.request_uri}][#{point.id}]"
     - even = !even

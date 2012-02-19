@@ -21,11 +21,19 @@ class Mobile::MobileController < ApplicationController
     if session[:mobile][@option.id].nil?
       session[:mobile][@option.id] = {
                               :included_points => { }, # No included points at first
+                              :deleted_points => { },  # No deleted points at first
+                              :written_points => [],    # No written points at first
                               :navigate => []          # Navigate used to move next/previous in mobile site
                             }
     end
     if session[:mobile][@option.id][:included_points].nil?
       session[:mobile][@option.id][:included_points] = { } # No included points at first
+    end
+    if session[:mobile][@option.id][:deleted_points].nil?
+      session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
+    end
+    if session[:mobile][@option.id][:written_points].nil?
+      session[:mobile][@option.id][:written_points] = []   # No written points at first
     end
     if (session[:mobile][@option.id][:navigate].nil? or 
         session[:mobile][@option.id][:navigate].empty? or 
@@ -123,6 +131,8 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
     define_navigation nil, true
 
+    @point = Point.new
+
     @type = params[:type]
   end
 
@@ -132,7 +142,8 @@ class Mobile::MobileController < ApplicationController
     @title = "#{@option.reference}"
     define_navigation nil, true
     
-    @point = Point.find_by_id(params[:point_id])
+    @point = Point.unscoped.find_by_id(params[:point_id])
+    @included_points = get_included_points(@point.is_pro)
     if @point.option != @option
       throw "Point not valid for the specified option"
     end

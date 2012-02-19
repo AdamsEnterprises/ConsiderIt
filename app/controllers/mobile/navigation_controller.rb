@@ -34,28 +34,33 @@ class Mobile::NavigationController < Mobile::MobileController
     handle_redirection redirect_path
   end
 
-  # POST /mobile/options/:option_id/navigate/position_initial
-  def position_initial
+  # POST /mobile/options/:option_id/navigate/position_update
+  def position_update
     redirect_path = handle_nav {|redirect_path|
-      push_to_stack = true
- 
-      # Next from choosing initial position.  Save in session data
       if params[:position] and params[:position][:stance_bucket]
         set_position(params[:position][:stance_bucket])
+        session[:mobile][option_id][:navigate].push mobile_option_update_position_path
       else
         # Didn't input correct data.  Tell them that
         flash[:error] = "No position chosen"
         redirect_path = request.referrer
-        push_to_stack = false
+        success = false
       end
-
-      if push_to_stack
-        # Push coming_from onto stack
-        session[:mobile][option_id][:navigate].push mobile_option_initial_position_path
-      end
-
       redirect_path
     }
+
+    if params[:button][:update_position]
+      success = true
+      if params[:position] and params[:position][:stance_bucket]
+        set_position(params[:position][:stance_bucket])
+        redirect_path = session[:mobile][option_id][:navigate].pop
+      else
+        # Didn't input correct data.  Tell them that
+        flash[:error] = "No position chosen"
+        redirect_path = request.referrer
+        success = false
+      end
+    end
 
     handle_redirection redirect_path
   end
@@ -63,6 +68,10 @@ class Mobile::NavigationController < Mobile::MobileController
   # POST /mobile/options/:option_id/navigate/points
   def points
     redirect_path = handle_nav {|redirect_path|
+      if current_user.nil?
+        # TODO: Redirect to login if no current_user
+        throw "Must be signed in!"
+      end
       session[:mobile][option_id][:navigate].push mobile_option_points_path
       redirect_path
     }
@@ -149,41 +158,6 @@ class Mobile::NavigationController < Mobile::MobileController
     if redirect_path.nil?
       redirect_path = handle_add_comment_button
     end
-
-    handle_redirection redirect_path
-  end
-
-  # POST /mobile/options/:option_id/navigate/position_final
-  def position_final
-    redirect_path = handle_nav {|redirect_path| 
-      push_to_stack = true
-
-      # Next from choosing final position.  Save in session data and actually save everything
-      if params[:position] and params[:position][:stance_bucket]
-        position_bucket = params[:position][:stance_bucket]
-
-        if current_user.nil?
-          # TODO: Redirect to login if no current_user
-          throw "Must be signed in!"
-        end
-
-        # Update everything in DB
-        position = set_position(position_bucket)
-        update_inclusions
-      else
-        # Didn't input correct data.  Tell them that
-        flash[:error] = "No position chosen"
-        redirect_path = request.referrer
-        push_to_stack = false
-      end
-     
-      if push_to_stack
-        # Push coming_from onto stack
-        session[:mobile][option_id][:navigate].push mobile_option_final_position_path
-      end
-
-      redirect_path
-    }
 
     handle_redirection redirect_path
   end
@@ -385,6 +359,8 @@ protected
       redirect_path = new_mobile_option_point_path(option_id, :con)
     elsif params[:button][:my_points]
       redirect_path = mobile_option_points_path
+    elsif params[:button][:update_position]
+      redirect_path = mobile_option_update_position_path
     end
 
     if redirect_path

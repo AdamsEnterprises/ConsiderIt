@@ -31,8 +31,8 @@ module Mobile::MobileHelper
         page_name = "Long Description"
       elsif path == show_mobile_option_fiscal_impact_path(@option)
         page_name = "Fiscal Impact Statement"
-      elsif path == mobile_option_initial_position_path(@option)
-        page_name = "Choose an Initial Position"
+      elsif path == mobile_option_update_position_path(@option)
+        page_name = "Update My Position"
       elsif path == mobile_option_points_path(@option)
         page_name = "My Pros and Cons"
       elsif path == mobile_option_list_points_path(@option, :pro)
@@ -47,8 +47,6 @@ module Mobile::MobileHelper
         page_name = "Write a New Pro"
       elsif path == new_mobile_option_point_path(@option, :con)
         page_name = "Write a New Con"
-      elsif path == mobile_option_final_position_path(@option)
-        page_name = "Update Your Position"
       elsif path == mobile_option_summary_path(@option)
         page_name = "Voter Distribution"
       # TODO: Fix this up (won't work @point not defined)

@@ -1,5 +1,7 @@
-%p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.
+%p Your current position: #{Position.stance_name_map(session[:mobile][@option.id][:position].to_i).capitalize}
 = form_for :navigate, :url => mobile_navigate_points_path do |f|
+  = f.submit "Update Position", :name => "button[update_position]"
+  %p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.
   #pro_con_nav
     %h2 My Pros (#{@included_pros.count})
     %ul.link_list

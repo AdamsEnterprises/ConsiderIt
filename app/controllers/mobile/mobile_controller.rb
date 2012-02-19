@@ -2,6 +2,7 @@ require 'date'
 
 class Mobile::MobileController < ApplicationController
   before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :new_user, :new_user_confirm, :new_user_pledge, :user]
+  before_filter :check_login, :only => [:new_user, :new_user_pledge, :user]
   
   # GET /mobile
   def index
@@ -118,8 +119,11 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/summary
   def summary
-    define_navigation nil, true
+    if !current_user
+      redirect_to new_mobile_user_pledge_path
+    end
 
+    define_navigation nil, true
     define_position
   end
 
@@ -176,6 +180,20 @@ class Mobile::MobileController < ApplicationController
     
   end
 
+  # GET /mobile/user/new
+  def new_user
+    if URI(request.referrer).path != new_mobile_user_pledge_path
+      redirect_to new_mobile_user_pledge_path
+    end
+  end
+
+  # GET /mobile/user/new/confirm
+  def new_user_confirm
+    if URI(request.referrer).path != new_mobile_user_path
+      redirect_to new_mobile_user_pledge_path
+    end
+  end
+
 protected
   def init_option_session
     @option = Option.find_by_id(params[:option_id])
@@ -210,6 +228,12 @@ protected
         # Set initial navigate to home path
         session[:mobile][@option.id][:navigate].push(mobile_home_path)
       end
+    end
+  end
+
+  def check_login
+    if current_user
+      redirect_to mobile_home_path
     end
   end
 

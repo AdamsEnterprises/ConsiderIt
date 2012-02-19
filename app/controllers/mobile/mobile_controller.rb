@@ -31,8 +31,8 @@ class Mobile::MobileController < ApplicationController
     define_navigation
   end
 
-  # GET /mobile/options/:option_id/fiscal_impact
-  def option_fiscal_impact
+  # GET /mobile/options/:option_id/additional_details
+  def option_additional_details
     define_navigation
   end
 
@@ -193,30 +193,32 @@ protected
     if session[:mobile].nil?
       session[:mobile] = {}
     end
-    if session[:mobile][@option.id].nil?
-      session[:mobile][@option.id] = {
-                              :included_points => { }, # No included points at first
-                              :deleted_points => { },  # No deleted points at first
-                              :written_points => [],    # No written points at first
-                              :navigate => []          # Navigate used to move next/previous in mobile site
-                            }
-    end
-    if session[:mobile][@option.id][:included_points].nil?
-      session[:mobile][@option.id][:included_points] = { } # No included points at first
-    end
-    if session[:mobile][@option.id][:deleted_points].nil?
-      session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
-    end
-    if session[:mobile][@option.id][:written_points].nil?
-      session[:mobile][@option.id][:written_points] = []   # No written points at first
-    end
-    if (session[:mobile][@option.id][:navigate].nil? or 
-        session[:mobile][@option.id][:navigate].empty? or 
-        request.referrer == mobile_home_url)
-      session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
+    if @option
+      if session[:mobile][@option.id].nil?
+        session[:mobile][@option.id] = {
+                                :included_points => { }, # No included points at first
+                                :deleted_points => { },  # No deleted points at first
+                                :written_points => [],    # No written points at first
+                                :navigate => []          # Navigate used to move next/previous in mobile site
+                              }
+      end
+      if session[:mobile][@option.id][:included_points].nil?
+        session[:mobile][@option.id][:included_points] = { } # No included points at first
+      end
+      if session[:mobile][@option.id][:deleted_points].nil?
+        session[:mobile][@option.id][:deleted_points] = { }  # No deleted points at first
+      end
+      if session[:mobile][@option.id][:written_points].nil?
+        session[:mobile][@option.id][:written_points] = []   # No written points at first
+      end
+      if (session[:mobile][@option.id][:navigate].nil? or 
+          session[:mobile][@option.id][:navigate].empty? or 
+          request.referrer == mobile_home_url)
+        session[:mobile][@option.id][:navigate] = [] # Navigate used to move next/previous in mobile site
 
-      # Set initial navigate to home path
-      session[:mobile][@option.id][:navigate].push(mobile_home_path)
+        # Set initial navigate to home path
+        session[:mobile][@option.id][:navigate].push(mobile_home_path)
+      end
     end
   end
 
@@ -258,7 +260,7 @@ protected
   def set_stance_name(stance_bucket)
     case stance_bucket
       when 7
-        @stance_name = "all voters"
+        @stance_name = "all users"
       when 6
         @stance_name = "strong supporters"
       when 5

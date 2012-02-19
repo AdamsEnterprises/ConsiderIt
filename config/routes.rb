@@ -48,7 +48,7 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/user/password/new' => "mobile/mobile#new_password", :via => :get, :module => :mobile, :as => :new_mobile_password
   match '/mobile/options/:option_id' => "mobile/mobile#option", :via => :get, :module => :mobile, :as => :show_mobile_option
   match '/mobile/options/:option_id/description' => "mobile/mobile#option_long_description", :via => :get, :module => :mobile, :as => :show_mobile_option_long_description
-  match '/mobile/options/:option_id/fiscal_impact' => "mobile/mobile#option_fiscal_impact", :via => :get, :module => :mobile, :as => :show_mobile_option_fiscal_impact
+  match '/mobile/options/:option_id/additional_details' => "mobile/mobile#option_additional_details", :via => :get, :module => :mobile, :as => :show_mobile_option_additional_details
   match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile, :as => :mobile_option_points
   match '/mobile/options/:option_id/position' => "mobile/mobile#position_update", :via => :get, :module => :mobile, :as => :mobile_option_update_position
   match '/mobile/options/:option_id/points/list/:type' => "mobile/mobile#list_points", :via => :get, :module => :mobile, :as => :mobile_option_list_points
@@ -62,7 +62,7 @@ ConsiderIt::Application.routes.draw do
   # Mobile Navigation
   match '/mobile/options/:option_id/navigate' => "mobile/navigation#option", :via => :post, :module => :mobile, :as => :mobile_navigate_option
   match '/mobile/options/:option_id/navigate/long_description' => "mobile/navigation#long_description", :via => :post, :module => :mobile, :as => :mobile_navigate_long_description
-  match '/mobile/options/:option_id/navigate/fiscal_impact' => "mobile/navigation#fiscal_impact", :via => :post, :module => :mobile, :as => :mobile_navigate_fiscal_impact
+  match '/mobile/options/:option_id/navigate/additional_details' => "mobile/navigation#additional_details", :via => :post, :module => :mobile, :as => :mobile_navigate_additional_details
   match '/mobile/options/:option_id/navigate/points' => "mobile/navigation#points", :via => :post, :module => :mobile, :as => :mobile_navigate_points
   match '/mobile/options/:option_id/navigate/position' => "mobile/navigation#position_update", :via => [:post, :put], :module => :mobile, :as => :mobile_navigate_position_update
   match '/mobile/options/:option_id/navigate/list_points/:type' => "mobile/navigation#list_points", :via => :post, :module => :mobile, :as => :mobile_navigate_list_points

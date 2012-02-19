@@ -1,10 +1,12 @@
 = form_for :navigate, :url => mobile_navigate_option_path do |f|
   - @option.format_description.each do |paragraph|
-    %p #{paragraph}
+    %p #{h paragraph.html_safe}
   .option_desc_links
-    %div
-      = f.submit "View Long Description", :name => 'button[description]'
-    %div
-      = f.submit "View Fiscal Impact Statement", :name => 'button[fiscal_impact]'
+    - if @option.long_description and !@option.long_description.empty?
+      %div
+        = f.submit "View Long Description", :name => 'button[description]'
+    - if @option.additional_details and !@option.additional_details.empty?
+      %div
+        = f.submit "View Additional Details", :name => 'button[additional_details]'
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

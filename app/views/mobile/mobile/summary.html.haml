@@ -1,11 +1,11 @@
-%p Now explore a breakdown of what other voters feel about #{@option.designator}!
-%p Select a segment of voters below to see a ranked list of the points that segment finds most important.
+%p Now explore a breakdown of what other users feel about #{@option.designator}!
+%p Select a segment of users below to see a ranked list of the points that segment finds most important.
 = form_for :navigate, :url => mobile_navigate_summary_path do |f|
   %ul.link_list
     %li
       = f.submit "My pros and cons", :name => "button[my_points]"
     %li
-      = f.submit "All voters", :name => "button[segment][7]"
+      = f.submit "All users", :name => "button[segment][7]"
     - all_positions_count = Position.where(:option_id => @option.id).count
     - (0..6).to_a.reverse.each do |stance|
       - current_stance_count = Position.where(:option_id => @option.id, :stance_bucket => stance).count

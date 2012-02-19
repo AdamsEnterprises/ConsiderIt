@@ -1,4 +1,4 @@
-= @option.additional_details.html_safe
-= form_for :navigate, :url => mobile_navigate_fiscal_impact_path do |f|
+=h @option.additional_details.html_safe
+= form_for :navigate, :url => mobile_navigate_additional_details_path do |f|
   = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
 

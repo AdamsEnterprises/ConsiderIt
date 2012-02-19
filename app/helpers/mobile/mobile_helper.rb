@@ -13,28 +13,28 @@ module Mobile::MobileHelper
     if path == mobile_home_path
       page_name = "Homepage"
     elsif path == mobile_user_path
-      page_name = "Log In to the Living Voters Guide"
+      page_name = "Log In to " + APP_CONFIG['meta']['title']
     elsif path == new_mobile_user_why_path
-      page_name = "Why Join ConsiderIt?"
+      page_name = "Why Join " + APP_CONFIG['meta']['title'] + "?"
     elsif path == new_mobile_user_path
-      page_name = "Join the Living Voters Guide"
+      page_name = "Join " + APP_CONFIG['meta']['title']
     elsif path == new_mobile_user_pledge_path
       page_name = "Participant Pledge"
     elsif path == new_mobile_user_confirm_path
-      page_name = "Welcome to the ConsiderIt Community!"
+      page_name = "Welcome to " + APP_CONFIG['meta']['title'] + " Community!"
     elsif path == new_mobile_password_path
       page_name = "Forgot Your Password?"
     elsif path == mobile_confirm_resend_path
       page_name = "Didn't receive confirmation instructions?"
     elsif path == mobile_tou_path
-      page_name = "ConsiderIt Terms of Use"
+      page_name = APP_CONFIG['meta']['title'] + " Terms of Use"
     elsif @option
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"
       elsif path == show_mobile_option_long_description_path(@option)
         page_name = "Long Description"
-      elsif path == show_mobile_option_fiscal_impact_path(@option)
-        page_name = "Fiscal Impact Statement"
+      elsif path == show_mobile_option_additional_details_path(@option)
+        page_name = "Additional Details"
       elsif path == mobile_option_update_position_path(@option)
         page_name = "Update My Position"
       elsif path == mobile_option_points_path(@option)
@@ -52,7 +52,7 @@ module Mobile::MobileHelper
       elsif path == new_mobile_option_point_path(@option, :con)
         page_name = "Write a New Con"
       elsif path == mobile_option_summary_path(@option)
-        page_name = "Voter Distribution"
+        page_name = "User Distribution"
       # TODO: Fix this up (won't work @point not defined)
       # elsif @point and path == show_mobile_option_point_path(@option, @point)
       # TEMPTEMP Fix for it (only works because no other path has this)
@@ -71,7 +71,7 @@ module Mobile::MobileHelper
           # Set up either stance name or "All Voters"...only if actually set page_name
           if temp
             if stance_bucket == 7
-              segment = "All Voters"
+              segment = "All Users"
             else
               segment = @stance_name.split(" ").each{|word| word.capitalize!}.join(" ")
             end

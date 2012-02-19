@@ -25,10 +25,10 @@ class Mobile::NavigationController < Mobile::MobileController
     handle_redirection redirect_path
   end
 
-  # POST /mobile/options/:option_id/navigate/fiscal_impact
-  def fiscal_impact
+  # POST /mobile/options/:option_id/navigate/additional_details
+  def additional_details
     redirect_path = handle_nav {|redirect_path|
-      throw "Should not have next for fiscal impact"
+      throw "Should not have next for additional details"
     }
 
     handle_redirection redirect_path
@@ -335,8 +335,8 @@ protected
     if params[:button][:description]
       # Show long description pushed
       redirect_path = show_mobile_option_long_description_path(params[:option_id])
-    elsif params[:button][:fiscal_impact]
-      redirect_path = show_mobile_option_fiscal_impact_path(params[:option_id])
+    elsif params[:button][:additional_details]
+      redirect_path = show_mobile_option_additional_details_path(params[:option_id])
     end
 
     if redirect_path

@@ -2,10 +2,11 @@
   = "Already have an account?"
   = link_to("Log in!", mobile_user_path)
 
-%p Before you sign up, please review a few short rules for using ConsiderIt.
+- @app_title = APP_CONFIG['meta']['title']
+%p Before you sign up, please review a few short rules for using #{@app_title}.
 
 %p
-  = link_to("Why should I join ConsiderIt?", new_mobile_user_why_path)
+  = link_to("Why should I join " + @app_title + "?", new_mobile_user_why_path)
 
 %ul#pledge_form
   %li

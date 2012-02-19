@@ -284,10 +284,11 @@ protected
         end
 
         point.update_attributes(:user_id => current_user.id, :published => true)
-        if not point.save
+        if !point.save
           throw "Could not publish point with id " + point_id.to_s
         end
       end
+      session[:mobile][option_id][:written_points] = [] # Clear written points at end
       
     end
   end
@@ -296,6 +297,8 @@ protected
     if redirect_path.nil?
       throw "No button action for " + params[:button].keys.first.to_s
     end
+
+    update_inclusions
 
     redirect_to redirect_path
   end

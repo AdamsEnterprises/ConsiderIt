@@ -9,8 +9,8 @@ window.onload = function() {
     // "Delete point" button
     $j(".delete_point").click(confirmDeletePoint);
 
-    // Cancel button on login - should be replaced with stack nav
-    $j(".cancel").click(function() { history.go(-1); });
+    // Cancel/back buttons and links
+    $j(".back").click(function() { history.back(); return false; });
 
     // Textboxes with watermark
     $j(".has_example")

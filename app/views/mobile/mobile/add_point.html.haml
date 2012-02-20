@@ -1,5 +1,5 @@
 = form_for :navigate, :url => mobile_navigate_add_point_path do |f|
-  %ul.link_list
+  %ul.link_list.cross_nav
     %li
       = link_to "See my " + @type.pluralize, mobile_option_list_points_path(:option_id => @option.id, :type => @type)
     %li
@@ -12,6 +12,5 @@
     = render :partial => "mobile/partials/point_list", :locals => { :points => @points, :included_points => @included_points, :form => f }
   - else
     %strong There are no unused #{@type.pluralize}
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
-
+= render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_points_path }
 

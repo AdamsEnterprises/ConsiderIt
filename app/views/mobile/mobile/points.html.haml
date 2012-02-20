@@ -1,23 +1,28 @@
-%p Your current position: #{Position.stance_name_map(@position.stance_bucket).capitalize}
-= form_for :navigate, :url => mobile_navigate_points_path do |f|
-  = f.submit "Update Position", :name => "button[update_position]"
-  %p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.
-  #pro_con_nav
-    %h2 My Pros (#{@included_pros.count})
-    %ul.link_list
-      %li
-        = f.submit "See my pros", :name => "button[my_pros]"
-      %li
-        = f.submit "Add an existing pro", :name => "button[add_pros]"
-      %li
-        = f.submit "Write a new pro", :name => "button[new_pro]"
-    %h2 My Cons (#{@included_cons.count})
-    %ul.link_list
-      %li
-        = f.submit "See my cons", :name => "button[my_cons]"
-      %li
-        = f.submit "Add an existing con", :name => "button[add_cons]"
-      %li
-        = f.submit "Write a new con", :name => "button[new_con]"
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+%div.current_position
+  %p
+    = "Your current position: "
+    - if @position.stance_bucket == nil
+      = "none"
+    - else
+      = Position.stance_name_map(@position.stance_bucket).capitalize
+  = link_to("Update Position", mobile_option_update_position_path, {:class => "update_position"})
 
+%p Construct a list of the most important factors in your decision. Start by browsing points other members have added, or write a new point that nobody has added yet.
+#pro_con_nav
+  %h2 My Pros (#{@included_pros.count})
+  %ul.link_list
+    %li
+      = link_to("See my pros", mobile_option_list_points_path(:type => "pro"))
+    %li
+      = link_to("Add an existing pro", add_mobile_option_point_path(:type => "pro"))
+    %li
+      = link_to("Write a new pro", new_mobile_option_point_path(:type => "pro"))
+  %h2 My Cons (#{@included_cons.count})
+  %ul.link_list
+    %li
+      = link_to("See my pros", mobile_option_list_points_path(:type => "con"))
+    %li
+      = link_to("Add an existing pro", add_mobile_option_point_path(:type => "con"))
+    %li
+      = link_to("Write a new pro", new_mobile_option_point_path(:type => "con"))
+= render :partial => "mobile/partials/nav", :locals => { :next_path => mobile_option_summary_path }

@@ -1,18 +1,22 @@
+-if (!defined? id)
+  - id = "nav_bottom"
 %div.nav{ :id => id }
-  - if include_header
+  - if ((!defined? skip_header) || !skip_header)
     %h2 Navigation
   %ul.link_list
-    - if navigation[:next]
+    - if defined? next_path
       %li
-        = form.submit "Next: " + get_page_name(navigation[:next][:path]), :name => "button[next][#{navigation[:next][:path]}]"
-    - if navigation[:previous][:path] != mobile_home_path
+        - if !(defined? next_title)
+          - next_title = get_page_name(next_path)
+        = link_to("Next: " + next_title, next_path)
+    - if defined? prev_path
       %li
-        = form.submit "Previous: " + get_page_name(navigation[:previous][:path]), :name => "button[previous]"
+        = link_to("Previous: " + get_page_name(prev_path), prev_path)
+
+    - if ((!defined? skip_description) || !skip_description)
+      %li
+        - @option_name = APP_CONFIG['decisions']['name']['full']
+        = link_to("#{@option_name.capitalize} Description", show_mobile_option_path)
 
     %li
-      = form.submit "Home", :name => "button[home]"
-
-    - if navigation[:show_description]
-      %li
-        = form.submit "Initiative Description", :name => "button[initiative_description][#{request.request_uri}]"
-
+      = link_to("Home", mobile_home_path)

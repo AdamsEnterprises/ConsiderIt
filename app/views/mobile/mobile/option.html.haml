@@ -1,12 +1,12 @@
-= form_for :navigate, :url => mobile_navigate_option_path do |f|
-  - @option.format_description.each do |paragraph|
-    %p #{h paragraph.html_safe}
-  .option_desc_links
-    - if @option.long_description and !@option.long_description.empty?
-      %div
-        = f.submit "View Long Description", :name => 'button[description]'
-    - if @option.additional_details and !@option.additional_details.empty?
-      %div
-        = f.submit "View Additional Details", :name => 'button[additional_details]'
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+- @option.format_description.each do |paragraph|
+  %p #{h paragraph.html_safe}
+%ul.option_desc_links
+  - if @option.long_description and !@option.long_description.empty?
+
+    %li
+      = link_to("View Long Description", show_mobile_option_long_description_path)
+  - if @option.additional_details and !@option.additional_details.empty?
+    %li
+      = link_to("View " + APP_CONFIG['decisions']['details'], show_mobile_option_additional_details_path)
+= render :partial => "mobile/partials/nav", :locals => { :next_path => mobile_option_update_position_path, :next_title => "My Position", :skip_description => true }
 

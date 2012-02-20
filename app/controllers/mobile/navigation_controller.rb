@@ -36,33 +36,14 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/position
   def position_update
-    redirect_path = handle_nav {|redirect_path|
-      if params[:position] and params[:position][:stance_bucket]
-        set_position(params[:position][:stance_bucket])
-        session[:mobile][option_id][:navigate].push mobile_option_update_position_path
-      else
-        # Didn't input correct data.  Tell them that
-        flash[:error] = "No position chosen"
-        redirect_path = request.referrer
-        success = false
-      end
-
-      redirect_path
-    }
-
-    if redirect_path.nil?
-      if params[:button][:update_position]
-        success = true
-        if params[:position] and params[:position][:stance_bucket]
-          set_position(params[:position][:stance_bucket])
-          redirect_path = session[:mobile][option_id][:navigate].pop
-        else
-          # Didn't input correct data.  Tell them that
-          flash[:error] = "No position chosen"
-          redirect_path = request.referrer
-          success = false
-        end
-      end
+    if params[:position] and params[:position][:stance_bucket]
+      set_position(params[:position][:stance_bucket])
+      redirect_path = mobile_option_points_path
+    else
+      # Didn't input correct data.  Tell them that
+      flash[:error] = "No position chosen"
+      redirect_path = request.referrer
+      success = false
     end
 
     handle_redirection redirect_path
@@ -271,12 +252,7 @@ protected
   end
 
   def handle_redirection redirect_path
-    if redirect_path.nil?
-      throw "No button action for " + params[:button].keys.first.to_s
-    end
-
     update_inclusions
-
     redirect_to redirect_path
   end
 

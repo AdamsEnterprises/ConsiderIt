@@ -1,16 +1,16 @@
 %p Now explore a breakdown of what other users feel about #{@option.designator}!
 %p Select a segment of users below to see a ranked list of the points that segment finds most important.
-= form_for :navigate, :url => mobile_navigate_summary_path do |f|
-  %ul.link_list
+%ul.link_list
+  -#%li
+    = link_to("My pros and cons", mobile_option_points_path)
+  %li
+    = link_to("All users", mobile_option_segment_path(:stance_bucket => "7"))
+  - all_positions_count = Position.where(:option_id => @option.id).count
+  - (0..6).to_a.reverse.each do |stance|
+    - current_stance_count = Position.where(:option_id => @option.id, :stance_bucket => stance).count
+    - percentage = (all_positions_count == 0) ? 0 : (100.0 * current_stance_count / all_positions_count).round(2)
     %li
-      = f.submit "My pros and cons", :name => "button[my_points]"
-    %li
-      = f.submit "All users", :name => "button[segment][7]"
-    - all_positions_count = Position.where(:option_id => @option.id).count
-    - (0..6).to_a.reverse.each do |stance|
-      - current_stance_count = Position.where(:option_id => @option.id, :stance_bucket => stance).count
-      - percentage = (all_positions_count == 0) ? 0 : (100.0 * current_stance_count / all_positions_count).round(2)
-      %li
-        = f.submit Position.stance_name_map(stance).capitalize + " (" + percentage.to_s + "%)" + (@position.stance_bucket == stance ? " (your position)" : ""), :name => "button[segment][#{stance}]"
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+      - link_text = Position.stance_name_map(stance).capitalize + " (" + percentage.to_s + "%)" + (@position.stance_bucket == stance ? " (your position)" : "")
+      = link_to(link_text, mobile_option_segment_path(:stance_bucket => stance))
 
+= render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_points_path }

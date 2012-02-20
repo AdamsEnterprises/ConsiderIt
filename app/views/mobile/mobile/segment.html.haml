@@ -1,12 +1,11 @@
 %p View a list of pros or cons ranked in order of importance for #{@stance_name}.
-= form_for :navigate, :url => mobile_navigate_segment_path do |f|
-  #pro_con_nav
-    %ul.link_list
+#pro_con_nav
+  %ul.link_list
+    %li
+      = link_to("Pros (" + @pro_points.count.to_s + ")", mobile_option_segment_list_path(:point_type => "pro"))
       %li
-        = f.submit "Pros (" + @pro_points.count.to_s + ")", :name => "button[segment][#{@stance_bucket}][pro]"
-      %li
-        = f.submit "Cons (" + @con_points.count.to_s + ")", :name => "button[segment][#{@stance_bucket}][con]"
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+        = link_to("Cons (" + @con_points.count.to_s + ")", mobile_option_segment_list_path(:point_type => "con"))
+= render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_summary_path }
 
 -# Might have nav links to the other voter segments and/or "my points" here
 

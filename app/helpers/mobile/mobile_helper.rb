@@ -34,7 +34,7 @@ module Mobile::MobileHelper
       elsif path == show_mobile_option_long_description_path(@option)
         page_name = "Long Description"
       elsif path == show_mobile_option_additional_details_path(@option)
-        page_name = "Additional Details"
+        page_name = APP_CONFIG['decisions']['details']
       elsif path == mobile_option_update_position_path(@option)
         page_name = "Update My Position"
       elsif path == mobile_option_points_path(@option)

@@ -190,11 +190,7 @@ textarea {
     margin-left: 12px;
 }
 
-.point_list ul {
-    margin: 0;
-}
-
-.point_list li {
+.point_list > li {
     font-size: 9pt;
     padding: 8px;
     border-bottom: 1px solid rgb(150,150,150);
@@ -204,10 +200,7 @@ textarea {
     padding-top: 0;
 }
 
-.point_links{
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+.po
 
 .all_points .point_links a:first-child {
     margin-right: 8px;
@@ -430,7 +423,7 @@ div.author {
 }
 
 #pro_con_nav .link_list {
-    margin: 0 0 30px 0;
+    margin: 0 0 20px 0;
 }
 
 /* login/signup page */
@@ -479,4 +472,24 @@ div.author {
 .login_method input[type="password"],
 .login_method input[type="email"] {
     width: 200px;
+}
+
+.current_position {
+    font-size: 0.9em;
+}
+
+.current_position p {
+    margin-bottom: 3px;
+}
+
+/* for traversing "horizontally" in the navigation hierarchy
+among your pro/con lists, add pro/con, write pro/con, and
+a user segment's pro/con lists */
+.link_list.cross_nav {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.link_list.cross_nav li {
+    margin: 3px 0;
 }

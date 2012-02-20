@@ -33,6 +33,7 @@ development:
     name: 
       short: levy component
       full: levy component
+    details: Additional Details
   
   footer:
     has_custom_resources: true

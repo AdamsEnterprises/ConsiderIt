@@ -3,5 +3,5 @@
   = render :partial => "mobile/partials/position_select", :locals => { :form => f }
   - if not @required_update
     = f.submit "Update Position", :name => "button[update_position]"
-  = render :partial => "mobile/partials/nav", :locals => { :id => "nav_bottom", :navigation => @navigation, :include_header => true, :form => f }
+= render :partial => "mobile/partials/nav", :locals => { :prev_path => show_mobile_option_path }
 

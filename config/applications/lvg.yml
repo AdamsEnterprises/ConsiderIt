@@ -35,6 +35,7 @@ development:
     name: 
       short: option
       full: option
+    details: Fiscal Impact Statement
   
   footer:
     has_custom_resources: true

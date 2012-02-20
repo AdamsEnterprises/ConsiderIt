@@ -9,6 +9,11 @@ module Mobile::MobileHelper
             path == mobile_confirm_resend_path)
   end
 
+  # return true if request.referrer matches the given path
+  def from_path(path)
+    return URI(request.referrer).path =~ /\A#{path}\/?\Z/
+  end
+
   def get_page_name(path = request.request_uri)
     if path == mobile_home_path
       page_name = "Homepage"
@@ -36,7 +41,7 @@ module Mobile::MobileHelper
       elsif path == show_mobile_option_additional_details_path(@option)
         page_name = APP_CONFIG['decisions']['details']
       elsif path == mobile_option_update_position_path(@option)
-        page_name = "Update My Position"
+        page_name = "My Position"
       elsif path == mobile_option_points_path(@option)
         page_name = "My Pros and Cons"
       elsif path == mobile_option_list_points_path(@option, :pro)
@@ -52,7 +57,7 @@ module Mobile::MobileHelper
       elsif path == new_mobile_option_point_path(@option, :con)
         page_name = "Write a New Con"
       elsif path == mobile_option_summary_path(@option)
-        page_name = "Other Users' Opinions"
+        page_name = "All Users' Opinions"
       # TODO: Fix this up (won't work @point not defined)
       # elsif @point and path == show_mobile_option_point_path(@option, @point)
       # TEMPTEMP Fix for it (only works because no other path has this)

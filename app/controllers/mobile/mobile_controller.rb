@@ -115,6 +115,24 @@ class Mobile::MobileController < ApplicationController
     if @point.option != @option
       throw "Point not valid for the specified option"
     end
+
+    # If you click buttons on this page so that it redirects to itself,
+    # you want the previous button to point to whatever the true
+    # previous page was (which can vary)
+    if (URI(request.referrer).path =~ /\A#{show_mobile_option_point_path}\/?\Z/)
+      @prev_path = params[:prev_path]
+    else
+      @prev_path = URI(request.referrer).path
+
+      if @prev_path == "/"  # no referring link
+        point_type = @point.is_pro ? "pro" : "con"
+        @prev_path = mobile_option_list_points(:type => point_type)
+      end
+
+      if @prev_path.ends_with?("/")
+        @prev_path = @prev_path[0..(@prev_path.length-2)]
+      end
+    end
   end
 
   # GET /mobile/options/:option_id/summary

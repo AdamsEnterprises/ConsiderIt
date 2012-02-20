@@ -169,10 +169,8 @@ protected
       end
     end
     
-    @included_pros = Point.included_by_stored(current_user, @option).where(:is_pro => true) + 
-                     Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => true)
-    @included_cons = Point.included_by_stored(current_user, @option).where(:is_pro => false) + 
-                     Point.included_by_unstored(session[@option.id][:included_points].keys, @option).where(:is_pro => false)
+    @included_pros = Point.included(current_user, session[@option.id][:included_points], true, @option)
+    @included_cons = Point.included(current_user, session[@option.id][:included_points], false, @option)
 
     @page = 1
   end

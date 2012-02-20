@@ -50,8 +50,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points
   def points
-    @title = "#{@option.reference}"
-
     define_position
     
     # Determine if we have the forward button available since we link to this page from 
@@ -70,7 +68,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/list/:type
   def list_points
-    @title = "#{@option.reference}"
     define_navigation nil, true
 
     @type = params[:type]
@@ -85,7 +82,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/add/:type
   def add_point
-    @title = "#{@option.reference}"
     define_navigation nil, true
     
     @type = params[:type]
@@ -102,7 +98,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/new/:type
   def new_point
-    @title = "#{@option.reference}"
     define_navigation nil, true
 
     @point = Point.new
@@ -112,7 +107,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/points/:point_id
   def point_details
-    @title = "#{@option.reference}"
     define_navigation nil, true
     
     @point = Point.unscoped.find_by_id(params[:point_id])
@@ -124,7 +118,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/summary
   def summary
-    @title = "#{@option.reference}"
     define_navigation nil, true
 
     define_position
@@ -132,7 +125,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
   def segment
-    @title = "#{@option.reference}"
     define_navigation nil, true
 
     @points = @option.points
@@ -153,7 +145,6 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
-    @title = "#{@option.reference}"
     define_navigation nil, true
     
     #TODO: Refactor this out since copied from points_controller (index)
@@ -247,14 +238,7 @@ protected
   end
 
   def get_included_points is_pro
-    #TEMPTEMP: Use this until get session setting correct(just handle null cases)
-    if session[:mobile][@option.id]
-      # TODO: Refactor this out since is replicated from positions_controller.rb
-      return (Point.included_by_stored(current_user, @option).where(:is_pro => is_pro) + 
-             Point.included_by_unstored(session[:mobile][@option.id][:included_points].keys, @option).where(:is_pro => is_pro)).uniq
-    else
-      return []
-    end
+    return Point.included(current_user, session[:mobile][@option.id][:included_points], is_pro, @option)
   end
 
   def set_stance_name(stance_bucket)

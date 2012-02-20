@@ -39,6 +39,12 @@ class Point < ActiveRecord::Base
     chain
   }
   
+  def self.included(user, session_included_points, is_pro, option)
+    stored = Point.included_by_stored(user, option).where(:is_pro => is_pro)
+    unstored = Point.included_by_unstored(session_included_points.keys, option).where(:is_pro => is_pro)
+    return (stored + unstored).uniq
+  end
+
   def self.included_by_stored(user, option)
     if user
       Point.

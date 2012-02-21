@@ -17,4 +17,4 @@
     %li
       = link_to("View " + APP_CONFIG['decisions']['details'], show_mobile_option_additional_details_path)
 
-= render :partial => "mobile/partials/nav", :locals => { :next_path => next_path, :skip_description => true, :prev_path => prev_path }
+= render :partial => "mobile/partials/nav", :locals => { :next_path => next_path, :skip_description => true, :prev_path => @prev_path }

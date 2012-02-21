@@ -68,4 +68,4 @@
             = " to add your comments!"
 
 - type = @point.is_pro ? "pro" : "con"
-= render :partial => "mobile/partials/nav", :locals => {:use_back => true, :no_back_title => true }
+= render :partial => "mobile/partials/nav", :locals => {:prev_path => @prev_path }

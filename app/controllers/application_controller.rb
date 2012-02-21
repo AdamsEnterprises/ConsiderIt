@@ -41,6 +41,15 @@ private
     end 
   end
 
+  # get path from request.referrer, including removing a trailing slash
+  def referring_path
+    path = URI(request.referrer).path
+    if path.ends_with?("/")
+      path.chop!
+    end
+    return path
+  end
+
   def is_mobile_call(url)
     uri = URI(url)
     return /^\/mobile/ === uri.path

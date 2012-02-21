@@ -14,13 +14,6 @@
     - if (defined? prev_path) && prev_path
       %li
         = link_to("Previous: " + get_page_name(prev_path), prev_path)
-    - elsif (defined? use_back) && use_back
-      %li
-        - if (defined? no_back_title) && no_back_title
-          - link_text = "Previous"
-        - else
-          - link_text = "Previous: " + get_page_name(referring_path)
-        = link_to(link_text, "", {:class => "back" })
 
     - if (!defined? skip_description) || !skip_description
       %li

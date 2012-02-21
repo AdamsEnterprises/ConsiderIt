@@ -1,12 +1,7 @@
 module Mobile::MobileHelper
   def is_login_page
     path = request.request_uri
-    return (path == mobile_user_path ||
-            path == new_mobile_user_path ||
-            path == new_mobile_user_pledge_path ||
-            path == new_mobile_user_confirm_path ||
-            path == new_mobile_password_path ||
-            path == mobile_confirm_resend_path)
+    return path =~ /^\/mobile\/user/
   end
 
   # return true if request.referrer matches the given path

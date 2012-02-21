@@ -40,13 +40,17 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id
   def option
-    # Determine if we have the forward button available since we also link to
-    # this page 
-    # from the nav and we don't want a forward option then (might be a buggy way to determine)
-    if (session[:mobile][@option.id][:navigate].last == mobile_home_path)
-      define_navigation mobile_option_update_position_path
+    # if redirected from option long description, option details, or login,
+    # use the stored referrer path. Otherwise, store the referrer path.
+    # If arrived directly and have no stored path, point to home.
+    if referring_path == show_mobile_option_long_description_path ||
+        referring_path == show_mobile_option_additional_details_path ||
+        referring_path =~ /^\/mobile\/user/ ||
+        referring_path == ""
+      @prev_path = session[:option_return_to] || mobile_home_path
     else
-      define_navigation
+      @prev_path = referring_path
+      session[:option_return_to] = referring_path
     end
   end
 
@@ -133,6 +137,18 @@ class Mobile::MobileController < ApplicationController
   def point_details
     define_navigation nil, true
     
+    # if redirected from this page itself, option description, or login,
+    # use the stored referrer path. Otherwise, store the referrer path.
+    # If arrived direclty and have no stored path, redirect to home.
+    if referring_path == show_mobile_option_path ||
+        referring_path == show_mobile_option_point_path ||
+        referring_path =~ /^\/mobile\/user/ ||
+        referring_path == ""
+      @prev_path = session[:point_return_to] || mobile_home_path
+    else
+      @prev_path = referring_path
+      session[:point_return_to] = referring_path
+    end
 
     @point = Point.unscoped.find_by_id(params[:point_id])
     @included_points = get_included_points(@point.is_pro)

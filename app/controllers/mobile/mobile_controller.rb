@@ -144,7 +144,7 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/options/:option_id/summary
   def summary
     if !current_user
-      redirect_to new_mobile_user_pledge_path
+      redirect_to mobile_user_path
     end
 
     define_navigation nil, true

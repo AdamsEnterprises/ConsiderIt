@@ -60,6 +60,7 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/summary/:stance_bucket/:point_type' => "mobile/mobile#segment_list", :via => :get, :module => :mobile, :as => :mobile_option_segment_list
 
   # Mobile Navigation
+  match '/mobile/options/navigate/login' => "mobile/navigation#login", :via => :get, :module => :mobile, :as => :mobile_navigate_login
   match '/mobile/options/:option_id/navigate' => "mobile/navigation#option", :via => :post, :module => :mobile, :as => :mobile_navigate_option
   match '/mobile/options/:option_id/navigate/long_description' => "mobile/navigation#long_description", :via => :post, :module => :mobile, :as => :mobile_navigate_long_description
   match '/mobile/options/:option_id/navigate/additional_details' => "mobile/navigation#additional_details", :via => :post, :module => :mobile, :as => :mobile_navigate_additional_details

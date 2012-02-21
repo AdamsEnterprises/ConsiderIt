@@ -26,7 +26,7 @@ private
 
   def after_sign_in_path_for(resource)
     if is_mobile_call(request.referrer)
-      return mobile_home_path
+      return mobile_navigate_login_path
     else
       super
     end

@@ -2,6 +2,15 @@ require 'date'
 
 class Mobile::NavigationController < Mobile::MobileController
   
+  # GET /mobile/options/navigate/login
+  def login
+    session[:mobile].keys.each do |optionid|
+      sync(optionid)
+    end
+
+    redirect_to mobile_home_path
+  end
+
   # POST /mobile/options/:option_id/navigate/option
   def option
     redirect_path = handle_nav {|redirect_path|
@@ -37,7 +46,8 @@ class Mobile::NavigationController < Mobile::MobileController
   # POST /mobile/options/:option_id/navigate/position
   def position_update
     if params[:position] and params[:position][:stance_bucket]
-      set_position(params[:position][:stance_bucket])
+      session[:mobile][option_id][:position] = params[:position][:stance_bucket]
+
       redirect_path = mobile_option_points_path
     else
       # Didn't input correct data.  Tell them that
@@ -117,7 +127,7 @@ class Mobile::NavigationController < Mobile::MobileController
         session[:mobile][option_id][:written_points].push(@point.id)
 
         # Update database if logged in
-        update_inclusions
+        sync
 
         # Redirect to listing user points
         redirect_path = mobile_option_list_points_path
@@ -203,38 +213,92 @@ protected
     return params[:option_id].to_i
   end
 
-  def update_inclusions
+  def sync(optionid = option_id)
+    # First position (since the position is needed for some points)
+    sync_position(optionid)
+    # Then inclusions/points
+    sync_inclusions(optionid)
+  end
+
+  def sync_position(optionid = option_id)
     if current_user
-      session[:mobile][option_id][:included_points].keys.each do |point_id|
-        prev_inclusion = current_user.inclusions.where(:option_id => option_id, :point_id => point_id)
-        if prev_inclusion.any?
-          throw "Should not have included the point already"
+      stance_bucket = session[:mobile][optionid][:position]
+      positions = current_user.positions.where(:option_id => optionid)
+      stance = stance_bucket.to_i / 6.0
+      if positions.any?
+        if positions.count == 1
+          position = positions.first
+          position.update_attributes(:stance => stance, :stance_bucket => stance_bucket)
+        else
+          throw "Invalid positions count (" + positions.count.to_s + "): " + positions.inspect
         end
-    
-        inclusion = Inclusion.new(:option_id => option_id, :point_id => point_id, :user_id => current_user.id)
-    
+      else
+        position = Position.new(:option_id => optionid, :user_id => current_user.id, :stance => stance, :stance_bucket => stance_bucket, :published => true)
+      end
+
+      if not position.save
+        throw "Could not save position: " + position.inspect
+      end
+    end
+  end
+
+  def add_inclusion(point_id, optionid = option_id)
+    if current_user
+      # Add to DB
+
+      prev_inclusion = current_user.inclusions.where(:option_id => optionid, :point_id => point_id)
+      if !prev_inclusion.any?
+        # Only make new inclusion if haven't done it one yet
+        inclusion = Inclusion.new(:option_id => optionid, :point_id => point_id, :user_id => current_user.id)
+
         # Set position of inclusion
-        user_position_array = current_user.positions.where(:option_id => option_id)
+        user_position_array = current_user.positions.where(:option_id => optionid)
         if user_position_array.any?
           inclusion.position_id = user_position_array.first.id
         end
-    
+
         # Save inclusion
         if not inclusion.save
           throw "Could not save inclusion " + inclusion.errors.inspect
         end
       end
-      session[:mobile][option_id][:included_points] = {} # Clear inclusions
+    else
+      # Add to Session
+      session[:mobile][optionid][:included_points][point_id] = 1
+    end
+  end
 
-      session[:mobile][option_id][:deleted_points].keys.each do |point_id|
-        # Remove inclusion of the point
-        current_user.inclusions.where(:point_id => point_id).each do |inc|
-          inc.destroy
-        end
+  def remove_inclusion(point_id, optionid = option_id)
+    if current_user
+      prev_inclusions = current_user.inclusions.where(:option_id => optionid, :point_id => point_id)
+      if prev_inclusions.any? && prev_inclusions.count == 1
+        inclusion = prev_inclusions.first
+
+        # Destroy inclusion
+        inclusion.destroy
+      else
+        throw "Cannot remove point: Point has been included #{prev_inclusions.count} times"
       end
-      session[:mobile][option_id][:deleted_points] = {} # Clear deleted points at end
+    else
+      # Check session inclusions to remove
+      if session[:mobile][option_id][:included_points].keys.include?(point_id)
+        session[:mobile][option_id][:included_points].delete(point_id)
+      else
+        throw "Cannot remove point: Point not included"
+      end
+    end
+  end
 
-      session[:mobile][option_id][:written_points].each do |point_id|
+  def sync_inclusions(optionid = option_id)
+    if current_user
+      # Go through all included points
+      session[:mobile][optionid][:included_points].keys.each do |point_id|
+        add_inclusion(point_id, optionid)
+      end
+      session[:mobile][optionid][:included_points] = {} # Clear inclusions
+
+      # Go through all written points
+      session[:mobile][optionid][:written_points].each do |point_id|
         point = Point.unscoped.find_by_id(point_id)
 
         if point.nil?
@@ -246,41 +310,16 @@ protected
           throw "Could not publish point with id " + point_id.to_s
         end
       end
-      session[:mobile][option_id][:written_points] = [] # Clear written points at end
+      session[:mobile][optionid][:written_points] = [] # Clear written points at end
       
     end
   end
 
   def handle_redirection redirect_path
-    update_inclusions
+    # sync up DB if user logged in
+    sync
+
     redirect_to redirect_path
-  end
-
-  def set_position(stance_bucket)
-    # Update session
-    session[:mobile][option_id][:position] = stance_bucket
-    
-    # Update user position if applicable
-    if current_user
-      positions = current_user.positions.where(:option_id => option_id)
-      stance = stance_bucket.to_i / 6.0
-      if positions.any?
-        if positions.count == 1
-          position = positions.first
-          position.update_attributes(:stance => stance, :stance_bucket => stance_bucket)
-        else
-          throw "Invalid positions count (" + positions.count.to_s + "): " + positions.inspect
-        end
-      else
-        position = Position.new(:option_id => option_id, :user_id => current_user.id, :stance => stance, :stance_bucket => stance_bucket, :published => true)
-      end
-
-      if not position.save
-        throw "Could not save position: " + position.inspect
-      end
-    end
-
-    return position
   end
 
   def handle_nav
@@ -352,27 +391,22 @@ protected
 
   def handle_add_remove_point_buttons(delete_path)
     if params[:button][:remove_point]
-      redirect_path = request.referrer
-
       point_id = params[:button][:remove_point].keys.first.to_i
 
-      # Check session inclusions to remove
-      if session[:mobile][option_id][:included_points].keys.include?(point_id)
-        session[:mobile][option_id][:included_points].delete(point_id)
-      end
-      session[:mobile][option_id][:deleted_points][point_id] = 1
-    elsif params[:button][:add_point]
-      redirect_path = request.referrer
+      remove_inclusion(point_id)
 
+      flash[:notice] = "Successfully removed point"
+
+      redirect_path = request.referrer
+    elsif params[:button][:add_point]
       point_id = params[:button][:add_point].keys.first.to_i
 
-      session[:mobile][option_id][:included_points][point_id] = 1
-      if session[:mobile][option_id][:deleted_points].keys.include?(point_id)
-        session[:mobile][option_id][:deleted_points].delete(point_id)
-      end
-    elsif params[:button][:delete_point]
-      redirect_path = delete_path
+      add_inclusion(point_id)
 
+      flash[:notice] = "Successfully added point"
+
+      redirect_path = request.referrer
+    elsif params[:button][:delete_point]
       point_id = params[:button][:delete_point].keys.first.to_i
 
       # Check session inclusions to remove
@@ -384,9 +418,13 @@ protected
       # Delete point from DB
       point = Point.unscoped.find_by_id(point_id)
       point.destroy
+
+      flash[:notice] = "Successfully deleted point"
+
+      redirect_path = request.referrer
     end
 
-    update_inclusions
+    sync
 
     return redirect_path
   end

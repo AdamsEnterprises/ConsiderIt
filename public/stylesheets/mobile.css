@@ -25,6 +25,14 @@ a.button {
     text-decoration: none;
 }
 
+p.flash_message {
+    color: green;
+}
+
+p.flash_error {
+    color: red;
+}
+
 .home {
     float: right;
 }
@@ -199,8 +207,6 @@ textarea {
 .point_list li:first-child {
     padding-top: 0;
 }
-
-.po
 
 .all_points .point_links a:first-child {
     margin-right: 8px;

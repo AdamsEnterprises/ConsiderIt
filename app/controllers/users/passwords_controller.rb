@@ -21,7 +21,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
     def after_sending_reset_password_instructions_path_for(resource)
       if /^\/mobile/ === URI(request.referrer).path
-        flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes. \nBe sure to check your junk mail folder"
+        flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes. Be sure to check your junk mail folder"
         return request.referrer
       else
         super

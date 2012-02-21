@@ -1,14 +1,14 @@
 %p Enter your email address below to have your confirmation instructions resent.
 %p Be sure to check your junk mail folder if you still don't receive the instructions.
 
-= form_for(resource, :as => resource_name, :url => password_path(resource_name)) do |f|
+= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name)) do |f|
   = f.label :email
   = f.email_field :email
 
-  %div.submit_footer
-    = f.submit "Resend instructions"
-
-  .login_back_link
-    = link_to("Return to login", mobile_user_path)
-%p
-  = link_to "Forgot your password?", new_mobile_password_path
+  %ul.link_list
+    %li
+      = f.submit "Resend instructions"
+    %li
+      = link_to "Return to login", mobile_user_path
+    %li
+      = link_to "Forgot your password?", new_mobile_password_path

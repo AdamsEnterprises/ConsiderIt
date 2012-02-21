@@ -13,21 +13,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if is_mobile
       # check for cancel button
       if params[:button][:cancel]
-        redirect_to login_return_path
+        redirect_to mobile_login_return_path
         return
       end
       
       # validate input
       error = true
       if params[:user][:name] == ""
-        flash[:notice] = "Please enter your first and last name."
+        flash[:error] = "Please enter your first and last name."
       elsif params[:user][:email] == ""
-        flash[:notice] = "Please enter an email address."
+        flash[:error] = "Please enter an email address."
       # email regex: a@a.a, where a is one or more non-whitespace chars
       elsif !(params[:user][:email] =~ /\A\S+@\S+\.\S+\Z/ )
-        flash[:notice] = "Invalid email address."
+        flash[:error] = "Invalid email address."
       elsif params[:user][:password].length < 6
-        flash[:notice] = "Password must be at least 6 characters"
+        flash[:error] = "Password must be at least 6 characters"
       else
         error = false
       end
@@ -58,12 +58,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords(resource)
-      if !error
-        flash[:notice] = "Email is already in use."
-      end
 
       if is_mobile
         # redirect to signup page on fail
+        if !error
+          flash[:error] = "Email is already in use."
+        end
         redirect_to request.referrer
       else
         respond_with_navigational(resource) { render_with_scope :new }

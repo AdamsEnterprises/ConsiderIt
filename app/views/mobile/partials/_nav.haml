@@ -11,7 +11,7 @@
       %li
         = link_to("Next: " + get_page_name(next_path), next_path)
 
-    - if (defined? prev_path) && prev_path
+    - if (defined? prev_path) && prev_path && prev_path != mobile_home_path
       %li
         = link_to("Previous: " + get_page_name(prev_path), prev_path)
 

@@ -1,6 +1,18 @@
 - @option_name = APP_CONFIG['decisions']['name']['full']
+
+- if user_signed_in?
+  %p Hello, #{current_user.name}!
+- else
+  %ul.headered_list
+    - APP_CONFIG['home']['values'].each do |value|
+      %li
+        %h2 #{value['lead']}
+        %p #{value['follow']}
 %p
-  = "Choose "
+  - if user_signed_in?
+    = "Choose "
+  - else
+    = "To get started, choose "
   - if %w(a e i o u).include?(@option_name.downcase[0])
     = "an"
   - else

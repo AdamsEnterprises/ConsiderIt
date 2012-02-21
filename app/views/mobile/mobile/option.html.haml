@@ -1,9 +1,8 @@
--# If you came from the link in the navigation footer, we show different
--# nav links than if you came from the homepage or directly here
-- if from_path("") || from_path(mobile_home_path)
+-# If you haven't chosen a position yet, show a "next" link pointing to
+-# the initial position.
+- if !has_stance(@option)
   - next_path = mobile_option_update_position_path
-- else
-  - prev_path = referring_path
+  - @prev_path = nil
 
 %p
 - @option.format_description.each do |paragraph|

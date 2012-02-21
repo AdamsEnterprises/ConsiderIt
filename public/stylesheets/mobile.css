@@ -18,6 +18,12 @@ h3 {
     margin: 6px 0;
 }
 
+/* sort of a tagline on the homepage */
+.call {
+    font-style: italic;
+    margin-top: 5px;
+}
+
 /* text of button within a link (e.g. pledge page)
 should not be underlined. Applying style to "a button"
 doesn't work - needs to be applied to "a" directly */
@@ -458,13 +464,13 @@ div.author {
     border-bottom: 2px solid #E1E1E1;
 }
 
-#pledge_form h2, #why_join h2 {
+.headered_list h2 {
     font-weight: bold;
     font-size: 1em;
     margin: 0;
 }
 
-#pledge_form p, #why_join p {
+.headered_list p {
     margin: 0 0 12px 0;
 }
 

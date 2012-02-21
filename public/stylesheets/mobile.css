@@ -504,3 +504,7 @@ a user segment's pro/con lists */
     font-size: 1em;
     padding: 0;
 }
+
+.login_back_link {
+    margin-top: 9px;
+}

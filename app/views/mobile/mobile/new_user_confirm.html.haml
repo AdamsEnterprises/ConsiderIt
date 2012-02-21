@@ -4,8 +4,8 @@
 
 %p We look forward to your contributions!
 
-%div
-  -# This button should return user to the last non-login page
-  %a.button{:href => mobile_home_path}
-    %button I'm ready to go!
+= form_for(resource, :as => resource_name, :url => new_mobile_user_complete_path) do |f|
+  %div
+    = f.submit "I'm ready to go!"
+  
 

@@ -8,9 +8,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
     build_resource
-    is_mobile = /^\/mobile/ === URI(request.referer).path
-    
+    is_mobile = is_mobile_call(request.referer)    
+
     if is_mobile
+      # check for cancel button
+      if params[:button][:cancel]
+        redirect_to login_return_path
+        return
+      end
+      
+      # validate input
       error = true
       if params[:user][:name] == ""
         flash[:notice] = "Please enter your first and last name."

@@ -45,6 +45,6 @@
       = link_to("Terms of Use", mobile_tou_path) + "."
 
     %div.submit_footer
-      = f.submit "Sign up"
-%div
-  %button.cancel Cancel
+      = f.submit "Sign up", :name => "button[signup]"
+    %div
+      = f.submit "Cancel", :name => "button[cancel]"

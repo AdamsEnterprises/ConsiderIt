@@ -8,7 +8,21 @@ class Mobile::NavigationController < Mobile::MobileController
       sync(optionid)
     end
 
-    redirect_to mobile_home_path
+    redirect_to mobile_login_return_path
+  end
+
+  # POST /mobile/user/new/complete
+  def new_user_complete
+    redirect_to mobile_login_return_path
+  end
+
+  # POST /mobile/user/new
+  def user_pledge_submit
+    if params[:button][:signup]
+      redirect_to new_mobile_user_path
+    else
+      redirect_to mobile_login_return_path
+    end
   end
 
   # POST /mobile/options/:option_id/navigate/option

@@ -1,1 +1,9 @@
 -# insert the actual terms of use into the specific theme
+
+- if referring_path == new_mobile_user_path
+  - prev_name = "Sign Up"
+- else
+  - prev_name = get_page_name(referring_path)  
+
+%div
+  = link_to("Previous: " + prev_name, request.referer)

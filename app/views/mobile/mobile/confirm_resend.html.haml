@@ -8,7 +8,7 @@
   %div.submit_footer
     = f.submit "Resend instructions"
 
-  %div
-    %button.cancel Cancel
+  .login_back_link
+    = link_to("Return to login", mobile_user_path)
 %p
   = link_to "Forgot your password?", new_mobile_password_path

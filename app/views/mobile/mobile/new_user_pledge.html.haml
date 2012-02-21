@@ -36,9 +36,8 @@
     %label{:for=>"pledge_agree"}
       = "I pledge to refrain from personal attacks, speak only my own opinion, and use only one account."
 
-    %div
-      %a.button{:href => new_mobile_user_path}
-        %button#pledge_submit{:disabled => "disabled"} Sign up!
-      
-    %div
-      %button.cancel Sorry, I cannot abide by these rules.
+= form_for(resource, :as => resource_name, :url => new_mobile_user_pledge_submit_path) do |f|
+  %div
+    = f.submit "Sign up!", :name => "button[signup]", :id => "pledge_submit", :disabled => "disabled"
+  %div
+    = f.submit "Sorry, I cannot abide by these rules.", :name => "button[cancel]"

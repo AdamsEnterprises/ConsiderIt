@@ -16,9 +16,32 @@ class Mobile::MobileController < ApplicationController
     render :action => params[:page]
   end  
 
+  # GET /mobile/user
+  def user
+    store_login_ref
+  end
+
+  # GET /mobile/user
+  def new_user_pledge
+    store_login_ref
+  end
+
+  # Should be called by all entry points to the login pages (i.e. all
+  # login/signup-related pages that are linked from a non-login page).
+  # If coming to a login page from a non-login page, stores the referrer.
+  def store_login_ref
+    # if coming from a non-login page, store it as the return page
+    # but if coming from an external link, don't store it at all
+    path = URI(request.referrer).path
+    if path != "/" && !(path =~ /^\/mobile\/user/)
+      session[:login_return_to] = request.referrer
+    end
+  end
+
   # GET /mobile/options/:option_id
   def option
-    # Determine if we have the forward button available since we also link to this page 
+    # Determine if we have the forward button available since we also link to
+    # this page 
     # from the nav and we don't want a forward option then (might be a buggy way to determine)
     if (session[:mobile][@option.id][:navigate].last == mobile_home_path)
       define_navigation mobile_option_update_position_path

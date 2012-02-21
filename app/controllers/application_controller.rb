@@ -46,4 +46,7 @@ private
     return /^\/mobile/ === uri.path
   end
 
+  def mobile_login_return_path
+    return session[:login_return_to] || mobile_home_path
+  end
 end

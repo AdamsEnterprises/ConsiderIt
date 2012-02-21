@@ -9,7 +9,7 @@
        
   %li
     %h2 Save your position
-    %p to create your personal voters guide.
+    %p to remember your reasoning on important issues.
       
   %li
     %h2 Explore the most important points
@@ -18,6 +18,9 @@
   %li
     %h2 Discuss with others. 
     %p Comment on pros and cons, or the issue broadly. 
-  
--# This needs stack navigation.
-%button.cancel Previous: (TODO)
+
+- if referring_path == new_mobile_user_pledge_path
+  - prev_name = "pledge"
+- else
+  - prev_name = "signup"  
+= link_to("Return to " + prev_name, request.referer)

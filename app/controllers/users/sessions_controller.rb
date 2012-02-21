@@ -25,6 +25,11 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
+    if params[:button][:cancel]
+      redirect_to mobile_login_return_path
+      return
+    end
+
     resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#new")
     #set_flash_message(:notice, :signed_in) if is_navigational_format?
     sign_in(resource_name, resource)

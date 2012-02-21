@@ -23,10 +23,10 @@
           = f.label :password
           = f.password_field :password, :autocapitalize => 'off'
       
-      %div.submit_footer
-        = f.submit "Log in"
- 
-    %div
-      %button.cancel Cancel
+      %div
+        = f.submit "Log in", :name => "button[login]"
+      %div
+        = f.submit "Cancel", :name => "button[cancel]"
+
   %p
     = link_to "Forgot your password?", new_mobile_password_path

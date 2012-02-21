@@ -493,3 +493,8 @@ a user segment's pro/con lists */
 .link_list.cross_nav li {
     margin: 3px 0;
 }
+
+.point_button {
+    font-size: 1em;
+    padding: 0;
+}

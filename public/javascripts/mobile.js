@@ -74,6 +74,7 @@ function addLink() {
               .attr("id", "point_point_links_attributes_" + LinkCount + "_url")
               .attr("name", "point[point_links_attributes][" + LinkCount + "][url]")
               .attr("title", "http://...")
+              .attr("autocapitalize", "off")
               .addClass("has_example")
               .blur(setExample)
               .focus(hideExample)

@@ -27,7 +27,7 @@
         - if @point.point_links.any?
           - @point.point_links.each do |point_link|
             %li 
-              = link_to point_link.description, point_link.url
+              = link_to point_link.description, point_link.url, {:target => "blank"}
               [#{point_link.url}]
         - else
           %li none provided
@@ -68,5 +68,4 @@
             = " to add your comments!"
 
 - type = @point.is_pro ? "pro" : "con"
-= render :partial => "mobile/partials/nav", :locals => {:prev_path => @prev_path }
-
+= render :partial => "mobile/partials/nav", :locals => {:use_back => true, :no_back_title => true }

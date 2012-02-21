@@ -11,7 +11,17 @@ module Mobile::MobileHelper
 
   # return true if request.referrer matches the given path
   def from_path(path)
-    return URI(request.referrer).path =~ /\A#{path}\/?\Z/
+    return referring_path == path
+  end
+
+  # get path from request.referrer, including removing a
+  # trailing slash
+  def referring_path
+    path = URI(request.referrer).path
+    if path.ends_with?("/")
+      path.chop!
+    end
+    return path
   end
 
   def get_page_name(path = request.request_uri)

@@ -2,9 +2,9 @@
   - point_creator = (current_user && point.user_id == current_user.id) || session[:mobile][@option.id][:written_points].include?(point.id)
 
   - if point_creator
-    = form.submit "Delete Point", :name => "button[delete_point][#{point.id}]", :class => "delete_point"
+    = form.submit "Delete Point", :name => "button[delete_point][#{point.id}]", :class => "delete_point point_button"
   - else
-    = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point"
+    = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point point_button"
 - else
-  = form.submit "Add Point", :name => "button[add_point][#{point.id}]"
+  = form.submit "Add Point", :name => "button[add_point][#{point.id}]", :class => "point_button"
 

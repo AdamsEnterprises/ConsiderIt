@@ -1,9 +1,9 @@
 -# If you came from the link in the navigation footer, we show different
 -# nav links than if you came from the homepage or directly here
-- if from_path("/") || from_path(mobile_home_path)
+- if from_path("") || from_path(mobile_home_path)
   - next_path = mobile_option_update_position_path
 - else
-  - show_back = true
+  - prev_path = referring_path
 
 %p
 - @option.format_description.each do |paragraph|
@@ -17,4 +17,4 @@
     %li
       = link_to("View " + APP_CONFIG['decisions']['details'], show_mobile_option_additional_details_path)
 
-= render :partial => "mobile/partials/nav", :locals => { :next_path => next_path, :skip_description => true, :show_back => show_back }
+= render :partial => "mobile/partials/nav", :locals => { :next_path => next_path, :skip_description => true, :prev_path => prev_path }

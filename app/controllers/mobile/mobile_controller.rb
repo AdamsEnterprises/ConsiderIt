@@ -29,12 +29,12 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/description
   def option_long_description
-    define_navigation
+#    define_navigation
   end
 
   # GET /mobile/options/:option_id/additional_details
   def option_additional_details
-    define_navigation
+#    define_navigation
   end
 
   # GET /mobile/options/:option_id/position
@@ -110,28 +110,11 @@ class Mobile::MobileController < ApplicationController
   def point_details
     define_navigation nil, true
     
+
     @point = Point.unscoped.find_by_id(params[:point_id])
     @included_points = get_included_points(@point.is_pro)
     if @point.option != @option
       throw "Point not valid for the specified option"
-    end
-
-    # If you click buttons on this page so that it redirects to itself,
-    # you want the previous button to point to whatever the true
-    # previous page was (which can vary)
-    if (URI(request.referrer).path =~ /\A#{show_mobile_option_point_path}\/?\Z/)
-      @prev_path = params[:prev_path]
-    else
-      @prev_path = URI(request.referrer).path
-
-      if @prev_path == "/"  # no referring link
-        point_type = @point.is_pro ? "pro" : "con"
-        @prev_path = mobile_option_list_points(:type => point_type)
-      end
-
-      if @prev_path.ends_with?("/")
-        @prev_path = @prev_path[0..(@prev_path.length-2)]
-      end
     end
   end
 
@@ -167,7 +150,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
-    define_navigation nil, true
+#    define_navigation request.referrer, nil, true
     
     #TODO: Refactor this out since copied from points_controller (index)
     qry = @option.points
@@ -265,7 +248,7 @@ protected
     end
   end
 
-  def define_navigation(next_path = nil, show_description = false)
+  def define_navigation(prev_path, next_path = nil, show_description = false, use_js_back = false)
     if next_path.nil?
       @navigation = { :previous => { :path => session[:mobile][@option.id][:navigate].last } }
     else

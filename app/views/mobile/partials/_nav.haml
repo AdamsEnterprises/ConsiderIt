@@ -4,21 +4,23 @@
   - if ((!defined? skip_header) || !skip_header)
     %h2 Navigation
   %ul.link_list
-    - if (defined? show_back) && show_back
-      %li
-        = link_to("Back", "", {:class => "back"})
 
     -# if next_path is defined AND is not nil (the latter can happen from
     -# option description page)
     - if (defined? next_path) && next_path
       %li
-        - if !(defined? next_title)
-          - next_title = get_page_name(next_path)
-        = link_to("Next: " + next_title, next_path)
+        = link_to("Next: " + get_page_name(next_path), next_path)
 
     - if (defined? prev_path) && prev_path
       %li
         = link_to("Previous: " + get_page_name(prev_path), prev_path)
+    - elsif (defined? use_back) && use_back
+      %li
+        - if (defined? no_back_title) && no_back_title
+          - link_text = "Previous"
+        - else
+          - link_text = "Previous: " + get_page_name(referring_path)
+        = link_to(link_text, "", {:class => "back" })
 
     - if (!defined? skip_description) || !skip_description
       %li

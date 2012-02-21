@@ -1,7 +1,7 @@
 %p Enter your email address below to have your confirmation instructions resent.
 %p Be sure to check your junk mail folder if you still don't receive the instructions.
 
-= form_for(resource, :as => resource_name, :url => password_path(resource_name)) do |f|
+= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name)) do |f|
   = f.label :email
   = f.email_field :email
 

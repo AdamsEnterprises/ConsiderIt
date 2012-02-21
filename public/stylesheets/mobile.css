@@ -25,6 +25,14 @@ a.button {
     text-decoration: none;
 }
 
+p.flash_message {
+    color: green;
+}
+
+p.flash_error {
+    color: red;
+}
+
 .home {
     float: right;
 }

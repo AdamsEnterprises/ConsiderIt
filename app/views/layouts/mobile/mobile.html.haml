@@ -28,6 +28,7 @@
           %p Hello, #{current_user.name}!
       - else
         %h1.page_title #{get_page_name}
+
     - if flash[:notice]
       %p.flash_message #{flash[:notice]}
     - if flash[:error]

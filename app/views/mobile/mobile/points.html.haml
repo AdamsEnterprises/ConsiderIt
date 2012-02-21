@@ -20,9 +20,9 @@
   %h2 My Cons (#{@included_cons.count})
   %ul.link_list
     %li
-      = link_to("See my pros", mobile_option_list_points_path(:type => "con"))
+      = link_to("See my cons", mobile_option_list_points_path(:type => "con"))
     %li
-      = link_to("Add an existing pro", add_mobile_option_point_path(:type => "con"))
+      = link_to("Add an existing con", add_mobile_option_point_path(:type => "con"))
     %li
-      = link_to("Write a new pro", new_mobile_option_point_path(:type => "con"))
+      = link_to("Write a new con", new_mobile_option_point_path(:type => "con"))
 = render :partial => "mobile/partials/nav", :locals => { :next_path => mobile_option_summary_path }

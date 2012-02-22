@@ -79,6 +79,11 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/options/:option_id/points
   def points
     define_position
+
+    if @position.stance_bucket.nil?
+      # If don't have a position yet, redirect to set position
+      redirect_to mobile_option_update_position_path
+    end
     
     # Determine if we have the forward button available since we link to this page from 
     # from the update position/home and summary pages and we don't want a forward option when
@@ -163,8 +168,14 @@ class Mobile::MobileController < ApplicationController
       redirect_to mobile_user_path
     end
 
-    define_navigation nil, true
     define_position
+
+    if @position.stance_bucket.nil?
+      # If don't have a position yet, redirect to set position
+      redirect_to mobile_option_update_position_path
+    end
+    
+    define_navigation nil, true
   end
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
@@ -284,7 +295,7 @@ protected
 
   def define_position
     if current_user
-      @position = current_user.positions.where(:option_id => @option.id).first
+      @position = current_user.positions.where(:option_id => @option.id).order("updated_at DESC").first
     end
 
     if @position.nil?

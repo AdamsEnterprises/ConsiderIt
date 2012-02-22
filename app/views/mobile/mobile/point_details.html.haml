@@ -27,7 +27,7 @@
         - if @point.point_links.any?
           - @point.point_links.each do |point_link|
             %li 
-              = link_to point_link.description, point_link.url, {:target => "blank"}
+              = link_to point_link.description, point_link.safe_url, {:target => "blank"}
               [#{point_link.url}]
         - else
           %li none provided

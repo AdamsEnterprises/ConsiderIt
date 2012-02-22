@@ -2,10 +2,15 @@ class CustomFailure < Devise::FailureApp
 
   # if login fails from mobile site, redirect to the mobile login page instead of main page
   def redirect_url
+
+    if warden.message == :unconfirmed
+      flash[:error] = "You have to confirm your account before continuing."
+      return mobile_confirm_resend_path
+    end
+
     if /^\/mobile/ === URI(request.referrer).path
-      # TODO: style this flash in the view
       flash[:notice] = "Invalid email or password"
-      request.referrer
+      return request.referrer
     else
       super
     end

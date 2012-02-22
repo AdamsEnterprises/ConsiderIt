@@ -77,4 +77,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     pp current_user
     redirect_to request.referer
   end
+
+  protected
+
+    def after_inactive_sign_up_path_for(resource)
+      new_mobile_user_confirm_path
+    end
+
 end

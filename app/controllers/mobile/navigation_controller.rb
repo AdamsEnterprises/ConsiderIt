@@ -4,6 +4,10 @@ class Mobile::NavigationController < Mobile::MobileController
   
   # GET /mobile/options/navigate/login
   def login
+    if !session[:mobile].any?
+      throw "No Options!"
+    end
+
     session[:mobile].keys.each do |optionid|
       sync(optionid)
     end
@@ -228,6 +232,7 @@ protected
   end
 
   def sync(optionid = option_id)
+    flash[:notice] = ''
     # First position (since the position is needed for some points)
     sync_position(optionid)
     # Then inclusions/points
@@ -236,22 +241,36 @@ protected
 
   def sync_position(optionid = option_id)
     if current_user
+      # Only if logged in
       stance_bucket = session[:mobile][optionid][:position]
-      positions = current_user.positions.where(:option_id => optionid)
-      stance = stance_bucket.to_i / 6.0
-      if positions.any?
-        if positions.count == 1
+      if !stance_bucket.nil?
+        # Only sync up if have a session position to sync
+        stance = stance_bucket.to_i / 6.0
+        positions = current_user.positions.where(:option_id => optionid).order("updated_at DESC")
+        if positions.any?
+          # Update latest position
           position = positions.first
+
+          # Get rid of all the old positions...only update the latest position 
+          # (for some reason, there were multiple positions sometimes)
+          if positions.count != 1
+            positions.each do |pos|
+              if pos != position
+                pos.destroy
+              end
+            end
+          end
+
+          # Update stance for position
           position.update_attributes(:stance => stance, :stance_bucket => stance_bucket)
         else
-          throw "Invalid positions count (" + positions.count.to_s + "): " + positions.inspect
+          # Make new position (no old positions exist for this option)
+          position = Position.new(:option_id => optionid, :user_id => current_user.id, :stance => stance, :stance_bucket => stance_bucket, :published => true)
         end
-      else
-        position = Position.new(:option_id => optionid, :user_id => current_user.id, :stance => stance, :stance_bucket => stance_bucket, :published => true)
-      end
 
-      if not position.save
-        throw "Could not save position: " + position.inspect
+        if not position.save
+          throw "Could not save position: " + position.inspect
+        end
       end
     end
   end

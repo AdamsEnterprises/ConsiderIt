@@ -44,11 +44,6 @@ class Users::SessionsController < Devise::SessionsController
       session[:domain] = current_user.domain_id
     end
 
-    # if is_mobile_call(request.referrer)
-    #   # Clear mobile session after logging in (just start with a fresh and position)
-    #   session[:mobile] = {}
-    # end
-
     respond_with resource, :location => redirect_location(resource_name, resource)
   end
 

@@ -25,7 +25,8 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    if params[:button][:cancel]
+    # params[:button][:cancel] is undefined when logging in from main site
+    if defined?(params[:button][:cancel]) && params[:button][:cancel]
       redirect_to mobile_login_return_path
       return
     end

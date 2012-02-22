@@ -50,6 +50,7 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/options/:option_id/description' => "mobile/mobile#option_long_description", :via => :get, :module => :mobile, :as => :show_mobile_option_long_description
   match '/mobile/options/:option_id/additional_details' => "mobile/mobile#option_additional_details", :via => :get, :module => :mobile, :as => :show_mobile_option_additional_details
   match '/mobile/options/:option_id/points' => "mobile/mobile#points", :via => :get, :module => :mobile, :as => :mobile_option_points
+  match '/mobile/options/:option_id/position/initial' => "mobile/mobile#position_initial", :via => :get, :module => :mobile, :as => :mobile_option_initial_position
   match '/mobile/options/:option_id/position' => "mobile/mobile#position_update", :via => :get, :module => :mobile, :as => :mobile_option_update_position
   match '/mobile/options/:option_id/points/list/:type' => "mobile/mobile#list_points", :via => :get, :module => :mobile, :as => :mobile_option_list_points
   match '/mobile/options/:option_id/points/add/:type' => "mobile/mobile#add_point", :via => :get, :module => :mobile, :as => :add_mobile_option_point

@@ -55,6 +55,8 @@ private
     return /^\/mobile/ === uri.path
   end
 
+  # Page from which the user entered the login/signup page, or home if user
+  # went to login/signup directly.
   def mobile_login_return_path
     return session[:login_return_to] || mobile_home_path
   end

@@ -24,7 +24,12 @@ module ApplicationHelper
   end
 
   def has_stance(option)
-    return current_user && current_user.positions.where(:option_id => option.id).count > 0
+    has_user_stance = (current_user && (current_user.positions.where(:option_id => option.id).count > 0))
+
+    has_anon_stance = (defined?(session[:mobile][option.id][:position]) &&
+                       session[:mobile][option.id][:position] != nil)
+
+    return has_user_stance || has_anon_stance
   end
 
 

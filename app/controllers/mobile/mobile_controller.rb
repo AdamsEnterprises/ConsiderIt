@@ -21,7 +21,7 @@ class Mobile::MobileController < ApplicationController
     store_login_ref
   end
 
-  # GET /mobile/user
+  # GET /mobile/user/new/pledge
   def new_user_pledge
     store_login_ref
   end
@@ -33,24 +33,27 @@ class Mobile::MobileController < ApplicationController
     # if coming from a non-login page, store it as the return page
     # but if coming from an external link, don't store it at all
     path = URI(request.referrer).path
-    if path != "/" && !(path =~ /^\/mobile\/user/)
+    if path != "/" && !is_login_page(path)
       session[:login_return_to] = request.referrer
     end
   end
 
   # GET /mobile/options/:option_id
   def option
+    define_position
+
     # if redirected from option long description, option details, or login,
-    # use the stored referrer path. Otherwise, store the referrer path.
-    # If arrived directly and have no stored path, point to home.
-    if referring_path == show_mobile_option_long_description_path ||
-        referring_path == show_mobile_option_additional_details_path ||
-        referring_path =~ /^\/mobile\/user/ ||
-        referring_path == ""
+    # use the stored referrer path. Otherwise, store the referrer path or
+    # home if none exists.
+    ref = referring_path()
+    if ref == show_mobile_option_long_description_path ||
+        ref == show_mobile_option_additional_details_path ||
+        ref =~ /^\/mobile\/user/ ||
+        ref == ""
       @prev_path = session[:option_return_to] || mobile_home_path
     else
-      @prev_path = referring_path
-      session[:option_return_to] = referring_path
+      @prev_path = ref
+      session[:option_return_to] = ref
     end
   end
 
@@ -64,16 +67,20 @@ class Mobile::MobileController < ApplicationController
 #    define_navigation
   end
 
+  # GET /mobile/options/:option_id/position/initial
+  def position_initial
+    define_position
+
+    # If you already have a position, either because you came here directly
+    # or because you redirected here after login, redirect to pros/cons
+    if !@position.stance_bucket.nil?
+      redirect_to mobile_option_points_path
+    end
+  end
+
   # GET /mobile/options/:option_id/position
   def position_update
     define_position
-
-    @required_update = session[:mobile][@option.id][:navigate] == [mobile_home_path, show_mobile_option_path]
-    if @required_update
-      define_navigation mobile_option_points_path, true
-    else
-      define_navigation nil, true
-    end
   end
 
   # GET /mobile/options/:option_id/points
@@ -139,15 +146,16 @@ class Mobile::MobileController < ApplicationController
     
     # if redirected from this page itself, option description, or login,
     # use the stored referrer path. Otherwise, store the referrer path.
-    # If arrived direclty and have no stored path, redirect to home.
-    if referring_path == show_mobile_option_path ||
-        referring_path == show_mobile_option_point_path ||
-        referring_path =~ /^\/mobile\/user/ ||
-        referring_path == ""
+    # If arrived directly and have no stored path, redirect to home.
+    ref = referring_path()
+    if ref == show_mobile_option_path ||
+        ref == show_mobile_option_point_path ||
+        is_login_page(ref) ||
+        ref == ""
       @prev_path = session[:point_return_to] || mobile_home_path
     else
-      @prev_path = referring_path
-      session[:point_return_to] = referring_path
+      @prev_path = ref
+      session[:point_return_to] = ref
     end
 
     @point = Point.unscoped.find_by_id(params[:point_id])
@@ -326,5 +334,9 @@ protected
       else
         throw "Invalid stance bucket " + @stance_bucket
     end
+  end
+
+  def is_login_page(path)
+    return path =~ /^\/mobile\/user/
   end
 end

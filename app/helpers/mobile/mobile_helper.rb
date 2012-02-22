@@ -46,7 +46,9 @@ module Mobile::MobileHelper
       elsif path == show_mobile_option_additional_details_path(@option)
         page_name = APP_CONFIG['decisions']['details']
       elsif path == mobile_option_update_position_path(@option)
-        page_name = "My Position"
+        page_name = "Update Position"
+      elsif path == mobile_option_initial_position_path(@option)
+        page_name = "Set Position"
       elsif path == mobile_option_points_path(@option)
         page_name = "My Pros and Cons"
       elsif path == mobile_option_list_points_path(@option, :pro)

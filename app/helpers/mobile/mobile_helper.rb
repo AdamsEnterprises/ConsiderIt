@@ -19,7 +19,7 @@ module Mobile::MobileHelper
     return path
   end
 
-  def get_page_name(path = request.request_uri)
+  def get_page_name(path = URI(request.path).path)
     if path == mobile_home_path
       page_name = "Homepage"
     elsif path == mobile_user_path
@@ -34,6 +34,8 @@ module Mobile::MobileHelper
       page_name = "Welcome to " + APP_CONFIG['meta']['title'] + " Community!"
     elsif path == new_mobile_password_path
       page_name = "Forgot Your Password?"
+    elsif path == edit_mobile_password_path
+      page_name = "Select a new password"
     elsif path == mobile_confirm_resend_path
       page_name = "Didn't receive confirmation instructions?"
     elsif path == mobile_tou_path

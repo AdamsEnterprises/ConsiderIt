@@ -1,7 +1,3 @@
 %p What's your initial opinion of #{@option.reference}?
-= form_for @position, :url => mobile_navigate_position_update_path do |f|
-  = render :partial => "mobile/partials/position_select", :locals => { :form => f }
-  - if not @required_update
-    = f.submit "Set Position", :name => "button[update_position]"
--
+= render :partial => "mobile/partials/position_select"
 = render :partial => "mobile/partials/nav", :locals => {:prev_path => show_mobile_option_path, :skip_description => true}

@@ -43,18 +43,31 @@ class Mobile::MobileController < ApplicationController
     define_position
 
     # if redirected from option long description, option details, or login,
-    # use the stored referrer path. Otherwise, store the referrer path or
-    # home if none exists.
+    # use the stored referrer path. If navigated directly here, don't use
+    # any previous path. (Don't use the session variable because it's from
+    # another tab, and it may cause redirection due to the case statement
+    # farther down.) Otherwise, store the referrer path.
     ref = referring_path()
     if ref == show_mobile_option_long_description_path ||
         ref == show_mobile_option_additional_details_path ||
-        ref =~ /^\/mobile\/user/ ||
-        ref == ""
-      @prev_path = session[:option_return_to] || mobile_home_path
+        ref =~ /^\/mobile\/user/  # from login/signup
+      # used stored referring path
+      @prev_path = session[:option_return_to]
+    elsif ref == ""
+      @prev_path = nil
     else
       @prev_path = ref
       session[:option_return_to] = ref
     end
+
+    # if redirected from home or initial position and you already have
+    # a position, redirect to pros/cons. But make sure you didn't 
+    if !(@position.stance_bucket.nil?) && (@prev_path == mobile_option_initial_position_path ||
+                                           @prev_path == mobile_home_path)
+      redirect_to mobile_option_points_path
+    end
+
+    
   end
 
   # GET /mobile/options/:option_id/description
@@ -73,7 +86,7 @@ class Mobile::MobileController < ApplicationController
 
     # If you already have a position, either because you came here directly
     # or because you redirected here after login, redirect to pros/cons
-    if !@position.stance_bucket.nil?
+    if !(@position.stance_bucket.nil?)
       redirect_to mobile_option_points_path
     end
   end
@@ -89,7 +102,7 @@ class Mobile::MobileController < ApplicationController
 
     if @position.stance_bucket.nil?
       # If don't have a position yet, redirect to set position
-      redirect_to mobile_option_update_position_path
+      redirect_to mobile_option_initial_position_path
     end
     
     # Determine if we have the forward button available since we link to this page from 

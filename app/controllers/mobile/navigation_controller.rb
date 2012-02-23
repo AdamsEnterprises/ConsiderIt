@@ -63,7 +63,13 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/position
   def position_update
-    if params[:position] and params[:position][:stance_bucket]
+    if params[:button][:cancel]
+      if referring_path == mobile_option_initial_position_path
+        redirect_path = show_mobile_option_path
+      else
+        redirect_path = mobile_option_points_path
+      end
+    elsif params[:position] and params[:position][:stance_bucket]
       session[:mobile][option_id][:position] = params[:position][:stance_bucket]
 
       redirect_path = mobile_option_points_path

@@ -1,6 +1,10 @@
-%ul{ :class => "opinion_list" }
-  - (0..6).to_a.reverse.each do |bucket|
-    %li
-      = form.radio_button(:stance_bucket, bucket)
-      = form.label("stance_bucket_#{bucket}", Position.stance_name_map(bucket).capitalize)
-
+= form_for @position, :url => mobile_navigate_position_update_path do |f|
+  %ul{ :class => "opinion_list" }
+    - (0..6).to_a.reverse.each do |bucket|
+      %li
+        = f.radio_button(:stance_bucket, bucket)
+        = f.label("stance_bucket_#{bucket}", Position.stance_name_map(bucket).capitalize)
+  %div
+    = f.submit "Set Position", :name => "button[update_position]"
+  %div
+    = f.submit "Cancel", :name => "button[cancel]"

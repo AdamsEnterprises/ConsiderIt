@@ -97,6 +97,8 @@ class Mobile::NavigationController < Mobile::MobileController
       point = Point.unscoped.find_by_id(point_id)
       point.destroy
 
+      flash[:notice] = "Successfully deleted point"
+
       # If coming from point details, redirect to previous page
       if referring_path == show_mobile_option_point_path(:option_id => option_id,
                                                          :point_id => point_id)
@@ -142,7 +144,6 @@ protected
   end
 
   def sync(optionid = option_id)
-    flash[:notice] = ''
     # First position (since the position is needed for some points)
     sync_position(optionid)
     # Then inclusions/points

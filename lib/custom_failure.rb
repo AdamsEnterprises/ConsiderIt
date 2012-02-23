@@ -9,7 +9,7 @@ class CustomFailure < Devise::FailureApp
     end
 
     if /^\/mobile/ === URI(request.referrer).path
-      flash[:notice] = "Invalid email or password"
+      flash[:error] = "Invalid email or password"
       return request.referrer
     else
       super

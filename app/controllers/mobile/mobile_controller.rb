@@ -1,7 +1,7 @@
 require 'date'
 
 class Mobile::MobileController < ApplicationController
-  before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :edit_password, :new_user, :new_user_confirm, :new_user_pledge, :user]
+  before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :edit_password, :new_user, :new_user_confirm, :new_user_pledge, :user, :new_user_why]
   before_filter :check_login, :only => [:new_user, :new_user_pledge, :user]
   
   # GET /mobile
@@ -267,7 +267,8 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/user/new
   def new_user
-    if URI(request.referrer).path != new_mobile_user_pledge_path && URI(request.referrer).path != new_mobile_user_path
+    path = URI(request.referrer).path
+    if path != new_mobile_user_pledge_path && path != new_mobile_user_path && path != new_mobile_user_why_path
       redirect_to new_mobile_user_pledge_path
     end
   end

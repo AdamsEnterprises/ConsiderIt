@@ -1,5 +1,6 @@
 %p Now explore a breakdown of what other users feel about #{@option.designator}!
 %p Select a segment of users below to see a ranked list of the points that segment finds most important.
+
 %ul.link_list
   -#%li
     = link_to("My pros and cons", mobile_option_points_path)
@@ -12,5 +13,9 @@
     %li
       - link_text = Position.stance_name_map(stance).capitalize + " (" + percentage.to_s + "%)" + (@position.stance_bucket == stance ? " (your position)" : "")
       = link_to(link_text, mobile_option_segment_path(:stance_bucket => stance))
+
+%p
+  = "Or, revisit"
+  = link_to("your pros and cons", mobile_option_points_path) + "."
 
 = render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_points_path }

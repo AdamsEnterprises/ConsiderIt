@@ -1,10 +1,12 @@
-- if included_points.include?(point)
-  - point_creator = session[:mobile][@option.id][:written_points].include?(point.id)
+= form_for :navigate, :url => mobile_navigate_add_remove_point_path do |f|
+  - if included_points.include?(point)
+    -# uncomment if we want to show delete button when logged in
+    - point_creator = session[:mobile][@option.id][:written_points].include?(point.id) # || (current_user && point.user_id == current_user.id)
 
-  - if point_creator
-    = form.submit "Delete Point", :name => "button[delete_point][#{point.id}]", :class => "delete_point point_button"
+    - if point_creator
+      = f.submit "Delete Point", :name => "button[delete_point][#{point.id}]", :class => "delete_point point_button"
+    - else
+      = f.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point point_button"
   - else
-    = form.submit "Remove Point", :name => "button[remove_point][#{point.id}]", :class => "remove_point point_button"
-- else
-  = form.submit "Add Point", :name => "button[add_point][#{point.id}]", :class => "point_button"
+    = f.submit "Add Point", :name => "button[add_point][#{point.id}]", :class => "point_button"
 

@@ -65,16 +65,8 @@ ConsiderIt::Application.routes.draw do
   match '/mobile/user/new/complete' => "mobile/navigation#new_user_complete", :via => :post, :module => :mobile, :as => :new_mobile_user_complete
   match '/mobile/user/new/pledge/submit' => "mobile/navigation#user_pledge_submit", :via => :post, :module => :mobile, :as => :new_mobile_user_pledge_submit
   match '/mobile/options/navigate/login' => "mobile/navigation#login", :via => :get, :module => :mobile, :as => :mobile_navigate_login
-  match '/mobile/options/:option_id/navigate' => "mobile/navigation#option", :via => :post, :module => :mobile, :as => :mobile_navigate_option
-  match '/mobile/options/:option_id/navigate/long_description' => "mobile/navigation#long_description", :via => :post, :module => :mobile, :as => :mobile_navigate_long_description
-  match '/mobile/options/:option_id/navigate/additional_details' => "mobile/navigation#additional_details", :via => :post, :module => :mobile, :as => :mobile_navigate_additional_details
-  match '/mobile/options/:option_id/navigate/points' => "mobile/navigation#points", :via => :post, :module => :mobile, :as => :mobile_navigate_points
   match '/mobile/options/:option_id/navigate/position' => "mobile/navigation#position_update", :via => [:post, :put], :module => :mobile, :as => :mobile_navigate_position_update
-  match '/mobile/options/:option_id/navigate/list_points/:type' => "mobile/navigation#list_points", :via => :post, :module => :mobile, :as => :mobile_navigate_list_points
-  match '/mobile/options/:option_id/navigate/add_point/:type' => "mobile/navigation#add_point", :via => :post, :module => :mobile, :as => :mobile_navigate_add_point
   match '/mobile/options/:option_id/navigate/new_point/:type' => "mobile/navigation#new_point", :via => :post, :module => :mobile, :as => :mobile_navigate_new_point
-  match '/mobile/options/:option_id/navigate/point_details/:point_id' => "mobile/navigation#point_details", :via => :post, :module => :mobile, :as => :mobile_navigate_point_details
-  match '/mobile/options/:option_id/navigate/summary' => "mobile/navigation#summary", :via => :post, :module => :mobile, :as => :mobile_navigate_summary
-  match '/mobile/options/:option_id/navigate/segment/:stance_bucket' => "mobile/navigation#segment", :via => :post, :module => :mobile, :as => :mobile_navigate_segment
-  match '/mobile/options/:option_id/navigate/segment_list/:stance_bucket/:point_type' => "mobile/navigation#segment_list", :via => :post, :module => :mobile, :as => :mobile_navigate_segment_list
+  match '/mobile/options/:option_id/navigate/add_remove_point' => "mobile/navigation#add_remove_point", :via => :post, :module => :mobile, :as => :mobile_navigate_add_remove_point
+  match '/mobile/options/:option_id/navigate/point/comment' => "mobile/navigation#point_comment", :via => :post, :module => :mobile, :as => :mobile_navigate_point_comment
 end

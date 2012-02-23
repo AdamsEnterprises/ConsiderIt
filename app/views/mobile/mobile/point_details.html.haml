@@ -1,38 +1,38 @@
-= form_for :navigate, :url => mobile_navigate_point_details_path do |f|
+%div.point_details
+  - if !@point.hide_name && @point.user
+    .avatar
+      = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
+  
+  %div
+    = render :partial => 'mobile/partials/add_remove_button', :locals => { :point => @point, :included_points => @included_points }
+  .summary
+    %h1 Summary
+    %p.description #{@point.nutshell}
+    %p.author
+      by 
+      - if @point.hide_name
+        anonymous
+      - elsif @point.user
+        = @point.user.name
+      - else
+        unknown
+  .details
+    %h1 Details
+    %p.the_details #{ @point.text.empty? ? "None" : @point.text }
+  .link
+    %h1 External Links
+    %ul
+      - if @point.point_links.any?
+        - @point.point_links.each do |point_link|
+          %li 
+            = link_to point_link.description, point_link.safe_url, {:target => "blank"}
+            [#{point_link.url}]
+      - else
+        %li none provided
 
-  %div.point_details
-    - if !@point.hide_name && @point.user
-      .avatar
-        = image_tag @point.user.avatar.url(:midsmall), :alt => "#{h @point.user.name}'s profile picture"
-    
-    %div
-      = render :partial => 'mobile/partials/add_remove_button', :locals => { :form => f, :point => @point, :included_points => @included_points }
-    .summary
-      %h1 Summary
-      %p.description #{@point.nutshell}
-      %p.author
-        by 
-        - if @point.hide_name
-          anonymous
-        - elsif @point.user
-          = @point.user.name
-        - else
-          unknown
-    .details
-      %h1 Details
-      %p.the_details #{ @point.text.empty? ? "None" : @point.text }
-    .link
-      %h1 External Links
-      %ul
-        - if @point.point_links.any?
-          - @point.point_links.each do |point_link|
-            %li 
-              = link_to point_link.description, point_link.safe_url, {:target => "blank"}
-              [#{point_link.url}]
-        - else
-          %li none provided
+  = form_for :comment, :url => mobile_navigate_point_comment_path do |f|
     .discuss
-      %h1 Discussion (#{@point.comments.count})</h1>
+      %h1 Discussion (#{@point.comments.count})
       %ul.comment_section
         - if @point.comments.any?
           - even = false
@@ -46,26 +46,26 @@
             - even = !even
         - else
           %li No discussion
-        - if current_user
-          = f.hidden_field "comment[user_id]", :value => current_user.id
-          = f.hidden_field "comment[commentable_type]", :value => "Option"
-          = f.hidden_field "comment[commentable_id]", :value => @option.id
-          = f.hidden_field "comment[point_id]", :value => @point.id
-          %li.even
-            .comment_text.pointform
-              - if @point.comments.any?
-                %p Contribute to this discussion:
-              - else
-                %p Be the first to discuss this point:
-              = f.text_area "comment[body]", :class => "has_example char_limit", :id => "comment_body", :title => "Type your comment here (up to 1000 characters)...", :count => "1000"
-              .count Remaining characters: 1000
-              %p.note
-                %strong Remember your pledge!
-              = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
-        - else
-          %li.even
-            = link_to("Log in", mobile_user_path) 
-            = " to add your comments!"
+      - if current_user
+        = f.hidden_field "user_id", :value => current_user.id
+        = f.hidden_field "commentable_type", :value => "Option"
+        = f.hidden_field "commentable_id", :value => @option.id
+        = f.hidden_field "point_id", :value => @point.id
+        %li.even
+          .comment_text.pointform
+            - if @point.comments.any?
+              %p Contribute to this discussion:
+            - else
+              %p Be the first to discuss this point:
+            = f.text_area "body", :class => "has_example char_limit", :id => "comment_body", :title => "Type your comment here (up to 1000 characters)...", :count => "1000"
+            .count Remaining characters: 1000
+          %p.note
+            %strong Remember your pledge!
+            = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
+      - else
+        %li.even
+          = link_to("Log in", mobile_user_path) 
+          = " to add your comments!"
 
 - type = @point.is_pro ? "pro" : "con"
 = render :partial => "mobile/partials/nav", :locals => {:prev_path => @prev_path }

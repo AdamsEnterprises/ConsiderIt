@@ -7,6 +7,6 @@
         %li
           = link_to("Details", show_mobile_option_point_path(:point_id => point.id))
         %li
-          = render :partial => 'mobile/partials/add_remove_button', :locals => { :form => form, :point => point, :included_points => included_points }
+          = render :partial => 'mobile/partials/add_remove_button', :locals => { :point => point, :included_points => included_points }
     - even = !even
 

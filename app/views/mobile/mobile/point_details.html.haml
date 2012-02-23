@@ -64,8 +64,7 @@
             = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
       - else
         %li.even
-          = link_to("Log in", mobile_user_path) 
-          = " to add your comments!"
+          = link_to("Log in to add your comments!", mobile_user_path) 
 
 - type = @point.is_pro ? "pro" : "con"
 = render :partial => "mobile/partials/nav", :locals => {:prev_path => @prev_path }

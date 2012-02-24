@@ -4,19 +4,12 @@ class Mobile::NavigationController < Mobile::MobileController
   
   # GET /mobile/options/navigate/login
   def login
-    if !session[:mobile].any?
-      throw "No Options!"
+    if session[:mobile]
+      session[:mobile].keys.each do |optionid|
+        sync(optionid)
+      end
     end
 
-    session[:mobile].keys.each do |optionid|
-      sync(optionid)
-    end
-
-    redirect_to mobile_login_return_path
-  end
-
-  # POST /mobile/user/new/complete
-  def new_user_complete
     redirect_to mobile_login_return_path
   end
 

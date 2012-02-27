@@ -1,3 +1,4 @@
 %p What's your initial opinion of #{@option.reference}?
 = render :partial => "mobile/partials/position_select"
 = render :partial => "mobile/partials/nav", :locals => {:prev_path => show_mobile_option_path, :skip_description => true}
+= render :partial => "mobile/partials/study_js", :locals => { :category => 2, :position_type => 1 }

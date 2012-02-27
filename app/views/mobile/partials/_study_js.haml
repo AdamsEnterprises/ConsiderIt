@@ -1,0 +1,40 @@
+- if category == 1
+  :javascript
+    $j(document).ready(function() {
+      $j.post('/home/study/1', {
+        position_id: #{"'" + @j_position_id.to_s + "'"},
+        option_id: #{@j_option_id},
+        point_id: #{@j_point_id},
+        bval: false
+      });
+    });
+- elsif category == 2
+  :javascript
+    $j(document).delegate('.opinion_list .position_choice', 'change', function() {
+      $j.post('/home/study/2', {
+        position_id: #{"'" + @j_position_id.to_s + "'"},
+        option_id: #{@j_option_id},
+        ival: #{position_type},
+        fval: $j(this).attr('value') / 6.0
+      });
+    });
+- elsif category == 3
+  :javascript
+    $j(document).ready(function() {
+      $j.post('/home/study/3', {
+        position_id: #{"'" + @j_position_id.to_s + "'"},
+        option_id: #{@j_option_id},
+        detail1: #{"'" + @j_bucket.to_s + "'"}
+      });
+    });
+- elsif category == 4
+  :javascript
+    $j(document).ready(function() {
+      $j.post('/home/study/4', {
+        position_id: #{"'" + @j_position_id.to_s + "'"},
+        option_id: #{@j_option_id},
+        detail1: #{"'" + @j_bucket.to_s + "'"},
+        ival: #{"'" + @j_context.to_s + "'"}
+      });
+    });
+

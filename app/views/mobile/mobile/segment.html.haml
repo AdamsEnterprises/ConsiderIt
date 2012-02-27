@@ -7,5 +7,4 @@
         = link_to("Cons (" + @con_points.count.to_s + ")", mobile_option_segment_list_path(:point_type => "con"))
 = render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_summary_path }
 
--# Might have nav links to the other voter segments and/or "my points" here
-
+= render :partial => "mobile/partials/study_js", :locals => { :category => 3 }

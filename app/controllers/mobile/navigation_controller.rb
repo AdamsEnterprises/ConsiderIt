@@ -22,9 +22,6 @@ class Mobile::NavigationController < Mobile::MobileController
     end
   end
 
-  def point_comment
-  end
-
   # POST /mobile/options/:option_id/navigate/position
   def position_update
     if params[:button][:cancel]
@@ -108,24 +105,30 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/new_point/:type
   def new_point
+    @point = Point.new(params[:point])
+    #throw @point.inspect
+    if @point.save
+      # Add point to included points
+      session[:mobile][option_id][:included_points][@point.id] = 1
+      # Add point to written points
+      session[:mobile][option_id][:written_points].push(@point.id)
 
-    if params[:button][:add_point]
-      @point = Point.new(params[:point])
-      #throw @point.inspect
-      if @point.save
-        # Add point to included points
-        session[:mobile][option_id][:included_points][@point.id] = 1
-        # Add point to written points
-        session[:mobile][option_id][:written_points].push(@point.id)
+      # Update database if logged in
+      sync
 
-        # Update database if logged in
-        sync
+      # Redirect to listing user points
+      redirect_path = mobile_option_list_points_path
 
-        # Redirect to listing user points
-        redirect_path = mobile_option_list_points_path
-      else
-        throw "Could not save point " + @point.errors.inspect
-      end
+      PointListing.create!(
+        :option_id => params[:option_id],
+        :position => @point.position,
+        :session_id => request.session_options[:id],
+        :point => @point,
+        :user => current_user,
+        :context => 7 # own point has been seen
+      )
+    else
+      throw "Could not save point " + @point.errors.inspect
     end
 
     handle_redirection redirect_path

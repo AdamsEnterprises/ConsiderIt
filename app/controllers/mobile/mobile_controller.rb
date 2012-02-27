@@ -133,6 +133,20 @@ class Mobile::MobileController < ApplicationController
     else
       throw 'Invalid type ' + @type
     end
+
+    define_study_objects
+    PointListing.transaction do
+      @included_points.each do |pnt|
+        PointListing.create!(
+          :option => @option,
+          :position_id => @j_position_id,
+          :session_id => request.session_options[:id],
+          :point => pnt,
+          :user => current_user,
+          :context => 2
+        )
+      end
+    end
   end
 
   # GET /mobile/options/:option_id/points/new/:type
@@ -227,8 +241,21 @@ class Mobile::MobileController < ApplicationController
       @j_bucket = @stance_bucket
     end
 
-    @j_context = 5 # initial load of voter segment on options page
+    @j_context = 5 # load of voter segment on options page
     define_study_objects
+
+    PointListing.transaction do
+      @included_points.each do |pnt|
+        PointListing.create!(
+          :option => @option,
+          :position_id => @j_position_id,
+          :session_id => request.session_options[:id],
+          :point => pnt,
+          :user => current_user,
+          :context => @j_context
+        )
+      end
+    end
 
     set_stance_name(@stance_bucket)
 

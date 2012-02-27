@@ -106,7 +106,6 @@ class Mobile::NavigationController < Mobile::MobileController
   # POST /mobile/options/:option_id/navigate/new_point/:type
   def new_point
     @point = Point.new(params[:point])
-    #throw @point.inspect
     if @point.save
       # Add point to included points
       session[:mobile][option_id][:included_points][@point.id] = 1
@@ -127,6 +126,10 @@ class Mobile::NavigationController < Mobile::MobileController
         :user => current_user,
         :context => 7 # own point has been seen
       )
+     
+      if @point.published
+        @point.update_absolute_score
+      end
     else
       throw "Could not save point " + @point.errors.inspect
     end
@@ -141,12 +144,14 @@ protected
 
   def sync(optionid = option_id)
     # First position (since the position is needed for some points)
-    sync_position(optionid)
+    position_id = sync_position(optionid)
     # Then inclusions/points
-    sync_inclusions(optionid)
+    sync_inclusions(position_id, optionid)
   end
 
   def sync_position(optionid = option_id)
+    position_id = nil
+
     if current_user
       # Only if logged in
       stance_bucket = session[:mobile][optionid][:position]
@@ -178,8 +183,12 @@ protected
         if not position.save
           throw "Could not save position: " + position.inspect
         end
+
+        position_id = position.id
       end
     end
+
+    return position_id
   end
 
   def add_inclusion(point_id, optionid = option_id)
@@ -229,7 +238,7 @@ protected
     end
   end
 
-  def sync_inclusions(optionid = option_id)
+  def sync_inclusions(position_id, optionid = option_id)
     if current_user
       # Go through all included points
       session[:mobile][optionid][:included_points].keys.each do |point_id|
@@ -245,7 +254,15 @@ protected
           throw "No written point with id " + point_id.to_s
         end
 
-        point.update_attributes(:user_id => current_user.id, :published => true)
+        position = Position.find_by_id(position_id)
+
+        point.update_attributes(
+                      :user_id => current_user.id, 
+                      :published => true, 
+                      :position_id => position_id,
+                      "score_stance_group_#{position.stance_bucket}".intern => 0.001
+                               )
+        point.update_absolute_score
         if !point.save
           throw "Could not publish point with id " + point_id.to_s
         end

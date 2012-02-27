@@ -183,6 +183,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/summary
   def summary
+    #Point.update_relative_scores
     if !current_user
       redirect_to mobile_user_path
     end
@@ -198,6 +199,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
   def segment
+    #Point.update_relative_scores
     @points = @option.points
     @pro_points = @points.pros
     @con_points = @points.cons
@@ -216,7 +218,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
-    #TODO: Refactor this out since copied from points_controller (index)
+    #Point.update_relative_scores
     qry = @option.points
 
     @point_type = params[:point_type]

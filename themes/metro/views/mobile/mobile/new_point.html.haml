@@ -1,0 +1,42 @@
+%div.pointform
+  %ul.link_list.cross_nav
+    %li
+      = link_to "See my " + @type.pluralize, mobile_option_list_points_path(:option_id => @option.id, :type => @type)
+    %li
+      = link_to "Add an existing " + @type, add_mobile_option_point_path(:option_id => @option.id, :type => @type)
+    %li
+      - opposite_type = @type == "pro" ? "con" : "pro"
+      = link_to "Write a new " + opposite_type, new_mobile_option_point_path(:option_id => @option.id, :type => opposite_type)
+
+  = form_for @point, :url => mobile_navigate_new_point_path do |f|
+    = f.hidden_field :is_pro, :value => ((@type == "pro") ? 1 : 0)
+    = f.hidden_field :option_id, :value => @option.id
+    - if current_user
+      = f.hidden_field :user_id, :value => current_user.id
+      = f.hidden_field :published, :value => 1
+    - else
+      = f.hidden_field :published, :value => 0
+    .point-title-group
+      %div Summarize your point in 140 characters (required):
+      = f.text_area :nutshell, :class => "char_limit", :id => "point_nutshell", :count => "140"
+      .count Remaining characters: 140
+    .point-description-group
+      %div Write a longer description of your point, up to 700 characters (optional):
+      = f.text_area :text, :class => "char_limit", :id => "point_text", :count => "700"
+      .count Remaining characters: 700
+    .point_link_block
+      %p
+        %a.clickable#add_link Insert link to a website below
+      #point_links
+      %p
+        %a{ :href => "", :onClick => "alert('When you link to credible websites that support the point that you just wrote, other users will be more likely to understand and believe your point.'); return false;" } Why should I add a link?
+    .hide_name
+      = f.check_box :hide_name, :id => "point_hide_name"
+      = f.label :hide_name, "Hide your name from other users (discouraged)"
+    .point-pledge
+      %p.note Remember your pledge!
+    .point-submit
+      = f.submit "Add " + @type.to_s, :name => "button[add_point]", :id => "point_submit"
+      %button.back Cancel
+
+= render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_points_path }

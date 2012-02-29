@@ -1,0 +1,26 @@
+%ul.headered_list
+  %li    
+    %h2 Your vote will count. 
+    %p We will tally your support or opposition in the totals.
+
+  %li
+    %h2 Share your pros and cons
+    %p for other people to consider.
+       
+  %li
+    %h2 Save your position
+    %p to remember your reasoning on important proposals.
+      
+  %li
+    %h2 Explore the most important points
+    %p for users who support, oppose or are neutral on the proposal.
+
+  %li
+    %h2 Discuss with others. 
+    %p Comment on pros and cons, or the proposal broadly. 
+
+- if referring_path == new_mobile_user_pledge_path
+  - prev_name = "pledge"
+- else
+  - prev_name = "signup"  
+= link_to("Return to " + prev_name, request.referer)

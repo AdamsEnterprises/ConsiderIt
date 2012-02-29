@@ -1,0 +1,43 @@
+%p.fineprint.login
+  = "Already have an account?"
+  = link_to("Log in!", mobile_user_path)
+
+- @app_title = APP_CONFIG['meta']['title']
+%p Before you sign up, please review a few short rules for using #{@app_title}.
+
+%p
+  = link_to("Why should I join " + @app_title + "?", new_mobile_user_why_path)
+
+%ul.headered_list
+  %li
+    %h2 Please refrain from personal attacks.
+    %p
+      Discussions can get heated. We ask that you please
+      refrain from personal attacks on other participants. We can
+      disagree without demonizing.
+
+  %li
+    %h2 Speak your opinions.
+    %p      
+      The opinions of everyday citizens are often not heard. We ask that you 
+      speak your own opinions, not the positions of any organizations to 
+      which you may belong.
+
+  %li
+    %h2 Do not create multiple accounts.
+    %p
+      Opinions can be maliciously manipulated. We ask that you 
+      do not create multiple accounts.
+      You are free to update your opinion, but please do so from a single account.
+
+  %div.submit_footer
+    -# builtin label and check_box functions are inconvenient here
+    %input#pledge_agree{:type=>"checkbox", :name=>"agree"}
+    %label{:for=>"pledge_agree"}
+      = "I pledge to refrain from personal attacks, speak only my own opinion, and use only one account."
+
+= form_for(resource, :as => resource_name, :url => new_mobile_user_pledge_submit_path) do |f|
+  %div
+    = f.submit "Sign up!", :name => "button[signup]", :id => "pledge_submit", :disabled => "disabled"
+  %div
+    = f.submit "Sorry, I cannot abide by these rules.", :name => "button[cancel]"

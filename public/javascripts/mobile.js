@@ -35,7 +35,7 @@ function adjustCharLimit() {
         // Play alert sound. Should probably remove old sound
         // elements to keep things clean, but it seems like this
         // slows things down slightly.
-        $j("body").append('<embed src="tonk.wav" autostart="true" loop="false" ' +
+        $j("body").append('<embed src="/public/sounds/tonk.wav" autostart="true" loop="false" ' +
 			  'style="visibility:hidden;" />');
     } else {
         textarea.siblings(".count")

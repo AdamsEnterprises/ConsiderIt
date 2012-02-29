@@ -6,7 +6,7 @@
   %div
     = render :partial => 'mobile/partials/add_remove_button', :locals => { :point => @point, :included_points => @included_points }
   .summary
-    %h1 Summary
+    %h2 Summary
     %p.description #{@point.nutshell}
     %p.author
       by 
@@ -17,10 +17,10 @@
       - else
         unknown
   .details
-    %h1 Details
+    %h2 Details
     %p.the_details #{ @point.text.empty? ? "None" : @point.text }
   .link
-    %h1 External Links
+    %h2 External Links
     %ul
       - if @point.point_links.any?
         - @point.point_links.each do |point_link|
@@ -32,7 +32,7 @@
 
   = form_for :comment, :url => mobile_navigate_point_comment_path do |f|
     .discuss
-      %h1 Discussion (#{@point.comments.count})
+      %h2 Discussion (#{@point.comments.count})
       %ul.comment_section
         - if @point.comments.any?
           - even = false

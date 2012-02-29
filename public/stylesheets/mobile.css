@@ -1,6 +1,6 @@
 body {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 11pt;
+  font-size: 0.9em;
 }
 
 ul {
@@ -10,12 +10,18 @@ ul {
 }
 
 h1, h2 {
-    font-size: 12pt;
+    font-size: 1.1em;
 }
 
 h3 {
-    font-size: 11pt;
+    font-size: 1em;
     margin: 6px 0;
+}
+
+/* buttons have a fixed font size by default. Setting font size to 1em
+causes them to increase with the browser font size.  */
+input[type="submit"], button {
+    font-size: 1em;
 }
 
 /* sort of a tagline on the homepage */
@@ -70,7 +76,7 @@ li.even {
     clear: both;
     border-top: 1px solid rgb(192,192,192);
     padding-top: 5px;
-    font-size: 9pt;
+    font-size: 0.85em;
 }
 
 a, .clickable {
@@ -86,7 +92,7 @@ h1 {
 
 h2.locality {
     color: #999999;
-    font-size: 9pt;
+    font-size: 0.8em;
     font-variant: small-caps;
     font-weight: normal;
     text-transform: lowercase;
@@ -97,7 +103,7 @@ input[type="password"],
 input[type="email"],
 textarea {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 10pt;
+  font-size: 0.93em;
   vertical-align: top;
   margin: 3px 2px;
 }
@@ -132,12 +138,12 @@ textarea {
 }
 
 .nav h2 {
-    font-size: 10pt;
+    font-size: 0.93em;
     margin: 0;
 }
 
 .nav li {
-    font-size: 10pt;
+    font-size: 0.93em;
     margin: 0;
 }
 
@@ -149,32 +155,9 @@ textarea {
     margin-top: 3px;
 }
 
-.hide { 
-    display: none;
-}
-
-.prompt {
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-.expander {
-    font-size: 9pt;
-    font-weight: normal;
-}
-
-.expandable {
-    font-size: 9pt;
-}
-
 .note {
     /*color: #C1C1C1;*/
     margin: 10px 0 5px;
-}
-
-.desc_link {
-    font-size: 9pt;
-    margin-left: 5px;
 }
 
 .point_list {
@@ -205,7 +188,7 @@ textarea {
 }
 
 .point_list > li {
-    font-size: 9pt;
+    font-size: 0.85em;
     padding: 8px;
     border-bottom: 1px solid rgb(150,150,150);
 }
@@ -222,16 +205,6 @@ textarea {
     margin: 0;
 }
 
-/*********************************
-      HOMEPAGE
-**********************************/
-.all_options h1 {
-    font-size: 16pt;
-}
-
-/*********************************
-      INITIATIVE DESCRIPTION
-**********************************/
 
 /*********************************
       CHOOSE POSITION PAGE
@@ -263,7 +236,7 @@ textarea {
 **********************************/
 
 .author {
-    font-size: 9pt;
+    font-size: 0.85em;
 }
 
 div.author {
@@ -294,16 +267,6 @@ div.author {
     width: 95%;
 }
 
-#comment_submit {
-    background-color: #999999;
-    background-image: -moz-linear-gradient(center bottom , #777777 7%, #CCCCCC 100%);
-    color: #272727;
-    font-size: 12px;
-    padding: 3px 15px;
-    border-radius: 5px 5px 5px 5px;
-    margin-top: 5px;
-}
-
 /*********************************
       NEW POINT
 **********************************/
@@ -330,7 +293,7 @@ div.author {
 }
 
 .count {
-    font-size: 10pt;
+    font-size: 0.93em;
 }
 
 .point-description-group {
@@ -355,7 +318,7 @@ div.author {
 
 .point_link_form .delete {
     float: right;
-    font-size: 8pt;
+    font-size: 0.85em;
     padding: 3px 5px;
 }
 
@@ -409,25 +372,9 @@ div.author {
     margin: 2px 0 0 0;
 }
 
-.point_details h1 {
+.point_details h2 {
     margin: 15px 0 0 0;
-    font-size: 11pt;
-}
-
-#points_header {
-    clear: both;
-}
-
-#points_header h2 {
-    margin-bottom: 2px;
-}
-
-#points_header .point_options {
-    font-size: 10pt;
-}
-
-#show_user_points {
-    margin-right: 15px;
+    font-size: 1em;
 }
 
 #pro_con_nav h2 {
@@ -498,7 +445,7 @@ div.author {
 among your pro/con lists, add pro/con, write pro/con, and
 a user segment's pro/con lists */
 .link_list.cross_nav {
-    font-size: 0.9em;
+    font-size: 0.93em;
     margin-bottom: 10px;
 }
 

@@ -1,7 +1,7 @@
 require 'date'
 
 class Mobile::MobileController < ApplicationController
-  before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :edit_password, :new_user, :new_user_confirm, :new_user_pledge, :user]
+  before_filter :init_option_session, :except => [:index, :confirm_resend, :new_password, :edit_password, :new_user, :new_user_confirm, :new_user_pledge, :user, :new_user_why]
   before_filter :check_login, :only => [:new_user, :new_user_pledge, :user]
   
   # GET /mobile
@@ -74,6 +74,8 @@ class Mobile::MobileController < ApplicationController
   def position_initial
     define_position
 
+    define_study_objects
+
     # If you already have a position, either because you came here directly
     # or because you redirected here after login, redirect to pros/cons
     if !(@position.stance_bucket.nil?)
@@ -84,11 +86,15 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/options/:option_id/position
   def position_update
     define_position
+    define_study_objects
   end
 
   # GET /mobile/options/:option_id/points
   def points
     define_position
+
+    @j_bucket = 'self'
+    define_study_objects
 
     if @position.stance_bucket.nil?
       # If don't have a position yet, redirect to set position
@@ -109,6 +115,10 @@ class Mobile::MobileController < ApplicationController
     else
       throw 'Invalid type ' + @type
     end
+
+    @j_bucket = 'self'
+    @j_context = nil # looking at own points list
+    define_study_objects
   end
 
   # GET /mobile/options/:option_id/points/add/:type
@@ -122,6 +132,20 @@ class Mobile::MobileController < ApplicationController
       @included_points = get_included_points(false)
     else
       throw 'Invalid type ' + @type
+    end
+
+    define_study_objects
+    PointListing.transaction do
+      @included_points.each do |pnt|
+        PointListing.create!(
+          :option => @option,
+          :position_id => @j_position_id,
+          :session_id => request.session_options[:id],
+          :point => pnt,
+          :user => current_user,
+          :context => 2
+        )
+      end
     end
   end
 
@@ -152,10 +176,14 @@ class Mobile::MobileController < ApplicationController
     if @point.option != @option
       throw "Point not valid for the specified option"
     end
+
+    @j_point_id = @point.id
+    define_study_objects
   end
 
   # GET /mobile/options/:option_id/summary
   def summary
+    #Point.update_relative_scores
     if !current_user
       redirect_to mobile_user_path
     end
@@ -171,6 +199,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket
   def segment
+    #Point.update_relative_scores
     @points = @option.points
     @pro_points = @points.pros
     @con_points = @points.cons
@@ -189,7 +218,7 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/options/:option_id/segment/:stance_bucket/:point_type
   def segment_list
-    #TODO: Refactor this out since copied from points_controller (index)
+    #Point.update_relative_scores
     qry = @option.points
 
     @point_type = params[:point_type]
@@ -207,9 +236,27 @@ class Mobile::MobileController < ApplicationController
     if @stance_bucket == 7
       ## All voters
       qry = qry.ranked_overall
+      @j_bucket = 'all'
     else
       ## specific voter segment...
       qry = qry.ranked_for_stance_segment(@stance_bucket)
+      @j_bucket = @stance_bucket
+    end
+
+    @j_context = 5 # load of voter segment on options page
+    define_study_objects
+
+    PointListing.transaction do
+      @included_points.each do |pnt|
+        PointListing.create!(
+          :option => @option,
+          :position_id => @j_position_id,
+          :session_id => request.session_options[:id],
+          :point => pnt,
+          :user => current_user,
+          :context => @j_context
+        )
+      end
     end
 
     set_stance_name(@stance_bucket)
@@ -220,7 +267,8 @@ class Mobile::MobileController < ApplicationController
 
   # GET /mobile/user/new
   def new_user
-    if URI(request.referrer).path != new_mobile_user_pledge_path && URI(request.referrer).path != new_mobile_user_path
+    path = URI(request.referrer).path
+    if path != new_mobile_user_pledge_path && path != new_mobile_user_path && path != new_mobile_user_why_path
       redirect_to new_mobile_user_pledge_path
     end
   end
@@ -286,9 +334,11 @@ protected
   end
 
   def set_stance_name(stance_bucket)
+    @j_bucket = stance_bucket
     case stance_bucket
       when 7
         @stance_name = "all users"
+        @j_bucket = 'all'
       when 6
         @stance_name = "strong supporters"
       when 5
@@ -305,6 +355,17 @@ protected
         @stance_name = "strong opposers"
       else
         throw "Invalid stance bucket " + @stance_bucket
+    end
+
+    define_study_objects
+  end
+
+  def define_study_objects
+    @j_option_id = @option.id
+    if current_user && current_user.positions.where(:option_id => @j_option_id).any?
+      @j_position_id = current_user.positions.where(:option_id => @j_option_id).first.id
+    else
+      @j_position_id = nil
     end
   end
 

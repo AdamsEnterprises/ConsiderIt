@@ -2,7 +2,7 @@
   %ul{ :class => "opinion_list" }
     - (0..6).to_a.reverse.each do |bucket|
       %li
-        = f.radio_button(:stance_bucket, bucket)
+        = f.radio_button(:stance_bucket, bucket, :class => "position_choice")
         = f.label("stance_bucket_#{bucket}", Position.stance_name_map(bucket).capitalize)
   %div
     = f.submit "Set Position", :name => "button[update_position]"

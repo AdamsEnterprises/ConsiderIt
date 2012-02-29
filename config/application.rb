@@ -48,4 +48,4 @@ module ConsiderIt
   end
 end
 
-APPNAME = 'lvg'
+APPNAME = 'metro'

@@ -32,7 +32,7 @@ development:
       twitter_page: "http://www.twitter.com/LVGuide"
   
   decisions:
-    universal_domain_short: WA state
+    universal_domain_short: Metro
     name: 
       short: option
       full: option

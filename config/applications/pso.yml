@@ -30,6 +30,7 @@ development:
       twitter_page: 
   
   decisions:
+    universal_domain_short: pso
     name: 
       short: levy component
       full: levy component

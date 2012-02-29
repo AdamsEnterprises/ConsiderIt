@@ -19,7 +19,7 @@ module ApplicationHelper
     end
     #TODO: add a "show_all, :integer" field to Option 
     # that can be queried here instead
-    options += Option.where(:domain_short => 'WA state').order(:designator)
+    options += Option.where(:domain_short => APP_CONFIG['decisions']['universal_domain_short']).order(:designator)
     return options
   end
 

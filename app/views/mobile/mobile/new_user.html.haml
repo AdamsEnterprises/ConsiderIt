@@ -22,23 +22,32 @@
 
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
   
-    %ul
+    %ul#signup_field_list
       %li.name_field
-        %label{:for => "user_name"}
-          = "First and last name:"
-          = link_to "(why?)", "",
+        %div
+          %label{:for => "user_name"}
+            = "First and last name:"
+        %div
+          = f.text_field :name
+        %div
+          = link_to "(why should I provide my name?)", "",
             {:onClick => "alert('You stand behind your opinions, don’t you? When possible, we believe it is best to avoid anonymity.'); return false;"}
-        = f.text_field :name, :class => 'has_example'
+
       %li.email_field
-        %label{:for => "user_email"}
-          = "Email:"
-          = link_to "(why?)", "",
+        %div
+          %label{:for => "user_email"}
+            = "Email:"
+        %div
+          = f.text_field :email, :autocapitalize => 'off'
+        %div
+          = link_to "(why provide my email?)", "",
             {:onClick => "alert('Your email is never shown to other users and we promise not to share your information with third parties. Your email is only used to confirm your account and to send notifications of relevant events, like someone replying to a comment you left.'); return false;"}
-        = f.text_field :email, :class => 'has_example', :autocapitalize => 'off'
 
       %li.password_field
-        %label{:for => "user_password"} Password:
-        = f.password_field :password, :class => 'has_example', :autocapitalize => 'off'
+        %div
+          %label{:for => "user_password"} Password:
+        %div
+          = f.password_field :password, :autocapitalize => 'off'
 
     %p.acknowledgment
       = "By signing up, you acknowledge that you have read, agree to and were bored by the "

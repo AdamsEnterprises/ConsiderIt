@@ -34,8 +34,8 @@ development:
   decisions:
     universal_domain_short: Metro
     name: 
-      short: option
-      full: option
+      short: proposal
+      full: proposal
     details: Fiscal Impact Statement
   
   footer:

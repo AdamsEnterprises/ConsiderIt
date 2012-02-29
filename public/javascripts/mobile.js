@@ -36,7 +36,7 @@ function adjustCharLimit() {
         // elements to keep things clean, but it seems like this
         // slows things down slightly.
         $j("body").append('<embed src="/sounds/tonk.wav" autostart="true" loop="false" ' +
-			  'style="visibility:hidden;height:0;" />');
+			  " />');
     } else {
         textarea.siblings(".count")
             .text("Remaining characters: " + (limit - length));

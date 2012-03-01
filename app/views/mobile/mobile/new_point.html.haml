@@ -28,9 +28,7 @@
       %p
         %a#add_link{ :href => ""} Click to insert a link to a website below
       #point_links
-      %p
-        %a{ :href => "", :onClick => "alert('When you link to credible websites that support the point that you just wrote, other voters will be more likely to understand and believe your point.'); return false;" } Why should I add a link?
-    .hide_name
+      = render :partial => "mobile/partials/why_add_link"
       = f.check_box :hide_name, :id => "point_hide_name"
       = f.label :hide_name, "Hide your name from other users (discouraged)"
     .point-pledge

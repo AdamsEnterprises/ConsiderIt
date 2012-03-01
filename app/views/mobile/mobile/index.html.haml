@@ -25,20 +25,4 @@
     %li{:class => ((@even) ? "even" : "")}
       = link_to "#{option.domain_short}: #{option.reference} - #{option.short_name}", has_stance(option) ? mobile_option_points_path(:option_id => option.id) : show_mobile_option_path(:option_id => option.id)
 
-- if @domain
-  - if (cnt = @domain.domain_maps.count) == 0
-    %p According to our records, the #{@domain.name} area does not have any local #{@option_name.pluralize}. 
-  - else
-    %p.zip_code_prompt In the list above, you can now access #{cnt} #{@domain.name} area #{@option_name.pluralize}.
-  .reset
-    Is #{@domain.identifier} not your zip code? 
-    = form_tag '/home/domain', :id => 'domain' do
-      = text_field_tag "domain", '', :title => 'your zip code'
-      = submit_tag 'change', :class => 'gray'
-                
-- else
-  %p.zip_code_prompt Or enter your zip code to unlock your local #{@option_name.pluralize}:
-  = form_tag '/home/domain', :id => 'domain' do
-    = text_field_tag "domain", '', :title => 'your zip code'
-    = submit_tag 'set', :class => 'gray'
-
+= render :partial => 'mobile/partials/zip_code_select'

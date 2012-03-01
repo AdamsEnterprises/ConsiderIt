@@ -1,0 +1,18 @@
+-# Can be overridden in the specific theme
+
+- if @domain
+  - if (cnt = @domain.domain_maps.count) == 0
+    %p According to our records, the #{@domain.name} area does not have any local #{@option_name.pluralize}. 
+  - else
+    %p.zip_code_prompt In the list above, you can now access #{cnt} #{@domain.name} area #{@option_name.pluralize}.
+  .reset
+    Is #{@domain.identifier} not your zip code? 
+    = form_tag '/home/domain', :id => 'domain' do
+      = text_field_tag "domain", '', :title => 'your zip code'
+      = submit_tag 'change', :class => 'gray'
+- else
+  %p.zip_code_prompt Or enter your zip code to unlock your local #{@option_name.pluralize}:
+  = form_tag '/home/domain', :id => 'domain' do
+    = text_field_tag "domain", '', :title => 'your zip code'
+    = submit_tag 'set', :class => 'gray'
+

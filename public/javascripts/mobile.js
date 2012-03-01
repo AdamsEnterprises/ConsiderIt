@@ -64,9 +64,9 @@ LinkCount = 0
 function addLink() {
   
   var fieldset = $j("<fieldset />")
-    .append($j("<div>")
+    .append($j("<a>")
+              .attr("href", "")
               .addClass("delete")
-              .addClass("clickable")
               .click(deleteLink)
               .text("delete"))
     .append($j("<input />")

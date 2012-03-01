@@ -461,3 +461,11 @@ a user segment's pro/con lists */
 .login_back_link {
     margin-top: 9px;
 }
+
+#signup_field_list li {
+    margin-bottom: 12px;
+}
+
+.zip_code_prompt {
+    margin-bottom: 5px;
+}

@@ -12,6 +12,14 @@
     = javascript_include_tag "jquery"
     = javascript_include_tag "application"
     = javascript_include_tag "mobile"
+
+    :javascript
+      $j = jQuery.noConflict();
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '#{GOOGLE_ANALYTICS}']);
+      _gaq.push(['_trackPageview']);
+
   %body
 
     -# if session[:mobile]

@@ -3,6 +3,10 @@ class HomeController < ApplicationController
   respond_to :json, :html
 
   def index
+    # We can't do everywhere (with a before_filter) since the mobile site uses a lot of parts
+    # in the main site, but if they try to go to the homepage, they should be redirected to the
+    # mobile homepage
+    redirect_to mobile_home_path
     @user = current_user
     @keywords = "Washington Voters Guide 2011 Election Ballot Measures Initiatives"
     @description = "A guide to the Washington State 2011 election, written by citizens like you. Think through the pros and cons of state and local ballot measures and initiatives. Discover what other voters think."

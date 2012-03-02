@@ -40,7 +40,12 @@ module Mobile::MobileHelper
       page_name = "Didn't receive confirmation instructions?"
     elsif path == mobile_tou_path
       page_name = APP_CONFIG['meta']['title'] + " Terms of Use"
-    elsif @option
+    elsif @option || /^\/mobile\/options/ === path
+      if !(@option)
+        tmp_path = path.clone()
+        tmp_path.slice!("/mobile/options/")
+        @option = Option.find_by_id(tmp_path.to_i)
+      end
       if path == show_mobile_option_path(@option)
         page_name = "#{@option.reference} Overview"
       elsif path == show_mobile_option_long_description_path(@option)

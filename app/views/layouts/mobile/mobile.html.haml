@@ -43,16 +43,25 @@
 
     = yield
 
-    - if !is_login_page
+    -# don't show footer on the TOU path because redirecting from login or
+    -# clicking the TOU link on the TOU page itself will mess up the
+    -# previous button
+    - if !is_login_page && request.request_uri != mobile_tou_path
       %div{ :id => 'footer' }
-        - if user_signed_in?
-          = "Logged in as #{current_user.name}."
-          = link_to 'Log Out', destroy_user_session_path, :class => 'logout'
-        - else
-          = "You are not logged in."
-          = link_to "Log in", mobile_user_path
-          = "or"
-          = link_to("sign up", new_mobile_user_pledge_path) + "."
+        %p
+          - if user_signed_in?
+            = "Logged in as #{current_user.name}."
+            = link_to 'Log Out', destroy_user_session_path, :class => 'logout'
+          - else
+            = "You are not logged in."
+            = link_to "Log in", mobile_user_path
+            = "or"
+            = link_to("sign up.", new_mobile_user_pledge_path)
+        %p
+          - if defined?(APP_CONFIG['footer']['disclaimer'])
+            = APP_CONFIG['footer']['disclaimer']
+          = link_to 'Terms of Use', mobile_tou_path
+
     :javascript
       $j(document).ready(function(){
         ConsiderIt.init();     

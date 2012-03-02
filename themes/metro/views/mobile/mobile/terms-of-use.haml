@@ -22,9 +22,9 @@
 
   %ul
     %li
-      Do not make personal attacks or use offensive language. Disagreement is both inevitable and welcome on the MPG; offensive behavior is not. In your posts please refrain from name-calling; using expletives; slurs against race, ethnicity, gender, and sexual orientation; and other insults. A basic rule of thumb is to focus your attention on the initiatives themselves rather than on the people advocating or opposing them. Doing so will help ensure that the LVG is a welcoming space for all Washington citizens.
+      Do not make personal attacks or use offensive language. Disagreement is both inevitable and welcome on the MPG; offensive behavior is not. In your posts please refrain from name-calling; using expletives; slurs against race, ethnicity, gender, and sexual orientation; and other insults. A basic rule of thumb is to focus your attention on the initiatives themselves rather than on the people advocating or opposing them. Doing so will help ensure that the MPG is a welcoming space for all Washington citizens.
     %li
-      Express only your own opinions. We are interested only in the opinions of private citizens, and specifically not in the positions of established interest groups. Therefore when you express yourself on the MVG, please make sure to express only your own personal opinion. Of course, it's fine if your personal opinion is similar to one from a party or interest group, but please use your own words in expressing it. The bottom line is, no one should be using this site as part of their paid advocacy duties.
+      Express only your own opinions. We are interested only in the opinions of private citizens, and specifically not in the positions of established interest groups. Therefore when you express yourself on the MPG, please make sure to express only your own personal opinion. Of course, it's fine if your personal opinion is similar to one from a party or interest group, but please use your own words in expressing it. The bottom line is, no one should be using this site as part of their paid advocacy duties.
     %li
       Though you may change your stance at any time, do not create multiple accounts. Please sign up for and use one and only one account. Multiple accounts belonging to a single individual will be deactivated immediately.
 
@@ -75,10 +75,13 @@
   %p
     MPG Terms of Use version of 1 March 2011
 
-- if referring_path == new_mobile_user_path
+- ref = referring_path
+- if ref == ""
+  - prev_name = get_page_name(mobile_home_path)
+- elsif ref == new_mobile_user_path
   - prev_name = "Sign Up"
 - else
-  - prev_name = get_page_name(referring_path)  
+  - prev_name = get_page_name(ref)
 
 %div
   = link_to("Previous: " + prev_name, request.referer)

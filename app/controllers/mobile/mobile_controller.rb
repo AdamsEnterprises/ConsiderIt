@@ -268,7 +268,7 @@ class Mobile::MobileController < ApplicationController
   # GET /mobile/user/new
   def new_user
     path = URI(request.referrer).path
-    if path != new_mobile_user_pledge_path && path != new_mobile_user_path && path != new_mobile_user_why_path
+    if path != new_mobile_user_pledge_path && path != new_mobile_user_path && path != new_mobile_user_why_path && path != mobile_tou_path
       redirect_to new_mobile_user_pledge_path
     end
   end

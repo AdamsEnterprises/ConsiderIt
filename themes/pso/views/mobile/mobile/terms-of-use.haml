@@ -1,9 +1,12 @@
 There are currently no terms of use for #{APP_CONFIG['meta']['title']}
 
-- if referring_path == new_mobile_user_path
+- ref = referring_path
+- if ref == ""
+  - prev_name = get_page_name(mobile_home_path)
+- elsif ref == new_mobile_user_path
   - prev_name = "Sign Up"
 - else
-  - prev_name = get_page_name(referring_path)  
+  - prev_name = get_page_name(ref)
 
 %div
   = link_to("Previous: " + prev_name, request.referer)

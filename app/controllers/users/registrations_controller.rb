@@ -52,7 +52,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
           redirect_to request.referer
         end
       else
-        set_flash_message :notice, :inactive_signed_up, :reason => inactive_reason(resource) if is_navigational_format?
+	if is_mobile
+          flash[:notice] = "You have successfully signed up!"
+        else
+          set_flash_message :notice, :inactive_signed_up, :reason => inactive_reason(resource) if is_navigational_format?
+        end
+        
         expire_session_data_after_sign_in!
         respond_with resource, :location => after_inactive_sign_up_path_for(resource)
       end

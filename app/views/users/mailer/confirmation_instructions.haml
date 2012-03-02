@@ -1,20 +1,15 @@
 %div
   %p
-    Welcome to the LVG community, #{@resource.name}!
+    Welcome to the MPG community, #{@resource.name}!
 
   %p 
-    You can confirm your account by following one of the links below. After you do so, your votes on ballot measures will be counted toward the totals. 
+    You can confirm your account by following the link below. After you do so, your votes on proposals will be counted toward the totals. 
 
   %p 
-    Main site:
-    = confirmation_url(@resource, :confirmation_token => @resource.confirmation_token, :mobile => false)
-
-  %p 
-    Mobile site:
-    = confirmation_url(@resource, :confirmation_token => @resource.confirmation_token, :mobile => true)
+    = link_to('Confirm account', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token, :mobile => true))
 
   %p
     Thanks, and we look forward to your contributions. 
   
   %p
-    The LVG team
+    The MPG team

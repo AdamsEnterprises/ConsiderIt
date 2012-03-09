@@ -10,8 +10,8 @@
     %meta{ :name => 'viewport', :content => 'width = device-width' }
     = stylesheet_link_tag 'mobile'
     = javascript_include_tag "jquery"
-    = javascript_include_tag "application"
     = javascript_include_tag "mobile"
+    = include_javascripts :workspace
 
     :javascript
       $j = jQuery.noConflict();

@@ -102,6 +102,7 @@ function deleteLink() {
     if (confirm("This link will be deleted.")) {
         $j(this).closest(".point_link_form").remove();
     }
+    return false;
 }
 
 function confirmRemovePoint() {

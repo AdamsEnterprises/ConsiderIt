@@ -35,6 +35,6 @@
       %p.note Remember your pledge!
     .point-submit
       = f.submit "Add " + @type.to_s, :name => "button[add_point]", :id => "point_submit"
-      %button.back Cancel
+      = f.submit "Cancel", :name => "button[cancel]"
 
 = render :partial => "mobile/partials/nav", :locals => { :prev_path => mobile_option_points_path }

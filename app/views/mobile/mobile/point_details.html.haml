@@ -46,25 +46,25 @@
             - even = !even
         - else
           %li No discussion
-      - if current_user
-        = f.hidden_field "user_id", :value => current_user.id
-        = f.hidden_field "commentable_type", :value => "Option"
-        = f.hidden_field "commentable_id", :value => @option.id
-        = f.hidden_field "point_id", :value => @point.id
-        %li.even
-          .comment_text.pointform
-            - if @point.comments.any?
-              %p Contribute to this discussion:
-            - else
-              %p Be the first to discuss this point:
-            = f.text_area "body", :class => "char_limit", :id => "comment_body", :title => "Type your comment here (up to 1000 characters)...", :count => "1000"
-            .count Remaining characters: 1000
-          %p.note
-            %strong Remember your pledge!
-            = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
-      - else
-        %li.even
-          = link_to("Log in to add your comments!", mobile_user_path) 
+        - if current_user
+          = f.hidden_field "user_id", :value => current_user.id
+          = f.hidden_field "commentable_type", :value => "Option"
+          = f.hidden_field "commentable_id", :value => @option.id
+          = f.hidden_field "point_id", :value => @point.id
+          %li.even
+            .comment_text.pointform
+              - if @point.comments.any?
+                %p Contribute to this discussion:
+              - else
+                %p Be the first to discuss this point:
+              = f.text_area "body", :class => "char_limit", :id => "comment_body", :title => "Type your comment here (up to 1000 characters)...", :count => "1000"
+              .count Remaining characters: 1000
+            %p.note
+              %strong Remember your pledge!
+              = f.submit "Add comment", :name => "button[add_comment][#{@point.id}]"
+        - else
+          %li.even
+            = link_to("Log in to add your comments!", mobile_user_path) 
 
 - type = @point.is_pro ? "pro" : "con"
 = render :partial => "mobile/partials/nav", :locals => {:prev_path => @prev_path }

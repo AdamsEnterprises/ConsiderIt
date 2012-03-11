@@ -60,7 +60,7 @@ class Mobile::NavigationController < Mobile::MobileController
   def add_remove_point
     if params[:button][:remove_point]
       point_id = params[:button][:remove_point].keys.first.to_i
-
+      
       remove_inclusion(point_id)
 
       flash[:notice] = "Successfully removed point"
@@ -105,33 +105,37 @@ class Mobile::NavigationController < Mobile::MobileController
 
   # POST /mobile/options/:option_id/navigate/new_point/:type
   def new_point
-    @point = Point.new(params[:point])
-    if @point.save
-      # Add point to included points
-      session[:mobile][option_id][:included_points][@point.id] = 1
-      # Add point to written points
-      session[:mobile][option_id][:written_points].push(@point.id)
-
-      # Update database if logged in
-      sync
-
-      # Redirect to listing user points
-      redirect_path = mobile_option_list_points_path
-
-      PointListing.create!(
-        :option_id => params[:option_id],
-        :position => @point.position,
-        :session_id => request.session_options[:id],
-        :point => @point,
-        :user => current_user,
-        :context => 7 # own point has been seen
-      )
-     
-      if @point.published
-        @point.update_absolute_score
+    if params[:button][:add_point]
+      @point = Point.new(params[:point])
+      if @point.save
+        # Add point to included points
+        session[:mobile][option_id][:included_points][@point.id] = 1
+        # Add point to written points
+        session[:mobile][option_id][:written_points].push(@point.id)
+        
+        # Update database if logged in
+        sync
+        
+        # Redirect to listing user points
+        redirect_path = mobile_option_list_points_path
+        
+        PointListing.create!(
+                             :option_id => params[:option_id],
+                             :position => @point.position,
+                             :session_id => request.session_options[:id],
+                             :point => @point,
+                             :user => current_user,
+                             :context => 7 # own point has been seen
+                             )
+        
+        if @point.published
+          @point.update_absolute_score
+        end
+      else
+        throw "Could not save point " + @point.errors.inspect
       end
-    else
-      throw "Could not save point " + @point.errors.inspect
+    else  # cancel button
+      redirect_path = mobile_option_points_path
     end
 
     handle_redirection redirect_path
